@@ -4,7 +4,12 @@ recursive_pr_engine.py - Breadth-First Search (BFS) Recursive PR Lineage Discove
 Executes recursive parent deed discovery with multi-signal jurisdiction resolution:
 - Pure Python deterministic logic, zero LLM dependency.
 - SRO bifurcation search cascade: Same SRO -> Mother SRO (Joint 1) -> District-wide sweep.
-- Multi-Signal Triangulation: Survey Number concordance (40%), Village match (30%), Party link (20%), Extent consistency (10%).
+- Multi-Signal Triangulation: Survey Number concordance (40%), Village match (30%), Geographic anchor (20%),
+  Chain-of-title party continuity (40%), District identity (10%).
+- Documentary Citation Guarantee: a deed explicitly cited in a child's PR field is NEVER dropped merely
+  because its village / survey differ from the child (rural village -> urban ward / TSLR conversions,
+  layout consolidations, SRO bifurcations). The best-evidenced candidate is retained, flagged
+  CITED_PR_GEOGRAPHY_UNCONFIRMED, and its own PR citations are queued upstream.
 - Deduplication: Never re-downloads or duplicates already visited documents.
 - 1975 Title Horizon Cutoff: Ancestral boundaries gracefully marked.
 - Safe human jitter throttling (1.2 - 1.8s) between live portal calls.
@@ -19,6 +24,7 @@ import time
 import random
 import datetime
 import collections
+import shutil
 from typing import Dict, List, Any, Optional, Set, Tuple
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -192,8 +198,15 @@ class RecursivePREngine:
             
             resolved_deed_data = None
             resolved_sro = None
+            resolved_pdf_res = None
             winning_score = 0.0
             winning_reasons = []
+            relationship = "PARENT_REFERENCE"
+            verification_status = "ROOT_TARGET" if depth == 0 else "CONCORDANCE_CONFIRMED"
+            candidate_evaluations: List[Dict[str, Any]] = []
+            discordant_candidates: List[Dict[str, Any]] = []
+            canonical_pdf_owner = None  # cascade index of the candidate whose PDF sits at the canonical path
+            portal_res = {}
 
             # Throttling jitter
             if deed_counter > 1:
@@ -206,8 +219,9 @@ class RecursivePREngine:
             curr_deed_folder = os.path.join(deeds_dir, deed_folder_name) if deeds_dir else ""
             if curr_deed_folder:
                 os.makedirs(curr_deed_folder, exist_ok=True)
+            canonical_pdf = os.path.join(curr_deed_folder, "official_encumbrance_certificate.pdf") if curr_deed_folder else ""
 
-            for sro_cand in candidate_sros:
+            for cand_idx, sro_cand in enumerate(candidate_sros):
                 c_sid = sro_cand.get("sro_id")
                 c_sname = sro_cand.get("sro_name")
                 tier_label = sro_cand.get("tier", "Sister SRO")
@@ -224,6 +238,8 @@ class RecursivePREngine:
                     run_folder=curr_deed_folder,
                     log_callback=_log
                 )
+                if portal_res.get("official_pdf_saved"):
+                    canonical_pdf_owner = cand_idx
 
                 if portal_res.get("success") and portal_res.get("total_records_found", 0) > 0:
                     # If this is the root target deed, it is accepted automatically
@@ -234,6 +250,13 @@ class RecursivePREngine:
                         winning_reasons = ["Root target deed verified directly at registered SRO"]
                         break
 
+                    # Parse this candidate's official PDF immediately (before a later candidate can
+                    # overwrite the canonical file) so party-continuity evidence is available and the
+                    # candidate can be retained if it is the cited parent across a boundary shift.
+                    cand_pdf_res, cand_pdf_copy = cls._extract_candidate_pdf(
+                        portal_res, curr_deed_folder, cand_idx, c_sid, curr_doc, curr_year, c_sname
+                    )
+
                     # If this is a parent PR deed, run Multi-Signal Triangulation against child deed
                     child_sro_name = child_doc.get("sro_name", "") if child_doc else ""
                     is_jurisdiction_sro = (
@@ -242,32 +265,97 @@ class RecursivePREngine:
                         (child_sro_name and c_sname.lower().strip() == child_sro_name.lower().strip())
                     )
 
-                    score, reasons = cls._triangulate_concordance(child_doc, portal_res, is_same_sro=is_jurisdiction_sro)
+                    score, reasons = cls._triangulate_concordance(
+                        child_doc, portal_res, is_same_sro=is_jurisdiction_sro, candidate_pdf=cand_pdf_res
+                    )
                     if is_jurisdiction_sro:
                         score = max(score, 60.0)
                         reasons.append(f"Explicit documentary PR citation from child deed verified at jurisdiction SRO '{c_sname}'")
 
                     _log(f"  [Triangulation Score] {score:.1f}% for SRO '{c_sname}' | Factors: {', '.join(reasons)}")
+                    candidate_evaluations.append({
+                        "cascade_index": cand_idx,
+                        "sro_id": c_sid,
+                        "sro_name": c_sname,
+                        "tier": tier_label,
+                        "score": score,
+                        "reasons": list(reasons),
+                        "villages": portal_res.get("villages", []),
+                        "survey_numbers": portal_res.get("survey_numbers", []),
+                        "official_pdf_retained": cand_pdf_copy or "",
+                    })
 
                     if score >= 50.0:
                         _log(f"  [+] BIFURCATION RESOLVED! Confirmed parent deed at '{c_sname}' (Score: {score:.1f}%)")
                         resolved_deed_data = portal_res
                         resolved_sro = sro_cand
+                        resolved_pdf_res = cand_pdf_res
                         winning_score = score
                         winning_reasons = reasons
+                        candidate_evaluations[-1]["decision"] = "ACCEPTED_CONCORDANCE"
                         break
                     else:
-                        _log(f"  [-] Rejected candidate at '{c_sname}' (Different village/survey in district)")
+                        candidate_evaluations[-1]["decision"] = "RETAINED_DISCORDANT_CITED_CANDIDATE"
+                        _log(f"  [-] Geographic discordance at '{c_sname}' (different village/survey). "
+                             f"Retained as cited-PR candidate; cascade continues.")
+                        discordant_candidates.append({
+                            "cascade_index": cand_idx,
+                            "sro_cand": sro_cand,
+                            "portal_res": portal_res,
+                            "pdf_res": cand_pdf_res,
+                            "pdf_copy": cand_pdf_copy,
+                            "score": score,
+                            "reasons": reasons,
+                        })
+
+            # -------------------------------------------------------------
+            # Documentary Citation Guarantee (administrative boundary shifts)
+            # -------------------------------------------------------------
+            # The child deed's PR field is an official documentary citation. Geography can
+            # legitimately differ between parent and child (rural revenue village -> urban
+            # ward / TSLR conversion, layout consolidation, SRO bifurcation), so geographic
+            # discordance is NOT negative evidence. Retain the best-evidenced candidate,
+            # flag it for verification, and keep traversing upstream.
+            if not resolved_deed_data and depth > 0 and discordant_candidates and item.get("cited_by_child", True):
+                best = cls._select_cited_candidate(discordant_candidates)
+                resolved_sro = best["sro_cand"]
+                resolved_deed_data = dict(best["portal_res"])
+                resolved_pdf_res = best["pdf_res"]
+                winning_score = best["score"]
+                winning_reasons = list(best["reasons"]) + [
+                    f"Accepted on explicit documentary PR citation in child deed "
+                    f"{child_doc.get('doc_id') if child_doc else ''} despite geographic discordance "
+                    f"(administrative boundary shift / TSLR conversion / layout consolidation); "
+                    f"parcel identity NOT inferred - requires verification"
+                ]
+                relationship = "PARENT_REFERENCE_CITED_ADMIN_SHIFT"
+                verification_status = "CITED_PR_GEOGRAPHY_UNCONFIRMED"
+                for ev in candidate_evaluations:
+                    if ev["cascade_index"] == best["cascade_index"]:
+                        ev["decision"] = "ACCEPTED_DOCUMENTARY_CITATION"
+                # Make the canonical PDF correspond to the retained candidate
+                if best.get("pdf_copy") and canonical_pdf:
+                    try:
+                        shutil.copyfile(best["pdf_copy"], canonical_pdf)
+                        resolved_deed_data["official_pdf_saved"] = canonical_pdf
+                        canonical_pdf_owner = best["cascade_index"]
+                    except OSError as e_cp:
+                        _log(f"  [!] Could not restore retained candidate PDF: {e_cp}")
+                elif canonical_pdf_owner != best["cascade_index"]:
+                    resolved_deed_data.pop("official_pdf_saved", None)
+                _log(f"  [+] CITED PR RETAINED: Deed {doc_key} at '{resolved_sro.get('sro_name')}' "
+                     f"(Score: {winning_score:.1f}%) | Status: {verification_status}")
 
             # If no online records confirmed yet, check if authentic official PDF was downloaded on disk
             if not resolved_deed_data:
-                pdf_in_folder = os.path.join(curr_deed_folder, "official_encumbrance_certificate.pdf") if curr_deed_folder else ""
+                pdf_in_folder = canonical_pdf
                 if pdf_in_folder and os.path.exists(pdf_in_folder) and os.path.getsize(pdf_in_folder) > 1000:
                     _log(f"  [+] Authentic official EC PDF verified on disk ({os.path.getsize(pdf_in_folder)} bytes). Retaining candidate as authoritative PR deed.")
                     resolved_deed_data = portal_res or {"official_pdf_saved": pdf_in_folder, "total_records_found": 1, "success": True}
                     resolved_sro = candidate_sros[0]
                     winning_score = 60.0
                     winning_reasons = ["Authentic official EC PDF downloaded from registration portal"]
+                    verification_status = "OFFLINE_PDF_ON_DISK" if depth > 0 else verification_status
                 else:
                     _log(f"  [!] Notice: Deed {doc_key} not indexed in online registration database. Preserved as offline certified citation.")
                     if child_doc:
@@ -283,18 +371,27 @@ class RecursivePREngine:
             # -------------------------------------------------------------
             # Deep Deterministic PDF Extraction for this deed
             # -------------------------------------------------------------
-            pdf_path = resolved_deed_data.get("official_pdf_saved", "")
-            if not pdf_path and curr_deed_folder:
-                cand_pdf = os.path.join(curr_deed_folder, "official_encumbrance_certificate.pdf")
-                if os.path.exists(cand_pdf):
-                    pdf_path = cand_pdf
-            pdf_res = {}
-            if pdf_path and os.path.exists(pdf_path):
-                _log(f"  [*] Deep extracting deterministic intelligence from official PDF...")
-                pdf_res = PDFDeterministicExtractor.extract_from_pdf(pdf_path, curr_doc, curr_year, resolved_sro.get("sro_name", "") if resolved_sro else curr_sro_name)
-                if pdf_res.get("success") and pdf_res.get("entries"):
+            if resolved_pdf_res is not None and resolved_pdf_res.get("success"):
+                pdf_res = resolved_pdf_res
+                _log(f"  [*] Reusing deterministic extraction of the accepted candidate's official PDF.")
+                if pdf_res.get("entries"):
                     ent = pdf_res["entries"][0]
                     _log(f"  [+] Extracted: Parties={len(ent['parties']['executants'])} vendor(s) / {len(ent['parties']['claimants'])} buyer(s) | PRs={ent['pr_lineage']['pr_raw'] or 'None'}")
+            else:
+                pdf_path = resolved_deed_data.get("official_pdf_saved", "")
+                if not pdf_path and curr_deed_folder:
+                    cand_pdf = canonical_pdf
+                    # Never attribute a PDF downloaded for a *different* (rejected) SRO candidate.
+                    accepted_idx = next((i for i, c in enumerate(candidate_sros) if c is resolved_sro), None)
+                    if os.path.exists(cand_pdf) and (canonical_pdf_owner is None or canonical_pdf_owner == accepted_idx or depth == 0):
+                        pdf_path = cand_pdf
+                pdf_res = {}
+                if pdf_path and os.path.exists(pdf_path):
+                    _log(f"  [*] Deep extracting deterministic intelligence from official PDF...")
+                    pdf_res = PDFDeterministicExtractor.extract_from_pdf(pdf_path, curr_doc, curr_year, resolved_sro.get("sro_name", "") if resolved_sro else curr_sro_name)
+                    if pdf_res.get("success") and pdf_res.get("entries"):
+                        ent = pdf_res["entries"][0]
+                        _log(f"  [+] Extracted: Parties={len(ent['parties']['executants'])} vendor(s) / {len(ent['parties']['claimants'])} buyer(s) | PRs={ent['pr_lineage']['pr_raw'] or 'None'}")
 
             # Save the Dual JSON files in this deed's subfolder
             if curr_deed_folder:
@@ -302,6 +399,18 @@ class RecursivePREngine:
                     json.dump(resolved_deed_data, f, indent=2, ensure_ascii=False)
                 with open(os.path.join(curr_deed_folder, "02_pdf_detailed_extraction.json"), "w", encoding="utf-8") as f:
                     json.dump(pdf_res, f, indent=2, ensure_ascii=False)
+                if depth > 0:
+                    with open(os.path.join(curr_deed_folder, "03_lineage_resolution.json"), "w", encoding="utf-8") as f:
+                        json.dump({
+                            "document_id": doc_key,
+                            "cited_by": child_doc.get("doc_id") if child_doc else None,
+                            "relationship": relationship,
+                            "verification_status": verification_status,
+                            "resolved_sro": resolved_sro,
+                            "concordance_score": winning_score,
+                            "reasons": winning_reasons,
+                            "candidate_evaluations": candidate_evaluations,
+                        }, f, indent=2, ensure_ascii=False)
 
             # Store in master registry
             master_entry = {
@@ -315,7 +424,10 @@ class RecursivePREngine:
                 "pdf_data": pdf_res,
                 "folder": curr_deed_folder,
                 "concordance_score": winning_score,
-                "reasons": winning_reasons
+                "reasons": winning_reasons,
+                "relationship": relationship if depth > 0 else "ROOT",
+                "verification_status": verification_status,
+                "candidate_evaluations": candidate_evaluations
             }
             master_deeds[doc_key] = master_entry
 
@@ -323,7 +435,8 @@ class RecursivePREngine:
                 lineage_edges.append({
                     "from_child": child_doc.get("doc_id"),
                     "to_parent": doc_key,
-                    "relationship": "PARENT_REFERENCE",
+                    "relationship": relationship,
+                    "verification_status": verification_status,
                     "concordance_score": winning_score,
                     "reasons": winning_reasons
                 })
@@ -349,6 +462,7 @@ class RecursivePREngine:
                                 "sro_id": resolved_sro.get("sro_id"),
                                 "sro_name": resolved_sro.get("sro_name"),
                                 "child_doc": master_entry,
+                                "cited_by_child": True,
                                 "depth": depth + 1,
                                 "path": f"{path} -> PR({p_key})"
                             })
@@ -425,15 +539,188 @@ class RecursivePREngine:
 
         return cascade
 
+    # ------------------------------------------------------------------
+    # Candidate handling helpers
+    # ------------------------------------------------------------------
     @classmethod
-    def _triangulate_concordance(cls, child_doc: Dict[str, Any], candidate_portal: Dict[str, Any], is_same_sro: bool = False) -> Tuple[float, List[str]]:
+    def _extract_candidate_pdf(
+        cls,
+        portal_res: Dict[str, Any],
+        deed_folder: str,
+        cand_idx: int,
+        sro_id: str,
+        doc_no: str,
+        year: str,
+        sro_name: str
+    ) -> Tuple[Dict[str, Any], str]:
+        """
+        Deterministically parses the official PDF downloaded for ONE SRO candidate and keeps a
+        private copy (extension '.pdf.candidate' so Engine B's '*.pdf' baseline glob never ingests
+        a rejected homonym). Returns (pdf_extraction, retained_copy_path).
+        """
+        pdf_path = portal_res.get("official_pdf_saved", "") if portal_res else ""
+        if not pdf_path or not os.path.exists(pdf_path):
+            return {}, ""
+        copy_path = ""
+        if deed_folder:
+            cand_dir = os.path.join(deed_folder, "_sro_candidates")
+            os.makedirs(cand_dir, exist_ok=True)
+            safe_sid = re.sub(r'[^0-9A-Za-z]+', '_', str(sro_id or "unknown"))
+            copy_path = os.path.join(cand_dir, f"cand_{cand_idx:02d}_{safe_sid}.pdf.candidate")
+            try:
+                shutil.copyfile(pdf_path, copy_path)
+            except OSError:
+                copy_path = ""
+        try:
+            pdf_res = PDFDeterministicExtractor.extract_from_pdf(pdf_path, doc_no, year, sro_name)
+        except Exception as e:  # extractor is defensive already; never abort the BFS
+            pdf_res = {"success": False, "error": str(e), "entries": []}
+        return pdf_res or {}, copy_path
+
+    @classmethod
+    def _select_cited_candidate(cls, candidates: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Deterministic choice among geographically discordant candidates for an explicitly cited PR:
+        highest concordance score, then chain-of-title party continuity, then availability of a
+        parsed official PDF, then cascade order (Current SRO -> Mother SRO -> Sister SROs).
+        """
+        def _key(c):
+            has_party = any("Chain-of-title party continuity" in r for r in c.get("reasons", []))
+            pdf = c.get("pdf_res") or {}
+            has_pdf = bool(pdf.get("success") and pdf.get("entries"))
+            return (-float(c.get("score", 0.0)), 0 if has_party else 1, 0 if has_pdf else 1, int(c.get("cascade_index", 0)))
+        return sorted(candidates, key=_key)[0]
+
+    # ------------------------------------------------------------------
+    # Normalisation helpers (deterministic, jurisdiction-agnostic)
+    # ------------------------------------------------------------------
+    SURVEY_CONTEXT_RE = re.compile(
+        r'(?:சர்வே|சர்ேவ|புல\s*எண்|S\.?\s*F\.?|R\.?\s*S\.?|Survey|அயன்|நத்தம்)[^0-9]{0,25}'
+        r'((?:[0-9]+\s*(?:/\s*[0-9A-Za-z\u0B80-\u0BFF]+)?\s*(?:,|மற்றும்|and|&)?\s*){1,12})',
+        re.I
+    )
+    URBAN_MARKER_RE = re.compile(
+        r'(?:\bward\b|வார்டு|பிளாக்|\bblock\b|டி\.?\s*எஸ்\.?\s*(?:எண்|நெ|நம்பர்)|\bT\.?\s?S\.?\s*No|town\s*survey|நகர\s*(?:நில\s*)?அளவை)',
+        re.I
+    )
+    DIRECTION_SUFFIX_RE = re.compile(r'(?:east|west|north|south|kizhakku|merku|vadakku|therku)$')
+
+    @classmethod
+    def _survey_tokens(cls, raw_values: List[str]) -> Set[Tuple[str, str]]:
+        """'19,71/2,94/1,95/1' -> {('19',''),('71','2'),('94','1'),('95','1')} (upper-cased subdivisions)."""
+        out: Set[Tuple[str, str]] = set()
+        for raw in raw_values or []:
+            if not raw:
+                continue
+            txt = PDFDeterministicExtractor.normalize_tamil_unicode(str(raw))
+            for part in re.split(r'[,;]|மற்றும்|\band\b|&', txt):
+                m = re.search(r'([0-9]{1,5})\s*(?:[/\-]\s*([0-9A-Za-z\u0B80-\u0BFF]+))?', part)
+                if m:
+                    out.add((m.group(1).lstrip('0') or '0', (m.group(2) or '').upper()))
+        return out
+
+    @classmethod
+    def _pdf_survey_tokens(cls, pdf_res: Optional[Dict[str, Any]]) -> Set[Tuple[str, str]]:
+        """Survey identifiers from a parsed EC PDF: schedule survey cells, parent / old surveys,
+        subdivided surveys and survey references stated in schedule remarks (old rural S.F. Nos
+        are routinely recited in urban/TSLR deeds)."""
+        vals: List[str] = []
+        if not pdf_res or not pdf_res.get("entries"):
+            return set()
+        for sch in pdf_res["entries"][0].get("schedules", []) or []:
+            sn = sch.get("survey_number", {})
+            if isinstance(sn, dict):
+                vals.append(sn.get("raw", "") or "")
+            elif isinstance(sn, str):
+                vals.append(sn)
+            ppl = sch.get("patta_and_parent_land", {}) or {}
+            if ppl.get("parent_survey"):
+                vals.append(ppl["parent_survey"])
+            vals.extend(ppl.get("subdivided_surveys", []) or [])
+            rem = PDFDeterministicExtractor.normalize_tamil_unicode(sch.get("schedule_remarks_full", "") or "")
+            for m in cls.SURVEY_CONTEXT_RE.finditer(rem):
+                vals.append(m.group(1))
+        return cls._survey_tokens(vals)
+
+    @classmethod
+    def _village_keys(cls, villages: List[str]) -> Set[str]:
+        """Normalises registration-village labels, unwrapping urban ward labels:
+        'WARD -AJ (Piratiyur East)' -> {'wardajpiratiyureast', 'piratiyureast', 'piratiyur'}."""
+        keys: Set[str] = set()
+        for v in villages or []:
+            low = str(v or "").lower().strip()
+            if not low:
+                continue
+            keys.add(re.sub(r'[^a-z0-9\u0B80-\u0BFF]+', '', low))
+            inner = re.findall(r'\(([^)]*)\)', low)
+            outer = re.sub(r'\([^)]*\)', ' ', low)
+            outer = re.sub(r'\bward\b\s*[-:]?\s*[a-z0-9]{1,4}\b', ' ', outer)
+            for frag in inner + [outer]:
+                k = re.sub(r'[^a-z0-9\u0B80-\u0BFF]+', '', frag)
+                if len(k) >= 4:
+                    keys.add(k)
+                    k2 = cls.DIRECTION_SUFFIX_RE.sub('', k)
+                    if len(k2) >= 4:
+                        keys.add(k2)
+        return keys
+
+    @classmethod
+    def _normalize_party(cls, name: str) -> str:
+        n = PDFDeterministicExtractor.normalize_tamil_unicode(str(name or "")).lower()
+        n = re.sub(r'\b(?:mr|mrs|miss|ms|dr|adv|thiru|tmt|selvi|m/s)\.?\s*', '', n)
+        n = re.sub(r'(?:திருமதி|திரு|செல்வி)\.?\s*', '', n)
+        n = re.sub(r'^(?:[a-z\u0B80-\u0BFF]{1,4}\.\s*)+', '', n)  # leading initials
+        return re.sub(r'[^a-z\u0B80-\u0BFF]+', '', n)
+
+    @classmethod
+    def _party_continuity(cls, child_pdf: Dict[str, Any], cand_pdf: Optional[Dict[str, Any]]) -> bool:
+        """Chain-of-title rule: a claimant of the parent deed executes the child deed."""
+        if not child_pdf or not cand_pdf or not child_pdf.get("entries") or not cand_pdf.get("entries"):
+            return False
+        sellers = {cls._normalize_party(p.get("name", "")) for p in child_pdf["entries"][0].get("parties", {}).get("executants", [])}
+        buyers = {cls._normalize_party(p.get("name", "")) for p in cand_pdf["entries"][0].get("parties", {}).get("claimants", [])}
+        sellers.discard("")
+        buyers.discard("")
+        for a in sellers:
+            for b in buyers:
+                if a == b and len(a) >= 3:
+                    return True
+                short, long_ = (a, b) if len(a) <= len(b) else (b, a)
+                if len(short) >= 5 and short in long_:
+                    return True
+        return False
+
+    @classmethod
+    def _is_urban_identity(cls, portal: Dict[str, Any], pdf_res: Optional[Dict[str, Any]]) -> bool:
+        texts = list(portal.get("villages", []) or []) if portal else []
+        if pdf_res and pdf_res.get("entries"):
+            for sch in pdf_res["entries"][0].get("schedules", []) or []:
+                texts.append(sch.get("village", "") or "")
+                texts.append(sch.get("schedule_remarks_full", "") or "")
+                if sch.get("ward_no") or sch.get("block_no"):
+                    return True
+        blob = PDFDeterministicExtractor.normalize_tamil_unicode(" ".join(texts))
+        return bool(cls.URBAN_MARKER_RE.search(blob))
+
+    @classmethod
+    def _triangulate_concordance(
+        cls,
+        child_doc: Dict[str, Any],
+        candidate_portal: Dict[str, Any],
+        is_same_sro: bool = False,
+        candidate_pdf: Optional[Dict[str, Any]] = None
+    ) -> Tuple[float, List[str]]:
         """
         Calculates multi-signal concordance score between child deed and candidate parent deed:
         - Jurisdiction SRO Concordance: +50%
-        - Survey Number Match: +40%
-        - Village Name Match: +30%
-        - Party Name / Remarks Link: +20%
-        - Extent Consistency: +10%
+        - Survey Number Match: +40%   (legacy raw rule OR tokenised survey roots incl. old S.F. Nos in remarks)
+        - Village Name Match: +30%    (legacy rule OR ward-label-unwrapped locality keys)
+        - Geographic Root Identity Anchor (survey AND village): +20%
+        - Chain-of-title Party Continuity (parent claimant == child executant): +40%
+        - District Identity: +10%
+        Every signal is additive: a score can only be >= the legacy score for the same inputs.
+        Geographic discordance caused by an administrative boundary shift is reported, never
+        treated as negative evidence.
         """
         score = 0.0
         reasons = []
@@ -445,23 +732,20 @@ class RecursivePREngine:
             score += 50.0
             reasons.append("Parent document registered at child jurisdiction SRO")
 
-        child_portal = child_doc.get("portal_data", {})
-        child_pdf = child_doc.get("pdf_data", {})
+        child_portal = child_doc.get("portal_data", {}) or {}
+        child_pdf = child_doc.get("pdf_data", {}) or {}
 
         # Child coordinates
-        child_surveys = child_portal.get("survey_numbers", [])
-        child_villages = [v.lower().strip() for v in child_portal.get("villages", [])]
-        child_sellers = []
-        if child_pdf.get("success") and child_pdf.get("entries"):
-            child_sellers = [p["name"].lower().strip() for p in child_pdf["entries"][0].get("parties", {}).get("executants", [])]
+        child_surveys = child_portal.get("survey_numbers", []) or []
+        child_villages = [v.lower().strip() for v in child_portal.get("villages", []) or []]
 
         # Candidate coordinates
-        cand_surveys = candidate_portal.get("survey_numbers", [])
-        cand_villages = [v.lower().strip() for v in candidate_portal.get("villages", [])]
+        cand_surveys = candidate_portal.get("survey_numbers", []) or []
+        cand_villages = [v.lower().strip() for v in candidate_portal.get("villages", []) or []]
 
         # 1. Survey Number Concordance (+40%)
         survey_hit = False
-        for cs in child_surveys:
+        for cs in child_surveys:  # legacy rule (kept verbatim for benchmark parity)
             cs_clean = cs.split('/')[0].strip()
             for ps in cand_surveys:
                 ps_clean = ps.split('/')[0].strip()
@@ -470,6 +754,15 @@ class RecursivePREngine:
                     break
             if survey_hit:
                 break
+        if not survey_hit:  # tokenised rule: comma-joined portal cells, PDF schedules, old S.F. Nos in remarks
+            child_tok = cls._survey_tokens(child_surveys) | cls._pdf_survey_tokens(child_pdf)
+            cand_tok = cls._survey_tokens(cand_surveys) | cls._pdf_survey_tokens(candidate_pdf)
+            # Roots must agree AND both sides must be of the same kind (subdivided rural S.F. vs
+            # bare number) so a bare Town Survey No. never "matches" an unrelated rural S.F. root.
+            for c_root, c_sub in child_tok:
+                if any(c_root == p_root and bool(c_sub) == bool(p_sub) for p_root, p_sub in cand_tok):
+                    survey_hit = True
+                    break
 
         if survey_hit:
             score += 40.0
@@ -477,7 +770,7 @@ class RecursivePREngine:
 
         # 2. Village Name Concordance (+30%)
         village_hit = False
-        for cv in child_villages:
+        for cv in child_villages:  # legacy rule
             cv_clean = re.sub(r'[^a-z0-9]+', '', cv)
             for pv in cand_villages:
                 pv_clean = re.sub(r'[^a-z0-9]+', '', pv)
@@ -486,20 +779,42 @@ class RecursivePREngine:
                     break
             if village_hit:
                 break
+        if not village_hit:
+            child_keys = cls._village_keys(child_portal.get("villages", []))
+            cand_keys = cls._village_keys(candidate_portal.get("villages", []))
+            for a in child_keys:
+                for b in cand_keys:
+                    if len(a) >= 4 and len(b) >= 4 and (a == b or a in b or b in a):
+                        village_hit = True
+                        break
+                if village_hit:
+                    break
 
         if village_hit:
             score += 30.0
             reasons.append("Revenue Village Matches")
 
-        # 3. Party Link (+20%)
-        # Note: If party names match, or if candidate is in the same village and survey
+        # 3. Geographic anchor (+20%)
         if survey_hit and village_hit:
             score += 20.0
             reasons.append("Geographic Root Identity Anchored")
 
-        # 4. District Identity (+10%)
+        # 4. Chain-of-title party continuity (+40%) - boundary-shift invariant
+        if cls._party_continuity(child_pdf, candidate_pdf):
+            score += 40.0
+            reasons.append("Chain-of-title party continuity (parent claimant executes child deed)")
+
+        # 5. District Identity (+10%)
         score += 10.0
         reasons.append("Same Registration District Jurisdiction")
+
+        # Informational: administrative boundary shift (urban ward/TSLR vs rural revenue village)
+        if not (survey_hit and village_hit):
+            child_urban = cls._is_urban_identity(child_portal, child_pdf)
+            cand_urban = cls._is_urban_identity(candidate_portal, candidate_pdf)
+            if child_urban != cand_urban:
+                reasons.append("Administrative boundary shift detected (rural revenue village <-> urban ward/TSLR); "
+                               "geographic discordance not treated as negative evidence")
 
         return score, reasons
 

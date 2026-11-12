@@ -147,6 +147,17 @@ class ECMasterMerger:
         for p in pdf_paths:
             if not os.path.exists(p):
                 continue
+            try:
+                from ec_portal_client import ECPortalClient
+                with open(p, "rb") as _fp:
+                    _insp = ECPortalClient.inspect_ec_pdf(_fp.read())
+            except Exception as _e:
+                _insp = {"authentic": False, "reason": f"UNREADABLE: {_e}"}
+            if not _insp.get("authentic"):
+                source_summary.append({"pdf_path": p, "success": False, "entries_extracted": 0,
+                                       "rejected_reason": _insp.get("reason"),
+                                       "error_record_count": _insp.get("error_record_count")})
+                continue
             ext_res = PDFDeterministicExtractor.extract_from_pdf(p)
             entry_count = len(ext_res.get("entries", []))
             source_summary.append({
@@ -176,8 +187,14 @@ class ECMasterMerger:
                 if d_no and yr:
                     pr_doc_ids.add(f"{d_no}/{yr}")
 
-        # Deduplicate
+        # Deduplicate. Entries whose certificate prints no SRO (document-wise deed ECs leave
+        # "S.R.O:" blank) are processed last and joined to the single SRO-qualified record with
+        # the same doc/year/book, if exactly one exists; otherwise they stay separate.
         unique_ledger = {}
+        all_raw_entries = sorted(
+            all_raw_entries,
+            key=lambda e: 0 if str(e.get("registration_particulars", {}).get("sro_name", "")).strip() else 1
+        )
         for entry in all_raw_entries:
             reg = entry.get("registration_particulars", {})
             d_no = str(reg.get("document_number", "")).strip()
@@ -189,6 +206,12 @@ class ECMasterMerger:
                 continue
 
             unique_key = f"{sro}_{d_no}_{yr}_{book_no}"
+            if not sro:
+                cands = [k for k in unique_ledger if k.endswith(f"_{d_no}_{yr}_{book_no}") and not k.startswith("_")]
+                if len(cands) == 1:
+                    unique_key = cands[0]
+                    unique_ledger[unique_key].setdefault("dedup_notes", []).append(
+                        "Merged SRO-less deed certificate by unique doc/year/book match")
             src_pdf = entry.get("_source_pdf", "")
             surv_list = [s.get("survey_number", {}).get("raw") for s in entry.get("schedules", []) if s.get("survey_number", {}).get("raw")]
 
@@ -439,6 +462,7 @@ class ECMasterMerger:
                 "parties": entry.get("parties", {}),
                 "schedules": entry.get("schedules", []),
                 "pr_lineage": entry.get("pr_lineage", {}),
+                "document_remarks": entry.get("document_remarks", ""),
                 "discovered_in_surveys": entry.get("discovered_in_surveys", []),
                 "source_pdfs": entry.get("source_pdfs", []),
                 "_source_pdf": entry.get("_source_pdf", "")

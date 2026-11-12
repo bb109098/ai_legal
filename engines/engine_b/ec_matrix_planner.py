@@ -24,6 +24,8 @@ import json
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple, Set
 
+from tslr_urban_parser import TSLRUrbanParser
+
 
 class SearchTrack:
     PRIMARY_SURVEY = "PRIMARY_SURVEY"
@@ -320,6 +322,13 @@ class ECMatrixPlanner:
                     if len(v_found) >= 4 and not any(kw in v_found.lower() for kw in ['road', 'street', 'salai', 'lane', 'plot']):
                         villages.add(v_found)
 
+                # 1b. Urban TSLR classification (deterministic). Done BEFORE survey harvesting so an
+                # explicitly declared Town Survey number is never planned as a rural S.F. number.
+                tslr_info = TSLRUrbanParser.parse_schedule(sched)
+                explicit_ts_pairs = set()
+                if tslr_info.get("explicit_ts_keyword"):
+                    explicit_ts_pairs = {(str(a), str(b).upper()) for a, b in tslr_info.get("ts_pairs", []) if b}
+
                 # 2. Harvest Survey & Subdivision (Strict Clean Splitting)
                 deed_surveys = []
                 sur_obj = sched.get("survey_number", {})
@@ -332,6 +341,9 @@ class ECMatrixPlanner:
                 # Also check schedule raw fields
                 if sched.get("survey_subdivision_raw"):
                     deed_surveys.extend(cls.parse_survey_subdivision_string(sched["survey_subdivision_raw"]))
+                # Town Survey (TSLR) pairs are municipal identifiers, not rural survey fields.
+                if explicit_ts_pairs:
+                    deed_surveys = [(a, b) for a, b in deed_surveys if (str(a).strip(), str(b).strip().upper()) not in explicit_ts_pairs]
                 # Deduplicate clean (survey, subdivision) pairs
                 for s_no, sub_no in deed_surveys:
                     s_no = str(s_no).strip()
@@ -364,61 +376,55 @@ class ECMatrixPlanner:
                 if fl_no:
                     flat_numbers.add(fl_no)
 
-                # TSLR (Ward & Block)
-                ward = sched.get("ward_no", "").strip()
-                block = sched.get("block_no", "").strip()
-                if ward or block:
-                    t_cand = {
-                        "ward": ward,
-                        "block": block,
-                        "survey_or_ts": deed_surveys[0][0] if deed_surveys else "",
-                        "subdiv": deed_surveys[0][1] if deed_surveys else "",
-                        "year": yr
-                    }
-                    if not any(t["ward"] == ward and t["block"] == block for t in tslr_entries):
-                        tslr_entries.append(t_cand)
+                # TSLR (Ward / Block / Town Survey) - deterministic urban identity
+                def _add_tslr(entry: Dict[str, Any]):
+                    key = (entry.get("ward", ""), entry.get("block", ""), entry.get("survey_or_ts", ""), entry.get("subdiv", ""))
+                    if not any((t.get("ward", ""), t.get("block", ""), t.get("survey_or_ts", ""), t.get("subdiv", "")) == key for t in tslr_entries):
+                        tslr_entries.append(entry)
 
-                # Schedule Remarks Deep Mining for TSLR and Layout Surveys
-                remarks = sched.get("schedule_remarks_full", "")
-                if remarks or sched.get("village", ""):
-                    w_rem = re.search(r'(?:வார்டு|Ward)[\s\:\-]+([A-Za-z0-9\-]+|[\u0B80-\u0BFF]+)', remarks, re.I)
-                    b_rem = re.search(r'(?:பிளாக்|Block)[\s\:\-]+([0-9A-Za-z]+)', remarks, re.I)
-                    ts_rem = re.search(r'(?:(?:டி\s*\.?\s*எஸ்\s*\.?\s*(?:எல்\s*\.?\s*ஆர்\s*\.?)?|T\.?S\.?(?:L\.?R\.?)?)\s*(?:சர்வே\s*)?(?:எண்|நெ\.?|நம்பர்|No\.?))[\s\:\-]*([0-9]+(?:\/[0-9A-Za-z]+)?)', remarks, re.I)
-                    
-                    ward_map = {
-                        "ஏஜே": "AJ", "ஏஜி": "AG", "ஏகே": "AK", "ஏஏ": "AA", "ஏபி": "AB",
-                        "ஏ": "A", "பி": "B", "சி": "C", "டி": "D", "இ": "E", "எச்": "H", "கே": "K"
-                    }
-                    raw_w = (w_rem.group(1).strip() if w_rem else ward) or ""
-                    ward_val = ward_map.get(raw_w, raw_w).upper() if raw_w else ""
-                    if not ward_val:
-                        v_ward_m = re.search(r'(?:\bward\b|வார்டு)\s*[-_]?\s*([a-zA-Z0-9]+)\b', sched.get("village", ""), re.I)
-                        if v_ward_m:
-                            ward_val = v_ward_m.group(1).upper()
-
-                    block_val = (b_rem.group(1).strip() if b_rem else block) or ""
-                    ts_val = ts_rem.group(1).strip() if ts_rem else ""
-                    ts_sub_val = ""
-                    if "/" in ts_val:
-                        ts_val, ts_sub_val = ts_val.split("/", 1)
-
-                    # If ts_val is not in remarks, check if survey_number starts with standalone TS number (e.g. "19, 71/2...")
-                    if not ts_val:
-                        surv_raw_text = str(sched.get("survey_number", {}).get("raw", "") if isinstance(sched.get("survey_number"), dict) else sched.get("survey_number", ""))
-                        m_lead_ts = re.match(r'^\s*([0-9]+)\s*\,', surv_raw_text)
-                        if m_lead_ts:
-                            ts_val = m_lead_ts.group(1).strip()
-
-                    if ward_val and (block_val or ts_val):
-                        if not any(entry["survey_or_ts"] == ts_val and entry["block"] == block_val and entry["ward"] == ward_val for entry in tslr_entries):
+                if tslr_info.get("entries"):
+                    for t_ent in tslr_info["entries"]:
+                        t_new = dict(t_ent)
+                        t_new["year"] = yr
+                        t_new["document_id"] = item.get("document_id", "")
+                        _add_tslr(t_new)
+                else:
+                    # Legacy behaviour (kept for parity) when NO Town Survey number is stated anywhere:
+                    # table Ward/Block fields without a TS number fall back to the first schedule survey.
+                    ward_raw = sched.get("ward_no", "").strip()
+                    block_raw = sched.get("block_no", "").strip()
+                    if ward_raw or block_raw:
+                        w_code, _ = TSLRUrbanParser.normalize_ward_code(ward_raw)
+                        b_code = TSLRUrbanParser.normalize_block_code(block_raw)
+                        ward = w_code or ward_raw
+                        block = b_code or block_raw
+                        if not any(t["ward"] == ward and t["block"] == block for t in tslr_entries):
                             tslr_entries.append({
-                                "ward": ward_val,
-                                "block": block_val,
-                                "survey_or_ts": ts_val,
-                                "subdiv": ts_sub_val,
-                                "year": yr
+                                "ward": ward,
+                                "block": block,
+                                "survey_or_ts": deed_surveys[0][0] if deed_surveys else "",
+                                "subdiv": deed_surveys[0][1] if deed_surveys else "",
+                                "year": yr,
+                                "era": "CURRENT",
+                                "ts_source": "LEGACY_FIRST_SCHEDULE_SURVEY_UNVERIFIED",
+                                "document_id": item.get("document_id", "")
+                            })
+                    # Ward + Block declared but no TS number: record the urban identity (no job is
+                    # emitted by Track 0 without a TS number; Track 3 keeps legacy behaviour).
+                    if tslr_info.get("ward_detected") and tslr_info.get("block"):
+                        w_guess = TSLRUrbanParser.ward_from_village(sched.get("village", ""))
+                        if not w_guess:
+                            w_guess = TSLRUrbanParser.parse_text(sched.get("schedule_remarks_full", ""))["current"]["ward"]
+                        if w_guess:
+                            _add_tslr({
+                                "ward": w_guess, "block": tslr_info["block"], "survey_or_ts": "", "subdiv": "",
+                                "year": yr, "era": "CURRENT", "ts_source": "",
+                                "document_id": item.get("document_id", "")
                             })
 
+                # Schedule Remarks Deep Mining for Layout Surveys
+                remarks = sched.get("schedule_remarks_full", "")
+                if remarks or sched.get("village", ""):
                     # Look for Layout formation surveys (only keep if subdivision present)
                     layout_m = re.search(r'(?:மனை\s*பிரிவு|layout|நகர்)[\s\S]{0,100}?(?:புல\s*எண்கள்?|சர்வே\s*எண்கள்?|Survey\s*Nos?\.?)[\s\:\-]*([0-9\,\s\/\.\-மற்றும்and]+)', remarks, re.I)
                     if layout_m:
@@ -439,6 +445,8 @@ class ECMatrixPlanner:
         # When an urban ward and Town Survey (TS) number are detected, prioritize municipal search
         if tslr_entries:
             for t_entry in tslr_entries:
+                if t_entry.get("era", "CURRENT") != "CURRENT":
+                    continue  # historical (old) TS numbers and ambiguous ward readings -> Track 3
                 ward = t_entry.get("ward", "").strip()
                 block = t_entry.get("block", "").strip()
                 ts_no = t_entry.get("survey_or_ts", "").strip()
@@ -460,6 +468,8 @@ class ECMatrixPlanner:
                         "subdivision_no": ts_sub,
                         "date_start": cls.SYSTEM_START_DATE,
                         "date_end": current_date_str,
+                        "ts_source": t_entry.get("ts_source", ""),
+                        "ward_source": t_entry.get("ward_source", ""),
                         "rationale": f"Municipal Corporation Town Survey (TSLR) search across Ward {ward}, Block {block}, T.S. {ts_no} ({cls.SYSTEM_START_DATE} to {current_date_str})."
                     })
                     job_seq += 1
@@ -606,6 +616,9 @@ class ECMatrixPlanner:
                     "subdivision_no": ts_sub,
                     "date_start": ts_start_date,
                     "date_end": current_date_str,
+                    "era": t_entry.get("era", "CURRENT"),
+                    "ts_source": t_entry.get("ts_source", ""),
+                    "ward_source": t_entry.get("ward_source", ""),
                     "rationale": f"Municipal Corporation Town Survey (TSLR) search across Ward {ward}, Block {block}, T.S. {ts_no}/{ts_sub} ({ts_start_date} to {current_date_str})."
                 })
                 job_seq += 1

@@ -22,6 +22,8 @@ import os
 import sys
 import re
 import json
+import datetime
+import unicodedata
 from typing import Dict, List, Any, Optional, Tuple
 import pypdf
 import pdfplumber
@@ -43,6 +45,20 @@ class PDFDeterministicExtractor:
         "corporation", "கார்ப்பரேஷன்", "board", "வாரியம்", "housing", "promoters", "builders"
     ]
 
+    # Boundary direction words (applied to normalize_tamil_unicode() output; legacy order kept too)
+    # Boundary direction words, tolerant of case endings (-கு/-கே/-கில்/-கும்) and of the broken
+    # glyph spellings seen on certificates ("தெற்க", "மேறகல்", "வடக்கில", "தெற்கிக்ல").
+    # Applied to normalize_tamil_unicode() output; never inside a word, never "மேற்படி".
+    BOUNDARY_DIR_WORDS = {
+        "north": r'(?:North|வடக்[\u0B80-\u0BFF]{0,5})',
+        "south": r'(?:South|தெற்[\u0B80-\u0BFF]{0,5}|ெதற்[\u0B80-\u0BFF]{0,5})',
+        "east": r'(?:East|கிழக்[\u0B80-\u0BFF]{0,5})',
+        "west": r'(?:West|மேற(?!்படி)[\u0B80-\u0BFF]{0,5}|ேமற(?!்படி)[\u0B80-\u0BFF]{0,5})',
+    }
+    BOUNDARY_OPPOSITE = {"north": "south", "south": "north", "east": "west", "west": "east"}
+    # Tamil dative ending of a landmark ("ரோட்டுக்கு", "மனைக்கும்", "நிலத்திற்கு", "பாதைக்கு")
+    BOUNDARY_DATIVE_RE = r'(?:க்கு|க்கும்|ற்கு|ற்கும்|க்குச்|டுக்கு|கு|கும்|க்க)$'
+
     @staticmethod
     def normalize_tamil_unicode(text: str) -> str:
         """
@@ -53,7 +69,9 @@ class PDFDeterministicExtractor:
         """
         if not text:
             return ""
-        return re.sub(r'([\u0BC6\u0BC7\u0BC8])([\u0B95-\u0BB9])', r'\2\1', text)
+        swapped = re.sub(r'([\u0BC6\u0BC7\u0BC8])([\u0B95-\u0BB9])', r'\2\1', text)
+        # Compose split two-part vowel signs (e.g. 'ே'+'ா' -> 'ோ') so "ரோடு" matches standard text.
+        return unicodedata.normalize("NFC", swapped)
 
     @classmethod
     def extract_from_pdf(cls, pdf_path: str, fallback_doc_no: str = "", fallback_year: str = "", fallback_sro: str = "") -> Dict[str, Any]:
@@ -191,14 +209,25 @@ class PDFDeterministicExtractor:
     def _parse_extent_dict(ext_str: str) -> Dict[str, Any]:
         if not ext_str:
             return {"raw": "", "sqft": 0.0, "sq_meters": 0.0}
-        clean_ext = ext_str.strip()
-        nums = re.findall(r'[0-9]+(?:\.[0-9]+)?', clean_ext)
-        val = float(nums[0]) if nums else 0.0
-        if any(k in clean_ext.lower() for k in ["acre", "ஏக்கர்"]):
+        clean_ext = PDFDeterministicExtractor._clean_extent_raw(ext_str)
+        if not clean_ext:
+            return {"raw": "", "sqft": 0.0, "sq_meters": 0.0}
+        # Prefer the number that directly precedes an explicit area unit, so a survey token
+        # in front ("173/2 - 2520.0 SQUARE FEET", "13, 173/2H - 2340.0 SQUARE FEET") is never
+        # taken as the area.
+        unit_m = PDFDeterministicExtractor.EXTENT_UNIT_RE.search(clean_ext)
+        if unit_m:
+            val = float(unit_m.group(1))
+            unit_txt = unit_m.group(2).lower()
+        else:
+            nums = re.findall(r'[0-9]+(?:\.[0-9]+)?', clean_ext)
+            val = float(nums[0]) if nums else 0.0
+            unit_txt = clean_ext.lower()
+        if any(k in unit_txt for k in ["acre", "ஏக்கர்"]):
             sqft = round(val * 43560.0, 2)
-        elif any(k in clean_ext.lower() for k in ["cent", "சென்ட்"]):
+        elif any(k in unit_txt for k in ["cent", "சென்ட்"]):
             sqft = round(val * 435.6, 2)
-        elif any(k in clean_ext.lower() for k in ["sq.m", "sqm", "சதுர மீட்டர்"]):
+        elif any(k in unit_txt for k in ["sq.m", "sqm", "சதுர மீட்டர்", "ச.மீ"]):
             sqft = round(val / 0.092903, 2)
         else:
             sqft = val
@@ -208,14 +237,65 @@ class PDFDeterministicExtractor:
             "sq_meters": round(sqft * 0.092903, 2)
         }
 
+    # Number immediately followed by an explicit area unit.
+    EXTENT_UNIT_RE = re.compile(
+        r'([0-9]+(?:\.[0-9]+)?)\s*(square\s*feet|sq\.?\s*ft\.?|sqft|சதுரடி|சதுர\s*அடி|ச\.?\s*அடி|சஅடி|'
+        r'acres?|ஏக்கர்|cents?|சென்ட்|sq\.?\s*m(?:eters?|tr?s?)?\b|sqm|சதுர\s*மீட்டர்|ச\.மீ)',
+        re.I
+    )
+    # Combined "Survey No-Extent/புல எண்-விஸ்தீர்ணம்: <survey> - <extent>" cell (legacy glyph order tolerated).
+    SURVEY_EXTENT_LABEL_RE = re.compile(
+        r'(?:Survey\s*No\.?\s*-\s*Extent|புல\s*எண்\s*-\s*விஸ்[^\s:]*\s*[^\s:]*)[^:\n]*:\s*', re.I
+    )
+
+    @staticmethod
+    def _clean_extent_raw(ext_str: str) -> str:
+        """Strips a leaked 'label:' prefix and an unbalanced trailing ')' left by a wrapped
+        "(விஸ்தீர்ணம் : 0.42 / ஏக்கர்)" remark."""
+        v = (ext_str or "").strip()
+        lab = re.match(r'^[^0-9:]{0,60}:\s*', v)
+        if lab and re.search(r'(?:ணம்|Extent|விஸ்)', lab.group(0), re.I):
+            v = v[lab.end():].strip()
+        while v.endswith(')') and v.count(')') > v.count('('):
+            v = v[:-1].rstrip()
+        return v.strip(' ,-')
+
+    @classmethod
+    def _split_survey_extent_cell(cls, cell: str) -> Optional[Tuple[str, str]]:
+        """Returns (survey_raw, extent_raw) for a combined Survey No-Extent cell, else None."""
+        if not cell:
+            return None
+        m = cls.SURVEY_EXTENT_LABEL_RE.search(cell)
+        if not m:
+            return None
+        val = cell[m.end():].split('\n')[0].strip()
+        if ' - ' in val:
+            sur, ext = val.rsplit(' - ', 1)
+        elif cls.EXTENT_UNIT_RE.search(val):
+            um = cls.EXTENT_UNIT_RE.search(val)
+            sur, ext = val[:um.start()], val[um.start():]
+        else:
+            sur, ext = val, ''
+        return sur.strip(' ,-'), ext.strip(' ,-')
+
     @staticmethod
     def _parse_survey_dict(sur_str: str) -> Dict[str, str]:
         if not sur_str:
             return {"raw": "", "survey": "", "subdivision": ""}
         s_clean = sur_str.split('-')[0].strip().strip(',')
-        m = re.search(r'([0-9]+)\s*[\/\-]\s*([0-9A-Za-z]+(?:\s*,\s*[0-9A-Za-z]+)?)', s_clean)
+        # Multi-survey cells ("173/1A, 173/2", "13, 173/2H") are listed individually; a comma token
+        # that starts another "<survey>/<sub>" is never glued onto the first subdivision.
+        survey_list = []
+        for tok in re.split(r'\s*[,;]\s*', s_clean):
+            mt = re.fullmatch(r'([0-9]+)\s*(?:/\s*([0-9A-Za-z]+(?:/[0-9A-Za-z]+)*))?', tok.strip())
+            if mt:
+                survey_list.append({"survey": mt.group(1), "subdivision": mt.group(2) or ""})
+        m = re.search(r'([0-9]+)\s*[\/\-]\s*([0-9A-Za-z]+(?:\s*,\s*[0-9A-Za-z]+\b(?!\s*/))?)', s_clean)
         if m:
-            return {"raw": s_clean, "survey": m.group(1).strip(), "subdivision": m.group(2).strip()}
+            out = {"raw": s_clean, "survey": m.group(1).strip(), "subdivision": m.group(2).strip()}
+            if len(survey_list) > 1:
+                out["survey_list"] = survey_list
+            return out
         m2 = re.search(r'([0-9]+)', s_clean)
         if m2:
             return {"raw": s_clean, "survey": m2.group(1).strip(), "subdivision": ""}
@@ -266,9 +346,28 @@ class PDFDeterministicExtractor:
 
             current_entry = None
             current_sched = None
+            col_field: Dict[int, str] = {}
             entry_idx = 1
+            # Label-only financial/PR cells (value pushed onto the next page): col -> label text
+            pending_value_labels: Dict[int, str] = {}
+            fin_label_re = re.compile(
+                r'(?:Consideration\s*Value|Market\s*Value|PR\s*Number|ைகமாற்றுத்|கைமாற்றுத்|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு|முந்ைதய\s*ஆவண|முந்தைய\s*ஆவண)[^:]*:\s*$',
+                re.I
+            )
 
             for r in all_table_rows:
+                if pending_value_labels:
+                    row_has_label = any(c and re.search(r'(?:Value|Number|Details|Remarks|:)', str(c)) for c in r)
+                    if not row_has_label:
+                        r = list(r)
+                        for col, lbl in pending_value_labels.items():
+                            if col < len(r) and r[col]:
+                                r[col] = f"{lbl}\n{r[col]}"
+                    pending_value_labels = {}
+                label_only = {i: str(c).strip() for i, c in enumerate(r) if c and fin_label_re.search(str(c).strip())}
+                if label_only and len(label_only) == sum(1 for c in r if c and str(c).strip()):
+                    pending_value_labels = label_only
+
                 doc_cell = None
                 for c in r[:3]:
                     if c and re.search(r'^\s*(\d{1,6})\s*/\s*(\d{4})\s*$', c.strip()):
@@ -279,8 +378,9 @@ class PDFDeterministicExtractor:
                     if current_entry:
                         if current_sched:
                             if not current_sched.get("plot_no"):
-                                target_text = f"{current_sched.get('schedule_remarks_full', '')} {current_sched.get('boundaries', {}).get('raw', '')}"
-                                p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)\s*([0-9]+[A-Za-z]?)', target_text, re.I)
+                                # Remarks only: boundary text names the NEIGHBOURING plots, never this plot.
+                                target_text = current_sched.get('schedule_remarks_full', '')
+                                p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)[\s\.:]*([0-9]+[A-Za-z]?)', target_text, re.I)
                                 if p_fallback:
                                     current_sched["plot_no"] = p_fallback.group(1).strip()
                             current_entry["schedules"].append(current_sched)
@@ -294,21 +394,13 @@ class PDFDeterministicExtractor:
                     dates_raw = r[2] if len(r) > 2 and r[2] else ""
                     dates_list = re.findall(r'\d{2}-[A-Za-z]{3}-\d{4}', dates_raw)
 
-                    exec_list = []
-                    if len(r) > 4 and r[4]:
-                        for raw_e in r[4].split('\n'):
-                            clean_e = re.sub(r'^[0-9\.\s]+', '', raw_e).strip()
-                            if clean_e:
-                                exec_list.append(cls._format_party_entry(clean_e))
+                    exec_list = [cls._format_party_entry(n) for n in cls._split_party_cell(r[4] if len(r) > 4 else "")]
+                    claim_list = [cls._format_party_entry(n) for n in cls._split_party_cell(r[5] if len(r) > 5 else "")]
 
-                    claim_list = []
-                    if len(r) > 5 and r[5]:
-                        for raw_c in r[5].split('\n'):
-                            clean_c = re.sub(r'^[0-9\.\s]+', '', raw_c).strip()
-                            if clean_c:
-                                claim_list.append(cls._format_party_entry(clean_c))
-
-                    vol_page = r[6].strip() if len(r) > 6 and r[6] and r[6] != '-' else None
+                    vol_page_raw = re.sub(r'\s+', ' ', r[6]).strip() if len(r) > 6 and r[6] else ""
+                    vol_no, page_no = cls._split_vol_page(vol_page_raw)
+                    # Main-row columns that can continue on the next page (page-break split rows)
+                    col_field = {2: "dates", 3: "nature", 4: "executants", 5: "claimants", 6: "vol_page"}
 
                     current_entry = {
                         "entry_index": entry_idx,
@@ -316,17 +408,20 @@ class PDFDeterministicExtractor:
                             "document_number": d_no,
                             "registration_year": yr,
                             "document_id": f"{d_no}/{yr}",
-                            "nature_of_deed": r[3].replace('\n', ' ').strip() if len(r) > 3 and r[3] else "",
-                            "volume_no": vol_page,
-                            "page_no": None,
+                            "nature_of_deed": re.sub(r'\s+', ' ', r[3]).strip() if len(r) > 3 and r[3] else "",
+                            "volume_no": vol_no,
+                            "page_no": page_no,
+                            "vol_page_raw": vol_page_raw,
                             "book_no": "1",
                             "sro_name": sro_fallback,
                             "dates": {
                                 "execution_date": dates_list[0] if len(dates_list) > 0 else "",
                                 "presentation_date": dates_list[1] if len(dates_list) > 1 else "",
-                                "registration_date": dates_list[2] if len(dates_list) > 2 else (dates_list[0] if dates_list else "")
+                                # Never copied from another date: a page break can push it to the next page.
+                                "registration_date": dates_list[2] if len(dates_list) > 2 else ""
                             }
                         },
+                        "document_remarks": "",
                         "financials": {
                             "consideration_value_raw": "-",
                             "consideration_value_num": 0.0,
@@ -345,38 +440,68 @@ class PDFDeterministicExtractor:
                         "schedules": []
                     }
                     current_sched = None
+                elif current_entry and cls._is_continuation_row(r):
+                    # Unlabelled row = the tail of a cell that the PDF table split (page break / wrap).
+                    # Stitch each piece back onto the field that owns that column.
+                    for j, c in enumerate(r):
+                        if not c or not str(c).strip():
+                            continue
+                        cls._stitch_continuation_cell(current_entry, current_sched, col_field.get(j), str(c))
                 elif current_entry:
+                    # Track which field owns each column, for page-break continuation rows
+                    for j, c in enumerate(r):
+                        if c and str(c).strip():
+                            fk = cls._cell_field_kind(str(c))
+                            if fk:
+                                col_field[j] = fk
+                                # value cell to the right of a label-only "Document Remarks" cell
+                                if fk == "doc_remarks" and re.fullmatch(r'[\s\S]*:\s*', str(c).strip()):
+                                    col_field[j + 1] = "doc_remarks"
+                            elif col_field.get(j - 1) == "doc_remarks" and j - 1 >= 0 and r[j - 1] and cls._cell_field_kind(str(r[j - 1])) == "doc_remarks":
+                                v = re.sub(r'\s+', ' ', cls.normalize_tamil_unicode(str(c))).strip()
+                                if v and v != '-':
+                                    current_entry["document_remarks"] = (current_entry.get("document_remarks", "") + " " + v).strip()
                     # Parse row cells individually rather than flattening into a single space-separated string
                     # 1. Financials & PR (check cells in row)
                     for c in r:
                         if not c: continue
-                        con_m = re.search(r'(?:Consideration\s*Value|ைகமாற்றுத்\s*ெதாைக|கைமாற்றுத்\s*தொகை)[^\:]*[\:\-]\s*Rs\.?\s*([0-9\,]+|\-)', c, re.I)
-                        if con_m and con_m.group(1) != '-':
-                            v_num = float(con_m.group(1).replace(',', ''))
-                            current_entry["financials"]["consideration_value_raw"] = f"Rs. {con_m.group(1)}/-"
+                        con_m = re.search(r'(?:Consideration\s*Value|ைகமாற்றுத்\s*ெதாைக|கைமாற்றுத்\s*தொகை)[^\:]*[\:\-]\s*(Rs\.?|ரூ\.?)?\s*([0-9\,]+|\-)', c, re.I)
+                        if con_m and con_m.group(2) != '-':
+                            v_num = float(con_m.group(2).replace(',', ''))
+                            current_entry["financials"]["consideration_value_raw"] = f"{(con_m.group(1) or 'Rs.').rstrip('.')}. {con_m.group(2)}/-"
                             current_entry["financials"]["consideration_value_num"] = v_num
 
-                        mkt_m = re.search(r'(?:Market\s*Value|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு)[^\:]*[\:\-]\s*Rs\.?\s*([0-9\,]+|\-)', c, re.I)
-                        if mkt_m and mkt_m.group(1) != '-':
-                            v_num = float(mkt_m.group(1).replace(',', ''))
-                            current_entry["financials"]["market_value_raw"] = f"Rs. {mkt_m.group(1)}/-"
+                        mkt_m = re.search(r'(?:Market\s*Value|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு)[^\:]*[\:\-]\s*(Rs\.?|ரூ\.?)?\s*([0-9\,]+|\-)', c, re.I)
+                        if mkt_m and mkt_m.group(2) != '-':
+                            v_num = float(mkt_m.group(2).replace(',', ''))
+                            current_entry["financials"]["market_value_raw"] = f"{(mkt_m.group(1) or 'Rs.').rstrip('.')}. {mkt_m.group(2)}/-"
                             current_entry["financials"]["market_value_num"] = v_num
 
                         pr_m = re.search(r'(?:PR\s*Number|முந்ைதய\s*ஆவண\s*எண்|முந்தைய\s*ஆவண\s*எண்)[^\:]*[\:\-]\s*([^\n\r]+)', c, re.I)
                         if pr_m:
                             pr_val = pr_m.group(1).strip()
+                            # A PR cell can wrap across several physical lines when a deed cites
+                            # multiple parents (e.g. "1572/ 2007, 1644/\n2007, 1904/ 2007").
+                            # Stitch the continuation lines of the same cell deterministically.
+                            pr_full = cls._stitch_pr_cell_continuation(c[pr_m.start(1):])
+                            if pr_full:
+                                pr_val = pr_full
+                            pr_val = cls._clean_empty_pr(pr_val)
                             current_entry["pr_lineage"]["pr_raw"] = pr_val
-                            current_entry["pr_lineage"]["pr_documents"] = cls._parse_pr_string(pr_val)
+                            current_entry["pr_lineage"]["pr_documents"] = cls._parse_pr_string(
+                                pr_val, exclude_doc_id=current_entry["registration_particulars"].get("document_id", "")
+                            )
 
                     # 2. Schedule Marker detection
                     for c in r:
                         if not c: continue
-                        sm = re.search(r'(?:Schedule\s*([0-9]+)?\s*Details(?:\s*\(([^\)]*)\))?|அட்டவணை\s*([0-9]+)?\s*விவரங்கள்(?:\s*\(([^\)]*)\))?|அட்டவைண\s*([0-9]+)?\s*விவரங்கள்(?:\s*\(([^\)]*)\))?|Schedule\s*Details(?:\s*\(([^\)]*)\))?)', c, re.I)
+                        sm = re.search(r'(?:Schedule\s*([0-9]+|[A-Z])?\s*Details(?:\s*\(([^\)]*)\))?|அட்டவணை\s*([0-9]+)?\s*விவரங்கள்(?:\s*\(([^\)]*)\))?|அட்டவைண\s*([0-9]+)?\s*விவரங்கள்(?:\s*\(([^\)]*)\))?|Schedule\s*Details(?:\s*\(([^\)]*)\))?)', c, re.I)
                         if sm:
                             if current_sched:
                                 if not current_sched.get("plot_no"):
-                                    target_text = f"{current_sched.get('schedule_remarks_full', '')} {current_sched.get('boundaries', {}).get('raw', '')}"
-                                    p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)\s*([0-9]+[A-Za-z]?)', target_text, re.I)
+                                    # Remarks only: boundary text names the NEIGHBOURING plots, never this plot.
+                                    target_text = current_sched.get('schedule_remarks_full', '')
+                                    p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)[\s\.:]*([0-9]+[A-Za-z]?)', target_text, re.I)
                                     if p_fallback:
                                         current_sched["plot_no"] = p_fallback.group(1).strip()
                                 current_entry["schedules"].append(current_sched)
@@ -405,13 +530,18 @@ class PDFDeterministicExtractor:
                                 "flat_no": "",
                                 "block_no": "",
                                 "ward_no": "",
-                                "boundaries": {"raw": "", "east": "", "west": "", "north": "", "south": ""},
+                                "boundaries": {"raw": "", "east": "", "west": "", "north": "", "south": "", "layout_family": "NOT_ON_CERTIFICATE"},
                                 "schedule_remarks_full": ""
                             }
                             break
 
                     if current_sched is None:
-                        row_has_field = any(any(k in str(c) for k in ["Property Type", "Property Extent", "Survey No", "Village", "விஸ்தீர்ணம்", "புல எண்", "கிராமம்"]) for c in r if c)
+                        # Only real schedule field cells open a schedule; free text (document remarks
+                        # mentioning "விஸ்தீர்ணம்", boundaries, schedule remarks) never does.
+                        row_has_field = any(
+                            cls._cell_field_kind(str(c)) in ("field", "village_street")
+                            and any(k in str(c) for k in ["Property Type", "Property Extent", "Survey No", "Village", "விஸ்தீர்ணம்", "புல எண்", "கிராமம்"])
+                            for c in r if c)
                         if row_has_field:
                             current_sched = {
                                 "schedule_id": f"Schedule {len(current_entry['schedules']) + 1}",
@@ -428,7 +558,7 @@ class PDFDeterministicExtractor:
                                 "flat_no": "",
                                 "block_no": "",
                                 "ward_no": "",
-                                "boundaries": {"raw": "", "east": "", "west": "", "north": "", "south": ""},
+                                "boundaries": {"raw": "", "east": "", "west": "", "north": "", "south": "", "layout_family": "NOT_ON_CERTIFICATE"},
                                 "schedule_remarks_full": ""
                             }
 
@@ -436,6 +566,7 @@ class PDFDeterministicExtractor:
                     if current_sched:
                         for c in r:
                             if not c: continue
+                            is_text_cell = cls._cell_field_kind(str(c)) in ("boundary", "remarks", "doc_remarks")
 
                             # 1. Clean Property Type
                             pt_m = re.search(r'(?:Property\s*Type[\s\/]*(?:ெசாத்தின்\s*வைகப்பாடு|சொத்தின்\s*வகைப்பாடு)?|ெசாத்தின்\s*வைகப்பாடு|சொத்தின்\s*வகைப்பாடு)[\s\/\:\-]+([^\n\r]+?)(?=(?:Property\s*Extent|விஸ்தீர்ணம்|Survey\s*No|புல\s*எண்|Village|கிராமம்|\n|$))', c, re.I)
@@ -446,9 +577,19 @@ class PDFDeterministicExtractor:
                                     current_sched["property_type"] = pt_val
                                     is_field_row = True
 
+                            # 2a. Combined "Survey No-Extent: <survey> - <extent>" cell
+                            se_pair = None if is_text_cell else cls._split_survey_extent_cell(c)
+                            if se_pair:
+                                se_sur, se_ext = se_pair
+                                if se_sur and re.search(r'[0-9]', se_sur):
+                                    current_sched["survey_number"] = cls._parse_survey_dict(se_sur)
+                                if se_ext:
+                                    current_sched["extent"] = cls._parse_extent_dict(se_ext)
+                                is_field_row = True
+
                             # 2. Clean Property Extent
-                            ext_m = re.search(r'(?:Property\s*Extent[\s\/]*(?:ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)?|ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)[\s\/\:\-]+([^\n\r]+?)(?=(?:Survey\s*No|புல\s*எண்|Village|கிராமம்|Plot|மைன|Door|கதவு|\n|$))', c, re.I)
-                            if not ext_m:
+                            ext_m = None if (se_pair or is_text_cell) else re.search(r'(?:Property\s*Extent[\s\/]*(?:ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)?|ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)[\s\/\:\-]+([^\n\r]+?)(?=(?:Survey\s*No|புல\s*எண்|Village|கிராமம்|Plot|மைன|Door|கதவு|\n|$))', c, re.I)
+                            if not ext_m and not se_pair and not is_text_cell:
                                 ext_m = re.search(r'(?:Survey\s*No\-Extent|புல\s*எண்\-விஸ்த[ீி]ர்ணம்)[\s\/\:\-][^\-]+?\-\s*([^\n\r]+)', c, re.I)
                             if ext_m:
                                 ext_val = ext_m.group(1).strip(' ,-')
@@ -458,16 +599,18 @@ class PDFDeterministicExtractor:
                                     is_field_row = True
 
                             # 3. Clean Survey Number
-                            sur_m = re.search(r'(?:Survey\s*No\.?|புல\s*எண்)[\s\/\:\-]+([0-9]+[A-Za-z0-9\/\,\s\-]+?)(?=(?:New\s*Door|Old\s*Door|Door|Floor|Plot|புதிய|பழைய|கதவு|தள|மனை|மைன|\n|$))', c, re.I)
-                            if not sur_m:
+                            sur_m = None if (se_pair or is_text_cell) else re.search(r'(?:Survey\s*No\.?|புல\s*எண்)[\s\/\:\-]+([0-9]+[A-Za-z0-9\/\,\s\-]+?)(?=(?:New\s*Door|Old\s*Door|Door|Floor|Plot|புதிய|பழைய|கதவு|தள|மனை|மைன|\n|$))', c, re.I)
+                            if not sur_m and not se_pair and not is_text_cell:
                                 sur_m = re.search(r'(?:Survey\s*No\-Extent|புல\s*எண்\-விஸ்த[ீி]ர்ணம்)[\s\/\:\-]+([^\-\n\r]+)', c, re.I)
                             if sur_m:
                                 sur_val = sur_m.group(1).strip(' ,-')
-                                current_sched["survey_number"] = cls._parse_survey_dict(sur_val)
+                                # Never store a label (e.g. "புல எண்") as the survey value.
+                                if re.search(r'[0-9]', sur_val):
+                                    current_sched["survey_number"] = cls._parse_survey_dict(sur_val)
                                 is_field_row = True
 
                             # 4. Clean Village & Street (NEVER overwritten by schedule remarks)
-                            vs_m = re.search(r'(?:Village\s*&\s*Street[\s\/]*(?:கிராமம்\s*மற்றும்\s*(?:ெத|தெ)ரு)?|கிராமம்\s*மற்றும்\s*(?:ெத|தெ)ரு|Village\s*\/கிராமம்)[\s\/\:\-]+([\s\S]+?)(?=(?:Survey\s*No|புல\s*எண்|Plot\s*No|மைன\s*எண்|Door\s*No|கதவு\s*எண்|Boundary|Schedule|$))', c, re.I)
+                            vs_m = None if is_text_cell else re.search(r'(?:Village\s*&\s*Street[\s\/]*(?:கிராமம்\s*மற்றும்\s*(?:ெத|தெ)ரு)?|கிராமம்\s*மற்றும்\s*(?:ெத|தெ)ரு|Village\s*\/கிராமம்)[\s\/\:\-]+([\s\S]+?)(?=(?:Survey\s*No|புல\s*எண்|Plot\s*No|மைன\s*எண்|Door\s*No|கதவு\s*எண்|Boundary|Schedule|$))', c, re.I)
                             if vs_m:
                                 raw_vs = vs_m.group(1).strip()
                                 raw_vs = re.sub(r'^(?:கிராமம்\s*மற்றும்\s*(?:ெத|தெ)ரு|Village\s*\/கிராமம்)[\s\/\:\-]*', '', raw_vs).strip()
@@ -481,63 +624,65 @@ class PDFDeterministicExtractor:
                                 is_field_row = True
 
                             # 5. Full Plot Number Parsing
-                            pl_m = re.search(r'(?:Plot\s*No\.?|மைன\s*எண்|மனை\s*எண்)[\s\/\:\-]*([A-Za-z0-9\s\/\-]+?)(?=(?:New\s*Door|Old\s*Door|Door|Boundary|Schedule|Floor|Block|\n|$))', c, re.I)
+                            pl_m = None if is_text_cell else re.search(r'(?:Plot\s*No\.?|மைன\s*எண்|மனை\s*எண்)([^\n\r]*)', c, re.I)
                             if pl_m:
-                                pl_val = pl_m.group(1).strip(' ,-')
-                                pl_val = re.sub(r'^(?:மைன\s*எண்|மனை\s*எண்)[\s\/\:\-]*', '', pl_val).strip(' ,-')
+                                pl_val = cls._strip_field_label(pl_m.group(1))
+                                pl_val = re.split(r'(?:New\s*Door|Old\s*Door|Door|Boundary|Schedule|Floor|Block|Flat)', pl_val, flags=re.I)[0].strip(' ,-')
+                                if not re.search(r'[0-9A-Za-z\u0B80-\u0BFF]', pl_val):
+                                    pl_val = ""
                                 if pl_val:
                                     current_sched["plot_no"] = pl_val
                                     is_field_row = True
 
                             # 6. Door numbers, Floor, Block, Ward, Flat
-                            nd_m = re.search(r'(?:New\s*Door\s*No\.?|புதிய\s*கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            nd_m = None if is_text_cell else re.search(r'(?:New\s*Door\s*No\.?|புதிய\s*கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if nd_m:
-                                d_val = re.split(r'(?:Plot|Floor|Block|Old|Door|மனை|மைன|தள|பிளாக்)', nd_m.group(1))[0].strip(' ,-')
+                                d_val = re.split(r'(?:Plot|Floor|Block|Old|Door|மனை|மைன|தள|பிளாக்)', cls._strip_field_label(nd_m.group(1)))[0].strip(' ,-')
                                 if d_val:
                                     current_sched["new_door_no"] = d_val
                                     current_sched["door_no"] = d_val
                                     is_field_row = True
 
-                            od_m = re.search(r'(?:Old\s*Door\s*No\.?|பைழய\s*கதவு\s*எண்|பழைய\s*கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            od_m = None if is_text_cell else re.search(r'(?:Old\s*Door\s*No\.?|பைழய\s*கதவு\s*எண்|பழைய\s*கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if od_m:
-                                d_val = re.split(r'(?:Plot|Floor|Block|New|Door|மனை|மைன|தள|பிளாக்)', od_m.group(1))[0].strip(' ,-')
+                                d_val = re.split(r'(?:Plot|Floor|Block|New|Door|மனை|மைன|தள|பிளாக்)', cls._strip_field_label(od_m.group(1)))[0].strip(' ,-')
                                 if d_val:
                                     current_sched["old_door_no"] = d_val
                                     if not current_sched["door_no"]:
                                         current_sched["door_no"] = d_val
                                     is_field_row = True
 
-                            d_m = re.search(r'(?:Door\s*No\.?|கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            d_m = None if is_text_cell else re.search(r'(?:Door\s*No\.?|கதவு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if d_m and not any(k in c for k in ['New Door', 'Old Door', 'புதிய கதவு', 'பைழய கதவு', 'பழைய கதவு']):
-                                d_val = re.split(r'(?:Plot|Floor|Block|மனை|மைன|தள|பிளாக்)', d_m.group(1))[0].strip(' ,-')
+                                d_val = re.split(r'(?:Plot|Floor|Block|மனை|மைன|தள|பிளாக்)', cls._strip_field_label(d_m.group(1)))[0].strip(' ,-')
                                 if d_val and not current_sched["door_no"]:
                                     current_sched["door_no"] = d_val
                                     is_field_row = True
 
-                            fl_m = re.search(r'(?:Flat\s*No\.?|அடுக்குமாடி\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            fl_m = None if is_text_cell else re.search(r'(?:Flat\s*No\.?|அடுக்குமாடி\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if fl_m:
-                                fl_val = re.split(r'(?:Plot|Door|Floor|Block|மனை|மைன)', fl_m.group(1))[0].strip(' ,-')
+                                fl_val = re.split(r'(?:Plot|Door|Floor|Block|மனை|மைன)', cls._strip_field_label(fl_m.group(1)))[0].strip(' ,-')
                                 if fl_val:
                                     current_sched["flat_no"] = fl_val
                                     is_field_row = True
 
-                            floor_m = re.search(r'(?:Floor\s*No\.?|தள\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            floor_m = None if is_text_cell else re.search(r'(?:Floor\s*No\.?|தள\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if floor_m:
-                                floor_val = re.split(r'(?:Plot|Door|Flat|Block|மனை|மைன)', floor_m.group(1))[0].strip(' ,-')
+                                floor_val = re.split(r'(?:Plot|Door|Flat|Block|மனை|மைன)', cls._strip_field_label(floor_m.group(1)))[0].strip(' ,-')
                                 if floor_val:
                                     current_sched["floor_no"] = floor_val
                                     is_field_row = True
 
-                            block_m = re.search(r'(?:Block\s*No\.?|பிளாக்\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            block_m = None if is_text_cell else re.search(r'(?:Block\s*No\.?|பிளாக்\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if block_m:
-                                b_val = re.split(r'(?:Plot|Door|Floor|Flat|மனை|மைன)', block_m.group(1))[0].strip(' ,-')
+                                b_val = re.split(r'(?:Plot|Door|Floor|Flat|மனை|மைன)', cls._strip_field_label(block_m.group(1)))[0].strip(' ,-')
                                 if b_val:
                                     current_sched["block_no"] = b_val
                                     is_field_row = True
 
-                            ward_m = re.search(r'(?:Ward\s*No\.?|வார்டு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
+                            ward_m = None if is_text_cell else re.search(r'(?:Ward\s*No\.?|வார்டு\s*எண்)[\s\/\:\-]*([^\n\r]+)', c, re.I)
                             if ward_m:
-                                w_val = re.split(r'(?:Plot|Door|Floor|Block|மனை|மைன)', ward_m.group(1))[0].strip(' ,-')
+                                w_val = re.split(r'(?:Plot|Door|Floor|Block|மனை|மைன)', cls._strip_field_label(ward_m.group(1)))[0].strip(' ,-')
                                 if w_val:
                                     current_sched["ward_no"] = w_val
                                     is_field_row = True
@@ -548,6 +693,7 @@ class PDFDeterministicExtractor:
                                 b_raw = bnd_m.group(1).strip()
                                 if "Schedule Remarks" in b_raw:
                                     b_raw = b_raw.split("Schedule Remarks")[0].strip()
+                                current_sched["_bnd_src"] = b_raw
                                 current_sched["boundaries"] = cls._parse_boundaries(b_raw)
                                 is_field_row = True
 
@@ -573,8 +719,9 @@ class PDFDeterministicExtractor:
             if current_entry:
                 if current_sched:
                     if not current_sched.get("plot_no"):
-                        target_text = f"{current_sched.get('schedule_remarks_full', '')} {current_sched.get('boundaries', {}).get('raw', '')}"
-                        p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)\s*([0-9]+[A-Za-z]?)', target_text, re.I)
+                        # Remarks only: boundary text names the NEIGHBOURING plots, never this plot.
+                        target_text = current_sched.get('schedule_remarks_full', '')
+                        p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)[\s\.:]*([0-9]+[A-Za-z]?)', target_text, re.I)
                         if p_fallback:
                             current_sched["plot_no"] = p_fallback.group(1).strip()
                     current_entry["schedules"].append(current_sched)
@@ -583,7 +730,138 @@ class PDFDeterministicExtractor:
         except Exception as e:
             pass
 
+        for ent in entries:
+            for sc in ent.get("schedules", []):
+                sc.pop("_bnd_src", None)
+                # Door number written only in the schedule remarks ("கதவு எண் 40 உள்ள வீடு").
+                # Remarks describe this property; boundary text (neighbours) is never used.
+                if not sc.get("door_no"):
+                    dm = re.search(r'கதவு\s*(?:எண்|நெ|நம்பர்)[\s\.:]*([0-9][0-9A-Za-z/\-]*)', sc.get("schedule_remarks_full", "") or "")
+                    if dm:
+                        sc["door_no"] = dm.group(1).strip('-/')
+                        sc["door_no_source"] = "SCHEDULE_REMARKS"
         return entries
+
+    # ------------------------------------------------------------------
+    # Survey-EC table helpers (cell classification and page-break stitching)
+    # ------------------------------------------------------------------
+    CELL_KIND_PATTERNS = [
+        ("boundary", re.compile(r'^\s*(?:Boundary\s*Details|எல்லை\s*வி|எல்ைல\s*வி)', re.I)),
+        ("remarks", re.compile(r'^\s*(?:Schedule\s*Remarks|ெசாத்து\s*விவரம்|சொத்து\s*விவரம்)', re.I)),
+        ("doc_remarks", re.compile(r'^\s*(?:Document\s*Remarks|ஆவணக்\s*குறிப்பு)', re.I)),
+        ("village_street", re.compile(r'^\s*(?:Village\s*&\s*Street|கிராமம்\s*மற்றும்)', re.I)),
+        ("fin", re.compile(r'^\s*(?:Consideration\s*Value|Market\s*Value|PR\s*Number|ைகமாற்றுத்|கைமாற்றுத்|சந்ைத|சந்தை|முந்ைதய|முந்தைய)', re.I)),
+        ("field", re.compile(r'(?:^|\n)\s*(?:Schedule\s*[0-9]*\s*Details|Property\s*(?:Type|Extent)|Survey\s*No|Plot\s*No|Door\s*No|Flat\s*No|Floor\s*No|Block\s*No|Ward\s*No|'
+                             r'புல\s*எண்|மைன\s*எண்|மனை\s*எண்|கதவு\s*எண்|விஸ்த|வைகப்பாடு|வகைப்பாடு|அட்டவைண|அட்டவணை|பிளாக்\s*எண்\s*:|வார்டு\s*எண்\s*:)', re.I)),
+    ]
+    # Bilingual label "English Label/தமிழ் லேபிள்:" at the start of a cell line (any field)
+    BILINGUAL_LABEL_RE = re.compile(r'(?:^|\n)\s*[A-Za-z][A-Za-z\.\s&\-]{1,40}/\s*[\u0B80-\u0BFF][^:\n]{0,60}:')
+    FOOTER_MARKERS = ("helpdesk@", "கட்டணமில்லா", "மின்னஞ்சல் முகவரி", "S.R.O /சா.ப.அ:", "சந்ேதகங்கள்", "சந்தேகங்கள்")
+
+    @classmethod
+    def _cell_field_kind(cls, cell: str) -> Optional[str]:
+        for kind, rx in cls.CELL_KIND_PATTERNS:
+            if rx.search(cell or ""):
+                return kind
+        return None
+
+    @classmethod
+    def _is_continuation_row(cls, row: List[Any]) -> bool:
+        """True for a row with no label at all: the tail of cells split by a page break or wrap."""
+        cells = [str(c) for c in row if c and str(c).strip()]
+        if not cells:
+            return False
+        joined = " ".join(cells)
+        if any(h in joined for h in cls.FOOTER_MARKERS):
+            return False
+        return not any(cls._cell_field_kind(c) or cls.BILINGUAL_LABEL_RE.search(c) for c in cells)
+
+    @staticmethod
+    def _strip_field_label(val: str) -> str:
+        """'/புதிய கதவு எண்: 27' -> '27'; 'அடுக்குமாடிக் குடியிருப்பு எண்: B1' -> 'B1'."""
+        v = (val or "").strip()
+        v = re.sub(r'^[\s\/\.\-]+', '', v)
+        v = re.sub(r'^[\u0B80-\u0BFF\s\.]+:\s*', '', v)
+        v = re.sub(r'^[:\-\s]+', '', v)
+        return v.strip(' ,-')
+
+    @staticmethod
+    def _split_vol_page(raw: str) -> Tuple[Optional[str], Optional[str]]:
+        """Vol.No & Page.No column: '2569, 309' -> ('2569', '309'); '-' or '' -> (None, None)."""
+        v = (raw or "").strip()
+        if not v or re.fullmatch(r'[\s\-–—]*', v):
+            return None, None
+        m = re.fullmatch(r'([0-9A-Za-z]+)\s*[,/&]\s*([0-9A-Za-z]+)', v)
+        if m:
+            return m.group(1), m.group(2)
+        return v, None
+
+    @staticmethod
+    def _split_party_cell(cell: str) -> List[str]:
+        """
+        Splits an executant/claimant cell into parties. Parties are numbered ("1. X", "2. Y"); an
+        unnumbered line continues the previous party (wrapped organisation names such as
+        "... சங்கம்" + "லிமிடெட்"). Cells without any numbering keep one party per line.
+        """
+        lines = [l.strip() for l in str(cell or "").split('\n') if l.strip() and l.strip() != '-']
+        if not lines:
+            return []
+        numbered = any(re.match(r'^[0-9]+\s*\.', l) for l in lines)
+        out: List[str] = []
+        for l in lines:
+            if numbered and out and not re.match(r'^[0-9]+\s*\.', l):
+                out[-1] = out[-1] + " " + l
+            else:
+                out.append(re.sub(r'^[0-9]+\s*\.\s*', '', l).strip())
+        return [o for o in out if o]
+
+    @classmethod
+    def _stitch_continuation_cell(cls, entry: Dict[str, Any], sched: Optional[Dict[str, Any]], field: Optional[str], text: str) -> None:
+        reg = entry["registration_particulars"]
+        t = text.strip()
+        if field == "dates":
+            found = re.findall(r'\d{2}-[A-Za-z]{3}-\d{4}', t)
+            for k in ("execution_date", "presentation_date", "registration_date"):
+                if not found:
+                    break
+                if not reg["dates"].get(k):
+                    reg["dates"][k] = found.pop(0)
+        elif field == "nature":
+            reg["nature_of_deed"] = re.sub(r'\s+', ' ', (reg.get("nature_of_deed", "") + " " + t)).strip()
+        elif field in ("executants", "claimants"):
+            plist = entry["parties"][field]
+            first_numbered = bool(re.match(r'^[0-9]+\s*\.', t))
+            parts = cls._split_party_cell(t)
+            if parts and plist and not first_numbered:
+                merged = plist[-1]["raw"] + " " + parts.pop(0)
+                plist[-1] = cls._format_party_entry(merged)
+            plist.extend(cls._format_party_entry(x) for x in parts)
+        elif field == "vol_page":
+            raw = re.sub(r'\s+', ' ', (reg.get("vol_page_raw", "") + " " + t)).strip()
+            reg["vol_page_raw"] = raw
+            reg["volume_no"], reg["page_no"] = cls._split_vol_page(raw)
+        elif field == "doc_remarks":
+            v = re.sub(r'\s+', ' ', cls.normalize_tamil_unicode(t)).strip()
+            if v and v != '-':
+                entry["document_remarks"] = (entry.get("document_remarks", "") + " " + v).strip()
+        elif sched is not None and field == "village_street":
+            v = re.sub(r'\s+', ' ', t).strip(' ,')
+            if sched.get("street"):
+                sched["street"] = (sched["street"] + " " + v).strip()
+            elif sched.get("village"):
+                sched["street"] = v
+            else:
+                sched["village"] = v
+        elif sched is not None and field == "boundary":
+            src = (sched.get("_bnd_src") or "") + "\n" + t
+            sched["_bnd_src"] = src
+            sched["boundaries"] = cls._parse_boundaries(src)
+        elif sched is not None and field in ("remarks", None):
+            if field is None and not sched.get("schedule_remarks_full"):
+                return
+            v = re.sub(r'\s+', ' ', cls.normalize_tamil_unicode(t)).strip()
+            if v and v != '-':
+                sched["schedule_remarks_full"] = (sched.get("schedule_remarks_full", "") + " " + v).strip()
 
     @classmethod
     def _extract_metadata(cls, all_lines: List[str], fb_doc: str, fb_yr: str, fb_sro: str = "") -> Dict[str, Any]:
@@ -839,6 +1117,24 @@ class PDFDeterministicExtractor:
             elif any(k in l for k in ['PR Number', 'முந்ைதய ஆவண எண்', 'முந்தைய ஆவண எண்']):
                 if i + 1 < len(all_lines): pr_raw = all_lines[i + 1].strip()
 
+        # Robust PR citation harvesting (superset of the legacy next-line rule above):
+        #  - scans the whole entry header (not just the first 80 lines; large layout /
+        #    consolidation deeds with many parties push the PR row far down),
+        #  - reads values printed on the SAME line as the label,
+        #  - stitches wrapped multi-parent lists across continuation lines,
+        #  - is not masked when the PR label shares a line with Consideration/Market Value.
+        # Legacy citations are always retained (never silently discarded).
+        self_doc_id = f"{doc_no}/{year}" if doc_no and year else ""
+        legacy_pr_docs = cls._parse_pr_string(pr_raw, exclude_doc_id=self_doc_id)
+        robust_pr_raw = cls._extract_pr_raw_from_lines(all_lines)
+        robust_pr_docs = cls._parse_pr_string(robust_pr_raw, exclude_doc_id=self_doc_id)
+        merged_pr_docs = list(robust_pr_docs)
+        for p_doc in legacy_pr_docs:
+            if not any(m["formatted"] == p_doc["formatted"] for m in merged_pr_docs):
+                merged_pr_docs.append(p_doc)
+        if robust_pr_docs and (not legacy_pr_docs or len(robust_pr_docs) >= len(legacy_pr_docs)):
+            pr_raw = robust_pr_raw
+
         entry["financials"] = {
             "consideration_value_raw": con_raw,
             "consideration_value_num": cls._extract_numeric_value(con_raw),
@@ -848,8 +1144,8 @@ class PDFDeterministicExtractor:
         }
 
         entry["pr_lineage"] = {
-            "pr_raw": pr_raw,
-            "pr_documents": cls._parse_pr_string(pr_raw)
+            "pr_raw": cls._clean_empty_pr(pr_raw),
+            "pr_documents": merged_pr_docs
         }
 
         # -------------------------------------------------------------
@@ -991,19 +1287,14 @@ class PDFDeterministicExtractor:
                         else:
                             sched["survey_number"]["survey"] = sur_part.strip()
                     if ext_part and not sched["extent"]["raw"]:
-                        sched["extent"]["raw"] = ext_part.strip()
-                        num_sqft = cls._extract_numeric_value(ext_part)
-                        sched["extent"]["sqft"] = num_sqft
-                        sched["extent"]["sq_meters"] = round(num_sqft * 0.092903, 2) if num_sqft > 0 else 0.0
+                        sched["extent"] = cls._parse_extent_dict(ext_part)
 
             # Standalone Property Extent
             if any(k in l for k in ['Property Extent', 'ெசாத்தின் விஸ்தீர்ணம்', 'சொத்தின் விஸ்தீர்ணம்']) and not any(k in l for k in ['Survey No-Extent', 'புல எண்-விஸ்தீர்ணம்']):
                 if ':' in l:
                     raw_ext = l.split(':', 1)[1].strip()
-                    sched["extent"]["raw"] = raw_ext
-                    num_sqft = cls._extract_numeric_value(raw_ext)
-                    sched["extent"]["sqft"] = num_sqft
-                    sched["extent"]["sq_meters"] = round(num_sqft * 0.092903, 2) if num_sqft > 0 else 0.0
+                    # Unit-aware (acre / cent / sq.m / sq.ft); raw text kept verbatim.
+                    sched["extent"] = cls._parse_extent_dict(raw_ext)
 
             # Village & Street
             if any(k in l for k in ['Village & Street', 'கிராமம் மற்றும் ெதரு', 'கிராமம் மற்றும் தெரு']):
@@ -1220,42 +1511,131 @@ class PDFDeterministicExtractor:
 
         if not sched.get("plot_no"):
             target_text = f"{sched.get('schedule_remarks_full', '')} {sched.get('boundaries', {}).get('raw', '')}"
-            p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)\s*([0-9]+[A-Za-z]?)', target_text, re.I)
+            p_fallback = re.search(r'(?:(?:மனை|மைன|பிளாட்)\s*(?:எண்|நெ|நம்பர்)?|Plot\s*(?:No\.?)?)[\s\.:]*([0-9]+[A-Za-z]?)', target_text, re.I)
             if p_fallback:
                 sched["plot_no"] = p_fallback.group(1).strip()
 
         return sched
 
     @classmethod
-    def _parse_boundaries(cls, raw_b: str, extra_lines: List[str] = None) -> Dict[str, str]:
-        """Parses directional boundaries supporting English and Tamil (words, suffixes, shorthands, continuation)."""
-        norm = cls.normalize_tamil_unicode(raw_b)
-        dirs = {"raw": norm, "east": "", "west": "", "north": "", "south": ""}
+    def _parse_boundaries(cls, raw_b: str, extra_lines: List[str] = None) -> Dict[str, Any]:
+        """
+        Parses the four boundaries of a schedule. Layout families:
+          SHORTHAND             "(வ) X (தெ) Y ..." / "(N) X ..."
+          PREFIX_LABEL          "East: X, West: Y", "EAST BY X", "கிழக்கு: X", "கிழக்கே X"
+          TAMIL_SUFFIX_RELATIVE "X-க்கு வடக்கு, Y-க்கு தெற்கு ..." (older Tamil certificates). The
+                                property lies NORTH of X, so X is the property's SOUTH boundary:
+                                the landmark is stored on the opposite side; "as_written" keeps the
+                                certificate's own direction word for every phrase.
+          EMPTY_ON_CERTIFICATE  "-, -, -, -" (never invented)
+        Line wraps and page-break continuations are stitched before splitting sides.
+        Keys east/west/north/south always mean "landmark on that side of the property".
+        """
+        norm = cls.normalize_tamil_unicode(raw_b or "")
+        raw_ws = re.sub(r'[ \t]+', ' ', norm).strip()
+        text = re.sub(r'\s+', ' ', norm).strip()
+        dirs: Dict[str, Any] = {"raw": raw_ws, "east": "", "west": "", "north": "", "south": "", "layout_family": ""}
+
+        def _clean_val(v: str) -> str:
+            v = re.sub(r'\s+', ' ', v or "").strip(' ,;-–:')
+            v = re.sub(r'^(?:BY\b|by\b)\s*', '', v).strip(' ,;-–:')
+            return "" if re.fullmatch(r'[\s\-–—\.,;]*', v) else v
+
+        if not text or re.fullmatch(r'[\s,\-–—;\.]*', text):
+            dirs["layout_family"] = "EMPTY_ON_CERTIFICATE" if text else ""
+            return dirs
 
         # 1. Shorthand notation check: (வ), (தெ), (கி), (மே), (E), (W), (N), (S)
-        shorthands = list(re.finditer(r'\(\s*(வ|வட|ெத|தெ|கி|கிழ|ேம|மே|[EWNSewns])\s*\)[\s\-ல்:]*([^,(]+)', norm))
+        shorthands = list(re.finditer(r'\(\s*(வ|வட|ெத|தெ|கி|கிழ|ேம|மே|[EWNSewns])\s*\)[\s\-ல்:]*([^,(]+)', text))
         if shorthands:
             for m in shorthands:
                 cardinal = m.group(1).strip().upper()
-                val = m.group(2).strip(' ,-')
+                val = _clean_val(m.group(2))
                 if cardinal in ['கி', 'கிழ', 'E']: dirs['east'] = val
                 elif cardinal in ['ேம', 'மே', 'W']: dirs['west'] = val
                 elif cardinal in ['வ', 'வட', 'N']: dirs['north'] = val
                 elif cardinal in ['ெத', 'தெ', 'S']: dirs['south'] = val
+            dirs["layout_family"] = "SHORTHAND"
             return dirs
 
-        # 2. Universal Bilingual Delimiter
-        next_dir = r'(?=(?:[\,\;]?\s*(?:East|West|North|South|கிழக்கு|கிழக்கில்|கிழக்கே|கிழக்ேக|மேற்கு|ேமற்கு|மேற்கில்|ேமற்கில்|வடக்கு|வடக்கில்|தெற்கு|ெதற்கு|தெற்கில்|ெதற்கில்))|$)'
-        
-        m_e = re.search(r'(?:East|கிழக்கு|கிழக்கில்|கிழக்ேக|கிழக்கே)[\s\:\-]*([\s\S]+?)' + next_dir, norm, re.I)
-        m_w = re.search(r'(?:West|ேமற்கு|ேமற்கில்|மேற்கு|மேற்கில்)[\s\:\-]*([\s\S]+?)' + next_dir, norm, re.I)
-        m_n = re.search(r'(?:North|வடக்கு|வடக்கில்)[\s\:\-]*([\s\S]+?)' + next_dir, norm, re.I)
-        m_s = re.search(r'(?:South|ெதற்கு|ெதற்கில்|தெற்கு|தெற்கில்)[\s\:\-]*([\s\S]+?)' + next_dir, norm, re.I)
+        # a direction word starts a word, or is glued to a dative ending ("நிலத்திற்குவடக்கு")
+        dir_any = r'(?:(?<![\u0B80-\u0BFFA-Za-z])|(?<=கு)|(?<=கும்))(?:' + '|'.join(f'(?P<{k}>{v})' for k, v in cls.BOUNDARY_DIR_WORDS.items()) + ')'
+        dir_plain = r'(?<![\u0B80-\u0BFFA-Za-z])(?:' + '|'.join(cls.BOUNDARY_DIR_WORDS.values()) + ')'
 
-        if m_e: dirs["east"] = re.sub(r'\s+', ' ', m_e.group(1)).strip(' ,-')
-        if m_w: dirs["west"] = re.sub(r'\s+', ' ', m_w.group(1)).strip(' ,-')
-        if m_n: dirs["north"] = re.sub(r'\s+', ' ', m_n.group(1)).strip(' ,-')
-        if m_s: dirs["south"] = re.sub(r'\s+', ' ', m_s.group(1)).strip(' ,-')
+
+        # 2. PREFIX family: the text starts with a direction label
+        if re.match(r'^\s*' + dir_plain + r'(?![\u0B80-\u0BFFA-Za-z])', text, re.I):
+            labels = []
+            for m in re.finditer(r'(?:' + dir_any + r')(?![\u0B80-\u0BFFA-Za-z])', text, re.I):
+                before = text[:m.start()].rstrip()
+                if (not before or before[-1] in ',;.' or re.search(r'(?:\bAND|&|மற்றும்)$', before, re.I) or
+                        re.match(r'\s*(?::|BY\b|-)', text[m.end():], re.I)):
+                    labels.append(m)
+            raw_vals = []
+            for i, m in enumerate(labels):
+                side = next(k for k in cls.BOUNDARY_DIR_WORDS if m.group(k))
+                end = labels[i + 1].start() if i + 1 < len(labels) else len(text)
+                raw_vals.append((side, text[m.end():end]))
+            # "SOUTH AND WEST OF X": a label whose value is only "AND" shares the next value
+            resolved = []
+            for i, (side, v) in enumerate(raw_vals):
+                vv = v.strip(' ,;:-')
+                j = i
+                while re.fullmatch(r'(?:AND|&|மற்றும்)?', vv, re.I) and j + 1 < len(raw_vals) and vv:
+                    j += 1
+                    vv = raw_vals[j][1].strip(' ,;:-')
+                resolved.append((side, vv))
+            relative_en = False
+            for side, v in resolved:
+                ofm = re.match(r'^OF\b\s*', v, re.I)
+                if ofm:
+                    # "NORTH OF X": the property is north of X, so X is the SOUTH boundary
+                    relative_en = True
+                    side = cls.BOUNDARY_OPPOSITE[side]
+                    v = v[ofm.end():]
+                val = _clean_val(v)
+                if val and not dirs[side]:
+                    dirs[side] = val
+                elif val and val not in dirs[side]:
+                    dirs[side] = dirs[side] + "; " + val
+            if relative_en:
+                dirs["direction_convention"] = "ENGLISH_OF_RELATIVE"
+            dirs["layout_family"] = "PREFIX_LABEL"
+        else:
+            # 3. SUFFIX family: "<landmark> <direction>" phrases, each ending at , ; . or end of text
+            ends = list(re.finditer(r'(?:' + dir_any + r')(?=\s*(?:[,;\.]|$))', text, re.I))
+            if ends:
+                segs = []
+                prev = 0
+                for m in ends:
+                    side_word = next(k for k in cls.BOUNDARY_DIR_WORDS if m.group(k))
+                    seg = _clean_val(text[prev:m.start()])
+                    segs.append((seg, side_word, m.group(0)))
+                    prev = m.end()
+                tail = _clean_val(text[prev:])
+                dative = sum(1 for seg, _, _ in segs if seg and re.search(cls.BOUNDARY_DATIVE_RE, seg))
+                relative = dative >= max(1, (len([1 for sg in segs if sg[0]]) + 1) // 2)
+                as_written = []
+                prev_seg, prev_word = "", ""
+                for seg, side_word, word in segs:
+                    side = cls.BOUNDARY_OPPOSITE[side_word] if relative else side_word
+                    if not seg and prev_word.endswith("ும்") and prev_seg:
+                        # "ரோட்டுக்கும் தெற்கும், மேற்கும்": the same landmark for both directions
+                        seg = prev_seg
+                    prev_seg, prev_word = seg, word
+                    as_written.append({"landmark": seg, "direction_word": word, "side": side})
+                    if not seg:
+                        continue
+                    dirs[side] = (dirs[side] + "; " + seg) if dirs[side] else seg
+                dirs["as_written"] = as_written
+                if tail:
+                    dirs["unassigned_text"] = tail
+                dirs["layout_family"] = "TAMIL_SUFFIX_RELATIVE" if relative else "SUFFIX_NO_DATIVE"
+            else:
+                dirs["layout_family"] = "UNPARSED"
+
+        if dirs["layout_family"] != "PREFIX_LABEL":
+            return dirs
 
         # 3. Page break continuation check: If directions are incomplete and extra_lines provided
         if (not dirs["north"] or not dirs["south"] or not dirs["east"] or not dirs["west"]) and extra_lines:
@@ -1294,6 +1674,13 @@ class PDFDeterministicExtractor:
         """Parses a party string into structured entity object with verbatim initials and classification."""
         clean = name_str.strip().rstrip('- ')
         no_num = re.sub(r'^[0-9]+\.\s*', '', clean).strip()
+        no_num = re.sub(r'\s+', ' ', cls.normalize_tamil_unicode(no_num))
+        # Older certificates print a party reference number after the name ("லீலாவதி 1").
+        ref_m = re.search(r'(?:\s+|(?<=[\u0B80-\u0BFF\)]))([0-9]{1,2})$', no_num)
+        party_ref = ""
+        if ref_m:
+            party_ref = ref_m.group(1)
+            no_num = no_num[:ref_m.start()].strip()
 
         # Detect initials (Tamil or English): e.g. "ரா." or "S." or "ஆர்." or "K.R."
         init_m = re.match(r'^([A-Za-z\u0B80-\u0BFF\.\,]{1,5}\.[\s\.]*)', no_num)
@@ -1308,22 +1695,160 @@ class PDFDeterministicExtractor:
             "raw": clean,
             "name": clean_name or no_num,
             "initial_verbatim": initial_verbatim,
-            "party_type": party_type
+            "party_type": party_type,
+            **({"party_ref": party_ref} if party_ref else {})
         }
 
+    # ------------------------------------------------------------------
+    # PR (prior document / முந்தைய ஆவண எண்) citation parsing
+    # ------------------------------------------------------------------
+    # Doc-number / year token. Lookbehinds stop date fragments such as
+    # "12-05-2007" from being read as document "05/2007".
+    PR_TOKEN_RE = re.compile(
+        r'(?<![0-9])(?<![0-9]/)(?<![0-9]-)(?<![0-9]\.)([0-9]{1,7})\s*[\/\-]\s*([12][09][0-9]{2})(?![0-9])'
+    )
+    PR_SHORT_YEAR_RE = re.compile(r'(?<![0-9/\-\.])([0-9]{1,7})\s*/\s*([0-9]{1,2})(?![0-9])(?!\s*/\s*[0-9])')
+    PR_LABEL_RE = re.compile(
+        r'(?:(?<![A-Za-z])PR\s*Number|(?<![A-Za-z])PR\s*No\b\.?|முந்ைதய\s*ஆவண\s*எண்(?:கள்)?|முந்தைய\s*ஆவண\s*எண்(?:கள்)?)',
+        re.I
+    )
+    # Labels of neighbouring EC cells; a PR value never continues past one of these.
+    PR_STOP_LABEL_RE = re.compile(
+        r'(?:Consideration\s*Value|Market\s*Value|Document\s*Remarks|Schedule\s*(?:[0-9]+\s*)?Details|Schedule\s*Remarks|'
+        r'Property\s*Type|Property\s*Extent|Survey\s*No|Village|Boundary|Nature|Executant|Claimant|'
+        r'Number\s*of\s*Entries|ைகமாற்றுத்|கைமாற்றுத்|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு|ஆவணக்?\s*குறிப்பு|'
+        r'அட்டவைண|அட்டவணை|சொத்தின்|ெசாத்தின்|புல\s*எண்|கிராமம்|எல்லை|எல்ைல|பதிவுகளின்)',
+        re.I
+    )
+    PR_PURE_TOKEN_LINE_RE = re.compile(r'^[\s0-9\/\-\,\;\.&]*(?:(?:and|மற்றும்)[\s0-9\/\-\,\;\.&]*)*$', re.I)
+
     @classmethod
-    def _parse_pr_string(cls, pr_str: str) -> List[Dict[str, str]]:
-        """Parses comma-separated PR deeds into individual {doc_no, year} objects."""
-        pr_list = []
-        for part in re.split(r'[\,\;]', pr_str):
-            clean = part.strip()
-            m = re.search(r'([0-9]+)\s*[\/\-]\s*([12][09][0-9]{2})', clean)
-            if m:
-                pr_list.append({
-                    "doc_no": m.group(1),
-                    "year": m.group(2),
-                    "formatted": f"{m.group(1)}/{m.group(2)}"
-                })
+    def _is_pr_continuation_line(cls, prev_text: str, line: str) -> bool:
+        """A following physical line belongs to the PR value only if it carries doc tokens and
+        either the previous text visibly continues (trailing , / - &) or the line is token-only."""
+        if not line or cls.PR_STOP_LABEL_RE.search(line) or cls.PR_LABEL_RE.search(line):
+            return False
+        if not re.search(r'[0-9]', line):
+            return False
+        prev = (prev_text or "").rstrip()
+        if prev.endswith((',', '/', '-', '&', ';')) or re.search(r'(?:and|மற்றும்)$', prev, re.I):
+            return True
+        return bool(cls.PR_PURE_TOKEN_LINE_RE.match(line.strip()))
+
+    @classmethod
+    def _stitch_pr_cell_continuation(cls, cell_tail: str) -> str:
+        """Joins the PR value of a table cell that wraps across several lines."""
+        if not cell_tail:
+            return ""
+        lines = [l.strip() for l in str(cell_tail).replace('\r', '\n').split('\n')]
+        lines = [l for l in lines if l]
+        if not lines:
+            return ""
+        acc = lines[0]
+        stop = cls.PR_STOP_LABEL_RE.search(acc)
+        if stop:
+            acc = acc[:stop.start()].strip()
+        for l in lines[1:]:
+            if cls._is_pr_continuation_line(acc, l):
+                acc = f"{acc} {l}".strip()
+            else:
+                break
+        return acc.strip()
+
+    @classmethod
+    def _extract_pr_raw_from_lines(cls, all_lines: List[str]) -> str:
+        """
+        Deterministically harvests the PR citation value from EC text lines.
+        Search window: from the top of the entry up to the first schedule header
+        (PR row always precedes the schedule block). The first PR label wins.
+        """
+        if not all_lines:
+            return ""
+        end = len(all_lines)
+        for i, l in enumerate(all_lines):
+            if re.search(r'(?:Schedule\s*[0-9]+\s*Details|அட்டவைண\s*[0-9]+\s*விவரங்கள்|அட்டவணை\s*[0-9]+\s*விவரங்கள்)', l, re.I) \
+                    and not any(k in l for k in ['Schedule Remarks', 'ெசாத்து விவரம்', 'சொத்து விவரம்']):
+                end = i
+                break
+
+        for i in range(end):
+            line = all_lines[i]
+            labels = list(cls.PR_LABEL_RE.finditer(line))
+            if not labels:
+                continue
+            remainder = line[labels[-1].end():]
+            remainder = re.sub(r'^[^\:\-0-9]{0,40}?[\:\-]', '', remainder, count=1).strip()
+            stop = cls.PR_STOP_LABEL_RE.search(remainder)
+            if stop:
+                remainder = remainder[:stop.start()].strip()
+            acc = remainder
+            j = i + 1
+            # Legacy behaviour: value printed on the next line under the label.
+            if not cls.PR_TOKEN_RE.search(acc) and j < len(all_lines):
+                nxt = all_lines[j].strip()
+                if not cls.PR_STOP_LABEL_RE.search(nxt) and not cls.PR_LABEL_RE.search(nxt):
+                    acc = f"{acc} {nxt}".strip() if acc and acc not in ('-', ':') else nxt
+                    j += 1
+            # Wrapped continuation lines (bounded look-ahead).
+            while j < len(all_lines) and j < i + 8:
+                nxt = all_lines[j].strip()
+                if cls._is_pr_continuation_line(acc, nxt):
+                    acc = f"{acc} {nxt}".strip()
+                    j += 1
+                else:
+                    break
+            return acc.strip()
+        return ""
+
+    @staticmethod
+    def _clean_empty_pr(pr_val: str) -> str:
+        """A PR cell holding only '/' or '-' (portal placeholder for "no prior document") is empty."""
+        v = (pr_val or "").strip()
+        return "" if re.fullmatch(r'[\s\/\-–—]*', v) else v
+
+    @classmethod
+    def _parse_pr_string(cls, pr_str: str, exclude_doc_id: str = "") -> List[Dict[str, str]]:
+        """
+        Parses PR citations into individual {doc_no, year} objects.
+        Accepts comma / semicolon / 'and' / 'மற்றும்' / whitespace separated lists and
+        spaced slashes ("1572/ 2007, 1644/ 2007, 1904/ 2007"). Order preserved, duplicates
+        and self-citations removed, implausible years rejected.
+        """
+        pr_list: List[Dict[str, str]] = []
+        if not pr_str:
+            return pr_list
+        max_year = datetime.date.today().year + 1
+        excl = re.sub(r'\s+', '', str(exclude_doc_id or ""))
+        ref_m = re.search(r'/\s*([12][0-9]{3})$', excl)
+        ref_year = int(ref_m.group(1)) if ref_m else max_year
+        seen = set()
+        tokens = [(m.start(), m.end(), m.group(1), m.group(2), None) for m in cls.PR_TOKEN_RE.finditer(str(pr_str))]
+        # Abbreviated years ("1873/ 78", "1170/ 4", "5593/68/"): the latest 19YY/20YY that is not
+        # after this document's own registration year. Confirmed on the 1579 EC: "3580/ 4" -> 3580/2004.
+        for m in cls.PR_SHORT_YEAR_RE.finditer(str(pr_str)):
+            if any(a <= m.start() < b for a, b, *_ in tokens):
+                continue
+            yy = int(m.group(2))
+            full = 2000 + yy if 2000 + yy <= ref_year else 1900 + yy
+            tokens.append((m.start(), m.end(), m.group(1), str(full), m.group(2)))
+        tokens.sort(key=lambda t: t[0])
+        for _, _, d_no, yr, short in tokens:
+            if int(d_no) == 0:
+                continue  # "0/ 1900", "0/ 0": portal placeholder, not a document
+            if not (1800 <= int(yr) <= max_year):
+                continue
+            formatted = f"{d_no}/{yr}"
+            if formatted in seen or (excl and formatted == excl):
+                continue
+            seen.add(formatted)
+            item = {
+                "doc_no": d_no,
+                "year": yr,
+                "formatted": formatted
+            }
+            if short is not None:
+                item["year_as_printed"] = short
+            pr_list.append(item)
         return pr_list
 
     @staticmethod

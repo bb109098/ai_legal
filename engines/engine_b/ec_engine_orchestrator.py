@@ -18,6 +18,7 @@ import re
 import time
 import json
 import glob
+import requests
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 
@@ -31,6 +32,32 @@ from pdf_deterministic_extractor import PDFDeterministicExtractor
 
 class ECEngineOrchestrator:
     """Master controller orchestrating complete 1975-Present property EC discovery."""
+
+    WINDOW_TRANSIENT_RETRIES = 2
+    WINDOW_TRANSIENT_BACKOFF_S = 20
+
+    @staticmethod
+    def classify_window_result(res: Optional[Dict[str, Any]], reason: str = "") -> Dict[str, Any]:
+        """
+        Deterministic verdict for one portal search window.
+        ok=True only for an authentic downloaded certificate or a verified zero-record response
+        (countNoRecords explicitly 0 in the portal form and no PDF expected).
+        """
+        if reason:
+            return {"ok": False, "outcome": "FAILED", "reason": reason}
+        if not res:
+            return {"ok": False, "outcome": "FAILED", "reason": "NO_RESPONSE"}
+        if res.get("split_needed") or res.get("overflow"):
+            return {"ok": False, "outcome": "FAILED", "reason": "OVERFLOW_NOT_SPLIT"}
+        if not res.get("success"):
+            return {"ok": False, "outcome": "FAILED", "reason": res.get("pdf_status") or res.get("error") or "SEARCH_FAILED"}
+        if res.get("nil"):
+            if res.get("count_field_present") and int(res.get("portal_record_count") or 0) == 0:
+                return {"ok": True, "outcome": "NIL_VERIFIED", "reason": "countNoRecords=0"}
+            return {"ok": False, "outcome": "FAILED", "reason": "NIL_UNVERIFIED"}
+        if res.get("pdf_saved") and os.path.exists(res["pdf_saved"]):
+            return {"ok": True, "outcome": "CERTIFIED", "reason": "OK"}
+        return {"ok": False, "outcome": "FAILED", "reason": f"EC_PDF_{res.get('pdf_status') or 'NOT_OBTAINED'}"}
 
     @classmethod
     def run_for_engine_a_output(
@@ -97,6 +124,36 @@ class ECEngineOrchestrator:
         # Initialize live HTTP session for portal searches
         session = ECPortalClient.create_session()
 
+        # Per-window outcome ledger: a run is exhaustive only if EVERY planned window ended
+        # with an authentic certificate (CERTIFIED) or a verified zero-record response (NIL_VERIFIED).
+        window_outcomes: List[Dict[str, Any]] = []
+
+        def _record_window(job_id: str, w_start: str, w_end: str, res: Optional[Dict[str, Any]], reason: str = "") -> Dict[str, Any]:
+            outcome = ECEngineOrchestrator.classify_window_result(res, reason)
+            row = {
+                "job_id": job_id,
+                "date_start": w_start,
+                "date_end": w_end,
+                "outcome": outcome["outcome"],
+                "reason": outcome["reason"],
+                "portal_record_count": (res or {}).get("portal_record_count"),
+                "html_records": len((res or {}).get("records") or []),
+                "pdf_saved": (res or {}).get("pdf_saved"),
+                "error": (res or {}).get("error"),
+            }
+            window_outcomes.append(row)
+            if not outcome["ok"]:
+                audit_blockers.append({
+                    "type": "EC_WINDOW_NOT_CERTIFIED",
+                    "job_id": job_id,
+                    "date_start": w_start,
+                    "date_end": w_end,
+                    "reason": outcome["reason"],
+                    "portal_record_count": row["portal_record_count"],
+                })
+                log(f"      [!] AUDIT BLOCKER: {job_id} {w_start}..{w_end} not certified ({outcome['reason']}).")
+            return row
+
         def run_search_with_halving(
             cur_start: str,
             cur_end: str,
@@ -129,7 +186,9 @@ class ECEngineOrchestrator:
                         time.sleep(2 * s_att)
                         session = ECPortalClient.create_session()
                     else:
-                        raise
+                        fail = {"success": False, "pdf_status": "SESSION_INIT_FAILED", "error": str(e_init)}
+                        _record_window(base_job_id, cur_start, cur_end, fail)
+                        return [fail]
 
             res = None
             for s_att in range(1, 4):
@@ -155,11 +214,45 @@ class ECEngineOrchestrator:
                     log(f"      [!] Search execution network error (attempt {s_att}/3): {e_exec}")
                     if s_att < 3:
                         time.sleep(2 * s_att)
-                        session = ECPortalClient.create_session()
-                        session_state = ECPortalClient.init_ec_session(session, log_callback=log)
+                        try:
+                            session = ECPortalClient.create_session()
+                            session_state = ECPortalClient.init_ec_session(session, log_callback=log)
+                        except Exception as e_reinit:
+                            log(f"      [!] Session re-init notice: {e_reinit}")
                     else:
-                        raise
+                        res = {"success": False, "pdf_status": "SEARCH_FAILED", "error": str(e_exec)}
             
+            # Transient portal error ("Please try after sometime"): retry the SAME window with a fresh
+            # session and longer backoff. Never date-split on it; the error page's record count is stale.
+            t_att = 0
+            while res and res.get("transient") and t_att < cls.WINDOW_TRANSIENT_RETRIES:
+                t_att += 1
+                wait_s = cls.WINDOW_TRANSIENT_BACKOFF_S * t_att
+                log(f"      [↻] Transient portal error for {cur_start} to {cur_end}; window retry {t_att}/{cls.WINDOW_TRANSIENT_RETRIES} after {wait_s}s (no date split).")
+                time.sleep(wait_s)
+                try:
+                    session = ECPortalClient.create_session()
+                    session_state = ECPortalClient.init_ec_session(session, log_callback=log)
+                    res = ECPortalClient.execute_ec_search(
+                        session=session,
+                        auth_token=session_state["auth_token"],
+                        csrf_token=session_state["csrf_token"],
+                        captcha_code=session_state["captcha_code"],
+                        sro_info=sro_info,
+                        survey_items=survey_items,
+                        start_date=cur_start,
+                        end_date=cur_end,
+                        output_pdf_path=out_pdf_path,
+                        base_form_fields=session_state.get("base_form_fields"),
+                        is_ward_block=is_ward_block,
+                        ward_no=ward_no,
+                        block_no=block_no,
+                        log_callback=log
+                    )
+                except Exception as e_tr:
+                    log(f"      [!] Transient-retry notice: {e_tr}")
+                    res = {"success": False, "transient": True, "pdf_status": "PORTAL_TRANSIENT_ERROR", "error": str(e_tr)}
+
             results = []
             if res.get("split_needed") or res.get("overflow"):
                 log(f"      [!] Portal email submission prompt active: records exceed synchronous threshold.")
@@ -175,17 +268,43 @@ class ECEngineOrchestrator:
                     results.extend(res_right)
                 except Exception as e_split:
                     log(f"      [!] Cannot split further ({cur_start} to {cur_end}): {e_split}")
+                    _record_window(base_job_id, cur_start, cur_end, res, reason=f"OVERFLOW_UNSPLITTABLE: {e_split}")
                     results.append(res)
             else:
                 if res.get("pdf_saved"):
                     collected_pdf_paths.append(res["pdf_saved"])
                 if res.get("records"):
                     collected_survey_records.extend(res["records"])
+                res["_window_outcome"] = _record_window(base_job_id, cur_start, cur_end, res)
                 results.append(res)
                 
             return results
 
         executed_master_sros = set()
+        # sro -> list of {"surveys": set((s, sub)), "start", "end", "ok"} for MASTER_SRO_BATCH runs
+        master_coverage: Dict[str, List[Dict[str, Any]]] = {}
+
+        def _master_covers(job: Dict[str, Any]) -> bool:
+            key = (str(job.get("survey_no", "")), str(job.get("subdivision_no", "") or ""))
+            try:
+                j_start = ECDateSplitter.parse_date(job["date_start"])
+                j_end = ECDateSplitter.parse_date(job["date_end"])
+            except Exception:
+                return False
+            for cov in master_coverage.get(job["sro_name"], []):
+                if not cov["ok"] or key not in cov["surveys"]:
+                    continue
+                try:
+                    if ECDateSplitter.parse_date(cov["start"]) <= j_start and ECDateSplitter.parse_date(cov["end"]) >= j_end:
+                        return True
+                except Exception:
+                    continue
+            return False
+
+        def _job_skipped(job: Dict[str, Any], reason: str):
+            audit_blockers.append({"type": "EC_JOB_NOT_EXECUTED", "job_id": job.get("job_id"), "reason": reason})
+            window_outcomes.append({"job_id": job.get("job_id"), "date_start": job.get("date_start"),
+                                    "date_end": job.get("date_end"), "outcome": "NOT_EXECUTED", "reason": reason})
 
         for job in plan["search_jobs"]:
             track = job.get("track", "")
@@ -212,6 +331,7 @@ class ECEngineOrchestrator:
             if track == "MASTER_SRO_BATCH":
                 if not job.get("surveys"):
                     log(f"      [!] No deed-reflected surveys identified for MASTER_SRO_BATCH. Skipping.")
+                    _job_skipped(job, "NO_SURVEYS_FOR_MASTER_BATCH")
                     continue
                 executed_master_sros.add(job["sro_name"])
                 log(f"\n  --> Executing {job['job_id']}: MASTER SRO BATCH | SRO: {job['sro_name']} | Dates: {job['date_start']} to {job['date_end']}")
@@ -251,6 +371,7 @@ class ECEngineOrchestrator:
 
                 if not matched_villages:
                     log(f"      [!] Zero valid portal villages matched for SRO '{sro_info['sro_name']}'. Track paused by Audit Shield.")
+                    _job_skipped(job, "NO_PORTAL_VILLAGE_MATCHED")
                     continue
 
                 # Batch into groups of up to 3 villages (strict portal constraint)
@@ -258,6 +379,7 @@ class ECEngineOrchestrator:
                 log(f"      [+] Grouped into {len(v_batches)} execution search batch(es) (maximum 3 villages per portal query constraint):")
 
                 survey_tuples = job.get("surveys", [])
+                batch_ok = True
                 survey_display = [f"{s}/{sub}" if sub else str(s) for s, sub in survey_tuples]
 
                 for b_idx, batch in enumerate(v_batches, start=1):
@@ -275,6 +397,7 @@ class ECEngineOrchestrator:
                     is_wb = (job.get("search_mode") == "WARD_BLOCK_WISE")
                     w_no = str(job.get("ward_no", "") or "")
                     b_no = str(job.get("block_no", "") or "")
+                    n_before = len(window_outcomes)
                     run_search_with_halving(
                         cur_start=job["date_start"],
                         cur_end=job["date_end"],
@@ -285,8 +408,19 @@ class ECEngineOrchestrator:
                         ward_no=w_no,
                         block_no=b_no
                     )
-            elif job["sro_name"] in executed_master_sros and track in [SearchTrack.PRIMARY_SURVEY, SearchTrack.PARENT_SURVEY, SearchTrack.LAYOUT_AUXILIARY, "PRIMARY_SURVEY", "PARENT_SURVEY", "LAYOUT_AUXILIARY"]:
-                log(f"      [i] SRO '{job['sro_name']}' survey track already comprehensively covered by MASTER_SRO_BATCH. Skipping redundant job {job['job_id']}.")
+                    new_rows = window_outcomes[n_before:]
+                    if not new_rows or any(r.get("outcome") not in ("CERTIFIED", "NIL_VERIFIED") for r in new_rows):
+                        batch_ok = False
+                master_coverage.setdefault(job["sro_name"], []).append({
+                    "surveys": {(str(s), str(sub or "")) for s, sub in survey_tuples},
+                    "start": job["date_start"],
+                    "end": job["date_end"],
+                    "ok": batch_ok,
+                })
+            elif job["sro_name"] in executed_master_sros and track in [SearchTrack.PRIMARY_SURVEY, SearchTrack.PARENT_SURVEY, SearchTrack.LAYOUT_AUXILIARY, "PRIMARY_SURVEY", "PARENT_SURVEY", "LAYOUT_AUXILIARY"] and _master_covers(job):
+                log(f"      [i] SRO '{job['sro_name']}' survey {job.get('survey_no')}/{job.get('subdivision_no')} {job['date_start']}..{job['date_end']} already certified by MASTER_SRO_BATCH. Skipping redundant job {job['job_id']}.")
+                window_outcomes.append({"job_id": job["job_id"], "date_start": job["date_start"], "date_end": job["date_end"],
+                                        "outcome": "COVERED_BY_MASTER_BATCH", "reason": "same SRO, survey and date range certified"})
                 continue
             else:
                 log(f"\n  --> Executing {job['job_id']}: {job['search_mode']} | SRO: {job['sro_name']} | Dates: {job['date_start']} to {job['date_end']} | Survey: {job.get('survey_no')}/{job.get('subdivision_no')}")
@@ -317,6 +451,7 @@ class ECEngineOrchestrator:
 
                 if not v_id:
                     log(f"      [!] Unresolved village for job {job['job_id']}. Skipping to avoid false clean title.")
+                    _job_skipped(job, "UNRESOLVED_VILLAGE")
                     continue
 
                 s_item = [{
@@ -424,6 +559,19 @@ class ECEngineOrchestrator:
             for f in os.listdir(ec_downloads_dir) 
             if f.endswith(".pdf") and not f.startswith("Master_") and os.path.getsize(os.path.join(ec_downloads_dir, f)) > 1000
         ]
+        # Never splice a portal error/retry page into the master certificate.
+        _authentic = []
+        for _p in survey_pdfs_in_downloads:
+            try:
+                with open(_p, "rb") as _fp:
+                    _insp = ECPortalClient.inspect_ec_pdf(_fp.read())
+            except Exception as _e:
+                _insp = {"authentic": False, "reason": f"UNREADABLE: {_e}"}
+            if _insp.get("authentic"):
+                _authentic.append(_p)
+            else:
+                log(f"      [!] Excluding non-certificate PDF from master: {os.path.basename(_p)} ({_insp.get('reason')})")
+        survey_pdfs_in_downloads = _authentic
 
         if not survey_pdfs_in_downloads:
             log("      [i] No multi-page survey EC PDFs downloaded during current live run.")
@@ -521,6 +669,7 @@ class ECEngineOrchestrator:
         audit_status = "INCOMPLETE_UNRESOLVED_PARCEL" if audit_blockers else "VERIFIED_EXHAUSTIVE"
         plan["audit_status"] = audit_status
         plan["audit_blockers"] = audit_blockers
+        plan["window_outcomes"] = window_outcomes
         try:
             with open(plan_file, "w", encoding="utf-8") as fp:
                 json.dump(plan, fp, indent=2, ensure_ascii=False)
