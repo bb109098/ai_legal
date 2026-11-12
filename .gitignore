@@ -1,0 +1,37 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Local environments and IDEs
+.venv/
+venv/
+ENV/
+.env
+.idea/
+.vscode/
+
+# Caches and large downloads
+.deed_cache/
+.ocr_cache/
+.tngis_cache/
+*.zip
+*.tar.gz
+
+# Pipeline runtime output directories (keep repo clean)
+output/
+testing_lab/output/
+sample_outputs/
+testing_lab/scratch_*
+testing_lab/*.html
+testing_lab/*.pdf
+testing_lab/*.json
+!testing_lab/sro_hierarchy.json
+!testing_lab/tnreginet_official_sro_master.json
+tests_and_sample_inputs/
+
+# Temporary / OS files
+Thumbs.db
+Desktop.ini
+*.log

@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engine A Testing Lab - TNREGINET Target Document & Deep PDF Extraction</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --surface: #334155;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #0b1120;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            color: var(--text-sub);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .badge-lab {
+            background: #0369a1;
+            color: #bae6fd;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 440px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 960px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .form-control, select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .form-control:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+        }
+
+        .preset-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .btn-preset {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #93c5fd;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-weight: 500;
+        }
+
+        .btn-preset:hover {
+            background: #334155;
+            color: #ffffff;
+            border-color: #60a5fa;
+        }
+
+        .btn-run {
+            width: 100%;
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-run:hover:not(:disabled) {
+            background: #0369a1;
+        }
+
+        .btn-run:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .console-box {
+            background: #050811;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: "Cascadia Code", Consolas, Monaco, monospace;
+            font-size: 12px;
+            color: #38bdf8;
+            max-height: 220px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin-top: 14px;
+        }
+
+        .results-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .stat-val {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 10px 14px;
+            font-weight: 600;
+            border-bottom: 1px solid #334155;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #1e293b;
+            color: #f1f5f9;
+        }
+
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        .btn-action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn-action {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #e2e8f0;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: #334155;
+            border-color: #94a3b8;
+            color: #ffffff;
+        }
+
+        .tab-btn {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+        }
+
+        .json-viewer {
+            background: #050811;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #a7f3d0;
+            max-height: 320px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .deep-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .deep-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .deep-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .deep-val {
+            font-size: 14px;
+            color: #f8fafc;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .bnd-compass {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .bnd-box {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+
+        .bnd-title {
+            font-size: 11px;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .bnd-text {
+            font-size: 13px;
+            color: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>🏛️ Engine A Testing Lab <span class="badge-lab">Dual JSON Architecture</span></h1>
+                <p>Pure Deterministic Target Document Ingestion: Automated Live Portal Query + Automated Government EC PDF Extraction</p>
+            </div>
+            <div>
+                <a href="/api/open_output_root" target="_blank" class="btn-action">📁 Open Output Folder</a>
+            </div>
+        </div>
+
+        <!-- Presets -->
+        <div class="preset-bar">
+            <span style="font-size:12px; color:#94a3b8; align-self:center; margin-right:4px;">Quick Test Presets:</span>
+            <button class="btn-preset" onclick="loadPreset('Dindugal Joint I', '235', '2021')">⭐ Dindigul Joint 1 (Doc 235 / 2021)</button>
+            <button class="btn-preset" onclick="loadPreset('Trichy Joint 1', '1579', '2021')">Trichy Joint 1 (Doc 1579 / 2021)</button>
+            <button class="btn-preset" onclick="loadPreset('Thiruvottiyur', '242', '2022')">Thiruvottiyur (Doc 242 / 2022)</button>
+            <button class="btn-preset" onclick="loadPreset('Poolampatti', '2367', '2010')">Poolampatti (Doc 2367 / 2010)</button>
+            <button class="btn-preset" onclick="loadPreset('Ganapathy', '234', '2021')">Ganapathy (Doc 234 / 2021)</button>
+        </div>
+
+        <div class="grid-layout">
+            <!-- Left Panel: Inputs -->
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <span>1. Registration Coordinates</span>
+                        <span id="hierarchyStatus" style="font-size:11px; color:#38bdf8;">Loading Hierarchy...</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Zone (மண்டலம்)</label>
+                        <select id="zoneSelect" onchange="onZoneChanged()">
+                            <option value="">Select Zone...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Registration District (பதிவு மாவட்டம்)</label>
+                        <select id="districtSelect" onchange="onDistrictChanged()" disabled>
+                            <option value="">Select District...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Sub-Registrar Office - SRO (சார்பதிவாளர் அலுவலகம்)</label>
+                        <input type="text" id="sroFilterInput" class="form-control" style="font-size:12px; padding:6px 10px; margin-bottom:6px;" placeholder="🔍 Filter SRO..." oninput="filterSroList()" disabled>
+                        <select id="sroSelect" size="4" style="height:100px;" disabled>
+                            <option value="">Select SRO...</option>
+                        </select>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                        <div class="form-group">
+                            <label class="form-label">Document No (ஆவண எண்)</label>
+                            <input type="text" id="docNoInput" class="form-control" placeholder="e.g. 235">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Year (ஆண்டு)</label>
+                            <input type="text" id="yearInput" class="form-control" placeholder="e.g. 2021" value="2021">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Book Type</label>
+                        <select id="bookSelect">
+                            <option value="1" selected>Book 1: Regular Conveyance / Deeds (Auto-fallback to Book 4)</option>
+                            <option value="4">Book 4: Power of Attorney / Wills / Trusts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="display:flex; align-items:center; gap:8px; background:#0f172a; border:1px solid #334155; padding:8px 12px; border-radius:8px;">
+                        <input type="checkbox" id="recursiveCheckbox" checked style="width:16px; height:16px; accent-color:#0284c7; cursor:pointer;">
+                        <label for="recursiveCheckbox" style="font-size:12px; color:#38bdf8; font-weight:600; cursor:pointer; margin:0;">
+                            ⚡ Auto-Traverse 50-Year PR Lineage (BFS & Deduplication)
+                        </label>
+                    </div>
+
+                    <div class="form-group" style="display:flex; align-items:center; gap:8px; background:#0f172a; border:1px solid #059669; padding:8px 12px; border-radius:8px; margin-top:8px;">
+                        <input type="checkbox" id="fullECCheckbox" checked style="width:16px; height:16px; accent-color:#10b981; cursor:pointer;">
+                        <label for="fullECCheckbox" style="font-size:12px; color:#34d399; font-weight:600; cursor:pointer; margin:0;">
+                            🛡️ Auto-Run 1975–Present Property EC Engine (Multi-SRO, TSLR & Master Dossier)
+                        </label>
+                    </div>
+
+                    <button id="btnRun" class="btn-run" onclick="executeEngineA()">
+                        <span>⚡ Run Live Engine A Ingestion</span>
+                    </button>
+
+                    <div class="card-header" style="margin-top:20px; font-size:13px;">
+                        <span>Execution Stream</span>
+                    </div>
+                    <div id="consoleLog" class="console-box">Ready. Select coordinates and click Run.</div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="results-container">
+                <!-- Portal Overview Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>2. Government Portal Direct Query Overview</span>
+                        <span id="extractionStatusBadge" style="font-size:12px; font-weight:bold; color:#94a3b8;">AWAITING RUN</span>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Document Key</div>
+                            <div id="statDocKey" class="stat-val">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Schedules</div>
+                            <div id="statSchedules" class="stat-val" style="color:#38bdf8;">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Survey Numbers</div>
+                            <div id="statSurveys" class="stat-val" style="color:#4ade80;">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Target Village</div>
+                            <div id="statVillage" class="stat-val" style="font-size:14px; word-break:break-all;">—</div>
+                        </div>
+                    </div>
+
+                    <div class="btn-action-bar" id="actionButtons" style="display:none;">
+                        <button class="btn-action" onclick="openRunFolder()">📁 Open Run Folder</button>
+                        <a id="btnViewTreeReport" target="_blank" class="btn-action" style="background:#065f46; color:#a7f3d0; border-color:#059669; font-weight:700;">🌳 50-Yr Lineage Tree Report</a>
+                        <a id="btnViewReport" target="_blank" class="btn-action">📄 Inspection Report (HTML)</a>
+                        <a id="btnViewPdf" target="_blank" class="btn-action">📥 Official EC PDF</a>
+                        <a id="btnViewRawHtml" target="_blank" class="btn-action">🌐 Raw Government HTML</a>
+                    </div>
+                </div>
+
+                <!-- Deep Deterministic PDF Intelligence Card -->
+                <div class="card" id="deepPdfCard" style="display:none;">
+                    <div class="card-header">
+                        <span>3. Deep Government EC PDF Intelligence (02_pdf_detailed_extraction.json)</span>
+                        <span style="font-size:11px; background:#047857; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-weight:700;">100% DETERMINISTIC (NO LLM)</span>
+                    </div>
+
+                    <div class="deep-grid">
+                        <div class="deep-card">
+                            <div class="deep-label">Executant(s) (விற்பனையாளர்)</div>
+                            <div id="deepExecutants" class="deep-val" style="color:#fde047;">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Claimant(s) (வாங்குபவர்)</div>
+                            <div id="deepClaimants" class="deep-val" style="color:#67e8f9;">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Consideration & Market Values</div>
+                            <div id="deepValues" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">PR Number(s) (முந்தைய ஆவண எண்)</div>
+                            <div id="deepPR" class="deep-val" style="color:#f59e0b; font-family:monospace; font-weight:700;">—</div>
+                        </div>
+                    </div>
+
+                    <div class="deep-grid" style="margin-top:10px;">
+                        <div class="deep-card">
+                            <div class="deep-label">Regularization / Planning Approval</div>
+                            <div id="deepPlanning" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Panchayat / Local Body Order</div>
+                            <div id="deepPanchayat" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Patta & Parent Survey Lineage</div>
+                            <div id="deepPatta" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Plot Linear Dimensions (அளவுகள்)</div>
+                            <div id="deepDimensions" class="deep-val" style="font-size:12px;">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Flat & Door Property Structure -->
+                    <div class="deep-grid" style="margin-top:10px;">
+                        <div class="deep-card">
+                            <div class="deep-label">Plot & Door Numbers (மனை / கதவு எண்)</div>
+                            <div id="deepDoors" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Floor, Flat & Block (தளம் / பிளாக்)</div>
+                            <div id="deepFloorFlat" class="deep-val">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Undivided Share (UDS) / Extent</div>
+                            <div id="deepUDS" class="deep-val" style="color:#34d399;">—</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-label">Super Built-Up Area & Facing (அடுக்குமாடி)</div>
+                            <div id="deepBuiltUp" class="deep-val" style="color:#f472b6;">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Cardinal Boundaries Box -->
+                    <div class="deep-card" style="margin-top:12px;">
+                        <div class="deep-label">Four Directional Boundaries (நான்குமால் எல்லைகள்)</div>
+                        <div class="bnd-compass">
+                            <div class="bnd-box">
+                                <div class="bnd-title">EAST (கிழக்கு)</div>
+                                <div id="bndEast" class="bnd-text">—</div>
+                            </div>
+                            <div class="bnd-box">
+                                <div class="bnd-title">WEST (மேற்கு)</div>
+                                <div id="bndWest" class="bnd-text">—</div>
+                            </div>
+                            <div class="bnd-box">
+                                <div class="bnd-title">NORTH (வடக்கு)</div>
+                                <div id="bndNorth" class="bnd-text">—</div>
+                            </div>
+                            <div class="bnd-box">
+                                <div class="bnd-title">SOUTH (தெற்கு)</div>
+                                <div id="bndSouth" class="bnd-text">—</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1975-Present Master EC Engine Scrutiny Card -->
+                <div class="card" id="ecEngineCard" style="display:none; border:1px solid #059669; background: #064e3b15;">
+                    <div class="card-header" style="border-bottom:1px solid #047857;">
+                        <span style="color:#34d399; font-weight:700;">🛡️ 1975–Present Master Property Title Dossier (EC Engine)</span>
+                        <span id="ecStatusBadge" style="font-size:11px; background:#047857; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-weight:700;">RECONCILED 1975–2026</span>
+                    </div>
+
+                    <div class="deep-grid" style="margin-top:4px;">
+                        <div class="deep-card" style="border-color:#047857;">
+                            <div class="deep-label">Total Unique Transactions</div>
+                            <div id="ecTotalTx" class="deep-val" style="color:#6ee7b7; font-size:18px;">—</div>
+                        </div>
+                        <div class="deep-card" style="border-color:#047857;">
+                            <div class="deep-label">Confirmed Title Chain Deeds</div>
+                            <div id="ecLineageTx" class="deep-val" style="color:#34d399; font-size:18px;">—</div>
+                        </div>
+                        <div class="deep-card" style="border-color:#047857;">
+                            <div class="deep-label">Adverse / Other Transactions</div>
+                            <div id="ecAdverseTx" class="deep-val" style="color:#fcd34d; font-size:18px;">—</div>
+                        </div>
+                        <div class="deep-card" style="border-color:#047857;">
+                            <div class="deep-label">High Risk / Unsatisfied Mortgages</div>
+                            <div id="ecRiskTx" class="deep-val" style="color:#f87171; font-size:18px;">—</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center;">
+                        <a id="btnOpenECDossier" href="#" target="_blank" class="btn-action" style="background:#059669; border-color:#10b981; color:#ffffff; font-weight:700;">
+                            📄 Open 1975–2026 Master Title Dossier (HTML)
+                        </a>
+                        <a id="btnOpenMasterECPdf" href="#" target="_blank" class="btn-action" style="display:none; background:#0d9488; border-color:#14b8a6; color:#ffffff; font-weight:700;">
+                            📜 Official Government Master EC (PDF)
+                        </a>
+                        <a id="btnOpenMasterECJson" href="#" target="_blank" class="btn-action" style="display:none; background:#1e293b; border-color:#14b8a6; color:#5eead4;">
+                            🔍 Master EC Extraction (JSON)
+                        </a>
+                        <a id="btnOpenECLedger" href="#" target="_blank" class="btn-action" style="background:#1e293b; border-color:#059669; color:#6ee7b7;">
+                            📊 Master JSON Ledger
+                        </a>
+                        <button id="btnTriggerEC" class="btn-action" onclick="triggerECEngineManual()" style="background:#0f172a; border-color:#38bdf8; color:#38bdf8;">
+                            🔄 Re-Run 1975 EC Scrutiny
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Schedules Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>4. Government Portal Extracted Schedules</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Village (கிராமம்)</th>
+                                    <th>Survey / Sub-Div</th>
+                                    <th>Property Type</th>
+                                    <th>Plot / Door No</th>
+                                    <th>SRO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedulesTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; color:#64748b; padding:16px;">
+                                        Awaiting execution. Select SRO and run.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Dual JSON Viewer Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <span>5. Structured Output JSONs</span>
+                            <button id="tabBtnGraph" class="tab-btn" onclick="switchJsonTab('graph')">master_lineage_graph.json</button>
+                            <button id="tabBtnPdf" class="tab-btn active" onclick="switchJsonTab('pdf')">02_pdf_detailed_extraction.json</button>
+                            <button id="tabBtnPortal" class="tab-btn" onclick="switchJsonTab('portal')">01_portal_summary.json</button>
+                            <button id="tabBtnMaster" class="tab-btn" onclick="switchJsonTab('master')">extracted_data.json (Master)</button>
+                        </div>
+                        <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="copyActiveJson()">📋 Copy</button>
+                    </div>
+                    <pre id="jsonViewer" class="json-viewer">// JSON outputs will appear here after execution...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let HIERARCHY = [];
+        let CURRENT_SROS = [];
+        let LATEST_OUTPUT_FOLDER = "";
+        let LATEST_DATA = null;
+        let CURRENT_TAB = 'pdf';
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/hierarchy');
+                HIERARCHY = await res.json();
+                populateZones();
+                document.getElementById('hierarchyStatus').textContent = `Loaded ${HIERARCHY.length} Zones`;
+            } catch (e) {
+                document.getElementById('hierarchyStatus').textContent = 'Failed to load hierarchy';
+                logConsole(`[!] Error loading hierarchy: ${e}`);
+            }
+        });
+
+        function logConsole(msg) {
+            const el = document.getElementById('consoleLog');
+            el.textContent += msg + '\n';
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function populateZones() {
+            const zSel = document.getElementById('zoneSelect');
+            zSel.innerHTML = '<option value="">Select Zone...</option>';
+            HIERARCHY.forEach(z => {
+                const opt = document.createElement('option');
+                opt.value = z.zone_id;
+                opt.textContent = `${z.zone_name} (${z.districts.length} Districts)`;
+                zSel.appendChild(opt);
+            });
+        }
+
+        function onZoneChanged() {
+            const zid = document.getElementById('zoneSelect').value;
+            const dSel = document.getElementById('districtSelect');
+            const sSel = document.getElementById('sroSelect');
+            dSel.innerHTML = '<option value="">Select District...</option>';
+            sSel.innerHTML = '<option value="">Select SRO...</option>';
+            sSel.disabled = true;
+            document.getElementById('sroFilterInput').disabled = true;
+
+            if (!zid) {
+                dSel.disabled = true;
+                return;
+            }
+
+            const zoneObj = HIERARCHY.find(z => z.zone_id === zid);
+            if (zoneObj) {
+                zoneObj.districts.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.district_id;
+                    opt.textContent = `${d.district_name} (${d.sros.length} SROs)`;
+                    dSel.appendChild(opt);
+                });
+                dSel.disabled = false;
+            }
+        }
+
+        function onDistrictChanged() {
+            const zid = document.getElementById('zoneSelect').value;
+            const did = document.getElementById('districtSelect').value;
+            const sSel = document.getElementById('sroSelect');
+            const filterInput = document.getElementById('sroFilterInput');
+            sSel.innerHTML = '';
+
+            if (!zid || !did) {
+                sSel.disabled = true;
+                filterInput.disabled = true;
+                return;
+            }
+
+            const zoneObj = HIERARCHY.find(z => z.zone_id === zid);
+            const distObj = zoneObj?.districts.find(d => d.district_id === did);
+            if (distObj) {
+                CURRENT_SROS = distObj.sros;
+                renderSroOptions(CURRENT_SROS);
+                sSel.disabled = false;
+                filterInput.disabled = false;
+                filterInput.value = '';
+            }
+        }
+
+        function renderSroOptions(sros) {
+            const sSel = document.getElementById('sroSelect');
+            sSel.innerHTML = '';
+            sros.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.sro_id;
+                opt.dataset.sroName = s.sro_name;
+                opt.textContent = `${s.sro_name} [${s.sro_id}]`;
+                sSel.appendChild(opt);
+            });
+            if (sros.length > 0) sSel.selectedIndex = 0;
+        }
+
+        function filterSroList() {
+            const q = document.getElementById('sroFilterInput').value.toLowerCase().trim();
+            const filtered = CURRENT_SROS.filter(s => s.sro_name.toLowerCase().includes(q));
+            renderSroOptions(filtered);
+        }
+
+        function loadPreset(sroNamePattern, docNo, year) {
+            document.getElementById('docNoInput').value = docNo;
+            document.getElementById('yearInput').value = year;
+
+            for (const z of HIERARCHY) {
+                for (const d of z.districts) {
+                    for (const s of d.sros) {
+                        if (s.sro_name.toLowerCase().includes(sroNamePattern.toLowerCase())) {
+                            document.getElementById('zoneSelect').value = z.zone_id;
+                            onZoneChanged();
+                            document.getElementById('districtSelect').value = d.district_id;
+                            onDistrictChanged();
+                            document.getElementById('sroSelect').value = s.sro_id;
+                            logConsole(`[Preset] Loaded coordinates: ${z.zone_name} -> ${d.district_name} -> ${s.sro_name}`);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        async function executeEngineA() {
+            const sSel = document.getElementById('sroSelect');
+            const selectedOpt = sSel.options[sSel.selectedIndex];
+            const sroId = sSel.value;
+            const sroName = selectedOpt?.dataset.sroName || selectedOpt?.textContent.split(' [')[0] || '';
+            const docNo = document.getElementById('docNoInput').value.trim();
+            const year = document.getElementById('yearInput').value.trim();
+            const bookNo = document.getElementById('bookSelect').value;
+
+            if (!sroId || !docNo || !year) {
+                alert("Please select an SRO, enter Document Number, and enter Year.");
+                return;
+            }
+
+            const btn = document.getElementById('btnRun');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Ingesting & Downloading EC PDF...</span>';
+            document.getElementById('consoleLog').textContent = '';
+            document.getElementById('extractionStatusBadge').textContent = 'RUNNING';
+            document.getElementById('extractionStatusBadge').style.color = '#38bdf8';
+
+            logConsole(`[*] Starting Engine A ingestion for Doc ${docNo}/${year} at SRO ${sroName}...`);
+
+            const formData = new FormData();
+            formData.append('sro_id', sroId);
+            formData.append('sro_name', sroName);
+            formData.append('doc_no', docNo);
+            formData.append('year', year);
+            formData.append('book_no', bookNo);
+            formData.append('district_id', document.getElementById('districtSelect').value);
+            formData.append('run_recursive', document.getElementById('recursiveCheckbox').checked ? 'true' : 'false');
+            formData.append('run_full_ec', document.getElementById('fullECCheckbox').checked ? 'true' : 'false');
+
+            try {
+                const res = await fetch('/api/extract', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                LATEST_DATA = data;
+                LATEST_OUTPUT_FOLDER = data.output_folder || "";
+
+                if (data.logs) {
+                    data.logs.forEach(l => logConsole(l));
+                }
+
+                if (data.success) {
+                    document.getElementById('extractionStatusBadge').textContent = 'VERIFIED SUCCESS';
+                    document.getElementById('extractionStatusBadge').style.color = '#10b981';
+                    logConsole(`\n[+] Engine A completed successfully! Generated Dual JSONs.`);
+                } else {
+                    document.getElementById('extractionStatusBadge').textContent = 'NO RECORDS FOUND';
+                    document.getElementById('extractionStatusBadge').style.color = '#ef4444';
+                    logConsole(`\n[-] Ingestion notice: ${data.error || 'No records returned'}`);
+                }
+
+                renderResults(data);
+
+            } catch (e) {
+                logConsole(`[!] Network or Server Error: ${e}`);
+                document.getElementById('extractionStatusBadge').textContent = 'SERVER ERROR';
+                document.getElementById('extractionStatusBadge').style.color = '#ef4444';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>⚡ Run Live Engine A Ingestion</span>';
+            }
+        }
+
+        function renderResults(data) {
+            const portal = data.portal_data || {};
+            const pdf = data.pdf_data || {};
+
+            document.getElementById('statDocKey').textContent = `${portal.doc_no || '—'} / ${portal.year || '—'}`;
+            document.getElementById('statSchedules').textContent = `${portal.total_records_found || 0}`;
+            document.getElementById('statSurveys').textContent = portal.survey_numbers ? portal.survey_numbers.join(', ') : '—';
+            document.getElementById('statVillage').textContent = portal.villages ? portal.villages.join(', ') : '—';
+
+            // Multi-schedule table
+            const tbody = document.getElementById('schedulesTableBody');
+            tbody.innerHTML = '';
+            const schedules = portal.schedules || [];
+            if (schedules.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ef4444; padding:16px;">No property schedules registered on portal.</td></tr>`;
+            } else {
+                schedules.forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="text-align:center; font-weight:bold;">${s.schedule_index}</td>
+                        <td style="color:#f8fafc; font-weight:600;">${s.village || '—'}</td>
+                        <td style="font-family:monospace; color:#38bdf8; font-weight:bold;">${s.survey_subdivision_raw || '—'}</td>
+                        <td>${s.property_type_raw || '—'}</td>
+                        <td>${s.plot_no || '—'}</td>
+                        <td style="color:#94a3b8;">${s.sro_office || '—'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Deep PDF Intelligence Cards
+            const deepCard = document.getElementById('deepPdfCard');
+            if (pdf.success && pdf.entries && pdf.entries.length > 0) {
+                deepCard.style.display = 'block';
+                const ent = pdf.entries[0];
+                const sched = ent.schedules ? ent.schedules[0] : {};
+
+                // Parties
+                const execs = ent.parties.executants.map(p => `${p.name} ${p.initial_verbatim ? '('+p.initial_verbatim+')' : ''}`).join(', ') || '—';
+                const claims = ent.parties.claimants.map(p => `${p.name} ${p.initial_verbatim ? '('+p.initial_verbatim+')' : ''}`).join(', ') || '—';
+                document.getElementById('deepExecutants').textContent = execs;
+                document.getElementById('deepClaimants').textContent = claims;
+
+                // Financials & PR
+                document.getElementById('deepValues').textContent = `Consideration: ${ent.financials.consideration_value_raw || '—'} | Market: ${ent.financials.market_value_raw || '—'}`;
+                document.getElementById('deepPR').textContent = ent.pr_lineage.pr_raw || 'None Cited';
+
+                // Approvals
+                document.getElementById('deepPlanning').textContent = sched.planning_approval?.regularization_order || 'None Cited';
+                document.getElementById('deepPanchayat').textContent = sched.planning_approval?.panchayat_approval || 'None Cited';
+
+                // Patta & Parent
+                const patta = sched.patta_and_parent_land?.patta_no ? `Patta No. ${sched.patta_and_parent_land.patta_no}` : '';
+                const parentSur = sched.patta_and_parent_land?.parent_survey ? ` | Parent SF: ${sched.patta_and_parent_land.parent_survey}` : '';
+                document.getElementById('deepPatta').textContent = (patta + parentSur) || '—';
+
+                // Dimensions
+                const dims = sched.linear_dimensions || {};
+                const dimStr = `EW North: ${dims.east_west_north || '—'} | EW South: ${dims.east_west_south || '—'} | NS East: ${dims.north_south_east || '—'} | NS West: ${dims.north_south_west || '—'} (${dims.calculated_sqft || 0} Sq.Ft / ${dims.calculated_sqm || 0} Sq.M)`;
+                document.getElementById('deepDimensions').textContent = dimStr;
+
+                // Flat & Property Identifiers
+                const dNew = sched.new_door_no ? `New Door: ${sched.new_door_no}` : '';
+                const dOld = sched.old_door_no ? `Old Door: ${sched.old_door_no}` : '';
+                const dGen = sched.door_no ? `Door: ${sched.door_no}` : '';
+                const pNo = sched.plot_no ? `Plot No: ${sched.plot_no}` : '';
+                const doorParts = [pNo, dNew, dOld, dGen].filter(Boolean);
+                document.getElementById('deepDoors').textContent = doorParts.join(' | ') || '—';
+
+                const flr = sched.floor_no ? `Floor: ${sched.floor_no}` : '';
+                const flt = sched.flat_no ? `Flat: ${sched.flat_no}` : '';
+                const blk = sched.block_no ? `Block: ${sched.block_no}` : '';
+                const wrd = sched.ward_no ? `Ward: ${sched.ward_no}` : '';
+                const flrParts = [flr, flt, blk, wrd].filter(Boolean);
+                document.getElementById('deepFloorFlat').textContent = flrParts.join(' | ') || '—';
+
+                const flatObj = sched.flat_details || {};
+                const udsSqft = flatObj.undivided_share_land_sqft || (flatObj.is_flat ? sched.extent?.sqft : 0);
+                const udsRatio = flatObj.undivided_share_ratio ? ` (Ratio: ${flatObj.undivided_share_ratio})` : '';
+                document.getElementById('deepUDS').textContent = udsSqft > 0 ? `${udsSqft} Sq.Ft${udsRatio}` : (flatObj.is_flat ? 'Specified in Remarks' : 'N/A (Plot/Land)');
+
+                const builtup = flatObj.super_built_up_area_sqft ? `${flatObj.super_built_up_area_sqft} Sq.Ft` : '';
+                const facing = flatObj.facing_or_location ? `Facing: ${flatObj.facing_or_location}` : '';
+                const builtParts = [builtup, facing].filter(Boolean);
+                document.getElementById('deepBuiltUp').textContent = builtParts.join(' | ') || (flatObj.is_flat ? 'See Remarks' : 'N/A');
+
+                // Boundaries
+                const bnd = sched.boundaries || {};
+                document.getElementById('bndEast').textContent = bnd.east || '—';
+                document.getElementById('bndWest').textContent = bnd.west || '—';
+                document.getElementById('bndNorth').textContent = bnd.north || '—';
+                document.getElementById('bndSouth').textContent = bnd.south || '—';
+
+            } else {
+                deepCard.style.display = 'none';
+            }
+
+            // EC Engine Scrutiny Card
+            const ecCard = document.getElementById('ecEngineCard');
+            const ecData = data.ec_data || {};
+            if (ecData.success) {
+                ecCard.style.display = 'block';
+                document.getElementById('ecTotalTx').textContent = ecData.total_unique_transactions || 0;
+                document.getElementById('ecLineageTx').textContent = ecData.lineage_deeds_confirmed || 0;
+                document.getElementById('ecAdverseTx').textContent = ecData.adverse_transactions || 0;
+                document.getElementById('ecRiskTx').textContent = ecData.high_risk_alerts || 0;
+                if (ecData.unsatisfied_mortgages > 0) {
+                    document.getElementById('ecRiskTx').textContent = `${ecData.high_risk_alerts} (${ecData.unsatisfied_mortgages} Unsatisfied Mortgages!)`;
+                }
+                document.getElementById('btnOpenECDossier').href = ecData.dossier_relative_url || '#';
+                document.getElementById('btnOpenECDossier').style.display = 'inline-flex';
+                document.getElementById('btnOpenECLedger').href = ecData.ledger_relative_url || '#';
+                document.getElementById('btnOpenECLedger').style.display = 'inline-flex';
+                if (ecData.master_ec_pdf_url) {
+                    document.getElementById('btnOpenMasterECPdf').href = ecData.master_ec_pdf_url;
+                    document.getElementById('btnOpenMasterECPdf').style.display = 'inline-flex';
+                } else {
+                    document.getElementById('btnOpenMasterECPdf').style.display = 'none';
+                }
+                if (ecData.master_ec_json_url) {
+                    document.getElementById('btnOpenMasterECJson').href = ecData.master_ec_json_url;
+                    document.getElementById('btnOpenMasterECJson').style.display = 'inline-flex';
+                } else {
+                    document.getElementById('btnOpenMasterECJson').style.display = 'none';
+                }
+            } else if (LATEST_OUTPUT_FOLDER) {
+                ecCard.style.display = 'block';
+                document.getElementById('ecTotalTx').textContent = '—';
+                document.getElementById('ecLineageTx').textContent = '—';
+                document.getElementById('ecAdverseTx').textContent = '—';
+                document.getElementById('ecRiskTx').textContent = '—';
+                document.getElementById('btnOpenECDossier').style.display = 'none';
+                document.getElementById('btnOpenECLedger').style.display = 'none';
+            } else {
+                ecCard.style.display = 'none';
+            }
+
+            // Switch to default JSON view
+            switchJsonTab('pdf');
+
+            // Action Buttons
+            document.getElementById('actionButtons').style.display = 'flex';
+            if (data.lineage_report_url) {
+                document.getElementById('btnViewTreeReport').href = data.lineage_report_url;
+                document.getElementById('btnViewTreeReport').style.display = 'inline-flex';
+            } else {
+                document.getElementById('btnViewTreeReport').style.display = 'none';
+            }
+
+            if (data.report_relative_url) {
+                document.getElementById('btnViewReport').href = data.report_relative_url;
+                document.getElementById('btnViewReport').style.display = 'inline-flex';
+            } else {
+                document.getElementById('btnViewReport').style.display = 'none';
+            }
+
+            if (data.pdf_relative_url) {
+                document.getElementById('btnViewPdf').href = data.pdf_relative_url;
+                document.getElementById('btnViewPdf').style.display = 'inline-flex';
+            } else {
+                document.getElementById('btnViewPdf').style.display = 'none';
+            }
+
+            if (data.raw_html_relative_url) {
+                document.getElementById('btnViewRawHtml').href = data.raw_html_relative_url;
+                document.getElementById('btnViewRawHtml').style.display = 'inline-flex';
+            } else {
+                document.getElementById('btnViewRawHtml').style.display = 'none';
+            }
+        }
+
+        function switchJsonTab(tab) {
+            CURRENT_TAB = tab;
+            document.getElementById('tabBtnGraph').classList.remove('active');
+            document.getElementById('tabBtnPdf').classList.remove('active');
+            document.getElementById('tabBtnPortal').classList.remove('active');
+            document.getElementById('tabBtnMaster').classList.remove('active');
+
+            let content = {};
+            if (tab === 'graph') {
+                document.getElementById('tabBtnGraph').classList.add('active');
+                content = LATEST_DATA?.lineage_data || {};
+            } else if (tab === 'pdf') {
+                document.getElementById('tabBtnPdf').classList.add('active');
+                content = LATEST_DATA?.pdf_data || {};
+            } else if (tab === 'portal') {
+                document.getElementById('tabBtnPortal').classList.add('active');
+                content = LATEST_DATA?.portal_data || {};
+            } else {
+                document.getElementById('tabBtnMaster').classList.add('active');
+                content = LATEST_DATA || {};
+            }
+
+            document.getElementById('jsonViewer').textContent = JSON.stringify(content, null, 2);
+        }
+
+        function copyActiveJson() {
+            const txt = document.getElementById('jsonViewer').textContent;
+            navigator.clipboard.writeText(txt);
+            alert("Active JSON copied to clipboard!");
+        }
+
+        async function openRunFolder() {
+            if (!LATEST_OUTPUT_FOLDER) return;
+            try {
+                await fetch(`/api/open_folder?path=${encodeURIComponent(LATEST_OUTPUT_FOLDER)}`);
+            } catch (e) {
+                alert("Failed to trigger Windows Explorer: " + e);
+            }
+        }
+        async function triggerECEngineManual() {
+            if (!LATEST_OUTPUT_FOLDER) {
+                alert("Please run an ingestion or select a run folder first.");
+                return;
+            }
+            const folderName = LATEST_OUTPUT_FOLDER.replace(/\\/g, '/').split('/').filter(Boolean).pop();
+            const btn = document.getElementById('btnTriggerEC');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Reconciling 1975–Present EC...';
+            logConsole(`\n[*] Triggering 1975–Present EC Scrutiny for folder: ${folderName}...`);
+
+            try {
+                const res = await fetch(`/api/run_ec_engine?folder=${encodeURIComponent(folderName)}`);
+                const json = await res.json();
+                if (json.success) {
+                    logConsole(`[+] 1975–Present EC Scrutiny succeeded! ${json.total_unique_transactions} unique transactions reconciled.`);
+                    logConsole(`[+] Dossier URL: ${json.dossier_url}`);
+                    
+                    const ecCard = document.getElementById('ecEngineCard');
+                    ecCard.style.display = 'block';
+                    document.getElementById('ecTotalTx').textContent = json.total_unique_transactions || 0;
+                    document.getElementById('ecLineageTx').textContent = json.lineage_deeds_confirmed || 0;
+                    document.getElementById('ecAdverseTx').textContent = json.adverse_transactions || 0;
+                    document.getElementById('ecRiskTx').textContent = json.high_risk_alerts || 0;
+                    if (json.unsatisfied_mortgages > 0) {
+                        document.getElementById('ecRiskTx').textContent = `${json.high_risk_alerts} (${json.unsatisfied_mortgages} Unsatisfied Mortgages!)`;
+                    }
+                    document.getElementById('btnOpenECDossier').href = json.dossier_url || '#';
+                    document.getElementById('btnOpenECDossier').style.display = 'inline-flex';
+                    document.getElementById('btnOpenECLedger').href = json.ledger_url || '#';
+                    document.getElementById('btnOpenECLedger').style.display = 'inline-flex';
+                    if (json.master_ec_pdf_url) {
+                        document.getElementById('btnOpenMasterECPdf').href = json.master_ec_pdf_url;
+                        document.getElementById('btnOpenMasterECPdf').style.display = 'inline-flex';
+                    }
+                    if (json.master_ec_json_url) {
+                        document.getElementById('btnOpenMasterECJson').href = json.master_ec_json_url;
+                        document.getElementById('btnOpenMasterECJson').style.display = 'inline-flex';
+                    }
+                } else {
+                    alert('Error running EC Engine: ' + (json.error || 'Unknown error'));
+                    logConsole(`[!] EC Engine error: ${json.error}`);
+                }
+            } catch (e) {
+                alert('Network error: ' + e);
+                logConsole(`[!] Network error: ${e}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Re-Run 1975 EC Scrutiny';
+            }
+        }
+    </script>
+</body>
+</html>

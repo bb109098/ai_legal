@@ -1,0 +1,2956 @@
+[
+  {
+    "zone_id": "15",
+    "zone_name": "Chengalpattu",
+    "districts": [
+      {
+        "district_id": "20004",
+        "district_name": "Chengalpattu",
+        "sros": [
+          {
+            "sro_id": "20088:1",
+            "sro_name": "Acchirapakkam"
+          },
+          {
+            "sro_id": "20092:1",
+            "sro_name": "Chengleput Joint I"
+          },
+          {
+            "sro_id": "20093:1",
+            "sro_name": "Chengleput Joint II"
+          },
+          {
+            "sro_id": "20094:1",
+            "sro_name": "Cheyyur"
+          },
+          {
+            "sro_id": "20091:0",
+            "sro_name": "Chittamur_Closed"
+          },
+          {
+            "sro_id": "22605:1",
+            "sro_name": "Kelampakkam"
+          },
+          {
+            "sro_id": "20097:1",
+            "sro_name": "Madurandakam"
+          },
+          {
+            "sro_id": "22604:1",
+            "sro_name": "Navalur"
+          },
+          {
+            "sro_id": "20090:1",
+            "sro_name": "Salavakkam"
+          },
+          {
+            "sro_id": "20098:1",
+            "sro_name": "Sriperumpudur"
+          },
+          {
+            "sro_id": "20654:1",
+            "sro_name": "Sunguvarchattram"
+          },
+          {
+            "sro_id": "20095:1",
+            "sro_name": "Thirukazhukundram"
+          },
+          {
+            "sro_id": "20096:1",
+            "sro_name": "Thiruporur"
+          },
+          {
+            "sro_id": "20089:1",
+            "sro_name": "Uthiramerur"
+          }
+        ]
+      },
+      {
+        "district_id": "20005",
+        "district_name": "Kancheepuram",
+        "sros": [
+          {
+            "sro_id": "20100:1",
+            "sro_name": "Kanchipuram Joint I"
+          },
+          {
+            "sro_id": "20101:1",
+            "sro_name": "Kanchipuram Joint II"
+          },
+          {
+            "sro_id": "20102:1",
+            "sro_name": "Kanchipuram Joint IV"
+          },
+          {
+            "sro_id": "22306:0",
+            "sro_name": "Periyakanchipuram"
+          },
+          {
+            "sro_id": "20103:1",
+            "sro_name": "Thamal"
+          },
+          {
+            "sro_id": "20111:1",
+            "sro_name": "Walajabad"
+          }
+        ]
+      },
+      {
+        "district_id": "50007",
+        "district_name": "Tambaram",
+        "sros": [
+          {
+            "sro_id": "20060:1",
+            "sro_name": "Gooduvancheri"
+          },
+          {
+            "sro_id": "20057:1",
+            "sro_name": "Pallavaram"
+          },
+          {
+            "sro_id": "20065:1",
+            "sro_name": "Pammal"
+          },
+          {
+            "sro_id": "20653:1",
+            "sro_name": "Selaiyur"
+          },
+          {
+            "sro_id": "20053:1",
+            "sro_name": "Tambaram Joint 1"
+          },
+          {
+            "sro_id": "22601:1",
+            "sro_name": "Vandaloor"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "1",
+    "zone_name": "Chennai",
+    "districts": [
+      {
+        "district_id": "20003",
+        "district_name": "Chennai Central",
+        "sros": [
+          {
+            "sro_id": "20078:1",
+            "sro_name": "AnnaNagar"
+          },
+          {
+            "sro_id": "20087:1",
+            "sro_name": "Ashok Nagar"
+          },
+          {
+            "sro_id": "20083:1",
+            "sro_name": "Chennai Central Joint I"
+          },
+          {
+            "sro_id": "20085:1",
+            "sro_name": "Chennai Central Joint II"
+          },
+          {
+            "sro_id": "20079:1",
+            "sro_name": "Kodambakkam"
+          },
+          {
+            "sro_id": "20084:1",
+            "sro_name": "Mylapore"
+          },
+          {
+            "sro_id": "20082:1",
+            "sro_name": "Periamet"
+          },
+          {
+            "sro_id": "20081:1",
+            "sro_name": "Purasaivakkam"
+          },
+          {
+            "sro_id": "20080:1",
+            "sro_name": "Triplicane"
+          },
+          {
+            "sro_id": "20086:1",
+            "sro_name": "Villivakkam"
+          }
+        ]
+      },
+      {
+        "district_id": "20002",
+        "district_name": "Chennai North",
+        "sros": [
+          {
+            "sro_id": "20067:1",
+            "sro_name": "Ambattur"
+          },
+          {
+            "sro_id": "22308:0",
+            "sro_name": "Chennai Central_Chennai North Joint I"
+          },
+          {
+            "sro_id": "20072:1",
+            "sro_name": "Chennai North Joint I"
+          },
+          {
+            "sro_id": "22307:0",
+            "sro_name": "Chennai South_Chennai North Joint I"
+          },
+          {
+            "sro_id": "20077:1",
+            "sro_name": "Konnur"
+          },
+          {
+            "sro_id": "20655:1",
+            "sro_name": "Madhavaram"
+          },
+          {
+            "sro_id": "22309:0",
+            "sro_name": "Muthialpet_Chennai North Joint I"
+          },
+          {
+            "sro_id": "20069:1",
+            "sro_name": "Royapuram"
+          },
+          {
+            "sro_id": "20071:1",
+            "sro_name": "Sembiam"
+          },
+          {
+            "sro_id": "20073:1",
+            "sro_name": "Sowcarpet"
+          },
+          {
+            "sro_id": "20074:1",
+            "sro_name": "Thiruvottiyur"
+          }
+        ]
+      },
+      {
+        "district_id": "20001",
+        "district_name": "Chennai South",
+        "sros": [
+          {
+            "sro_id": "20051:1",
+            "sro_name": "Adayar"
+          },
+          {
+            "sro_id": "20052:1",
+            "sro_name": "Alandur"
+          },
+          {
+            "sro_id": "20054:1",
+            "sro_name": "Chennai South Joint I"
+          },
+          {
+            "sro_id": "20055:1",
+            "sro_name": "Chennai South Joint II"
+          },
+          {
+            "sro_id": "20061:1",
+            "sro_name": "Kunrathur"
+          },
+          {
+            "sro_id": "20066:1",
+            "sro_name": "Neelankarai"
+          },
+          {
+            "sro_id": "20062:1",
+            "sro_name": "Padappai"
+          },
+          {
+            "sro_id": "20056:1",
+            "sro_name": "Thiyagaraya nagar"
+          },
+          {
+            "sro_id": "20063:1",
+            "sro_name": "Velacheri"
+          },
+          {
+            "sro_id": "20059:1",
+            "sro_name": "Virugambakkam"
+          }
+        ]
+      },
+      {
+        "district_id": "50003",
+        "district_name": "Thiruvalur",
+        "sros": [
+          {
+            "sro_id": "20068:1",
+            "sro_name": "Arani_Tiruvallur"
+          },
+          {
+            "sro_id": "20064:1",
+            "sro_name": "Avadi"
+          },
+          {
+            "sro_id": "20070:1",
+            "sro_name": "Gummidipoondi"
+          },
+          {
+            "sro_id": "20109:1",
+            "sro_name": "Manavalanagar"
+          },
+          {
+            "sro_id": "20099:1",
+            "sro_name": "Oothukkottai"
+          },
+          {
+            "sro_id": "20106:1",
+            "sro_name": "Pallipattu"
+          },
+          {
+            "sro_id": "20107:1",
+            "sro_name": "Perambakkam"
+          },
+          {
+            "sro_id": "20075:1",
+            "sro_name": "Ponneri"
+          },
+          {
+            "sro_id": "20058:1",
+            "sro_name": "Poonamallee"
+          },
+          {
+            "sro_id": "20110:1",
+            "sro_name": "Ramakrishna Rajupettai"
+          },
+          {
+            "sro_id": "20076:1",
+            "sro_name": "Redhills"
+          },
+          {
+            "sro_id": "20104:1",
+            "sro_name": "Thiruttani"
+          },
+          {
+            "sro_id": "20108:1",
+            "sro_name": "Thiruvalankadu"
+          },
+          {
+            "sro_id": "20105:1",
+            "sro_name": "Tiruvallur Joint 1"
+          },
+          {
+            "sro_id": "22603:1",
+            "sro_name": "Tiruvallur Joint 2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "2",
+    "zone_name": "Coimbatore",
+    "districts": [
+      {
+        "district_id": "20006",
+        "district_name": "Coimbatore North",
+        "sros": [
+          {
+            "sro_id": "20112:1",
+            "sro_name": "Annur"
+          },
+          {
+            "sro_id": "20115:1",
+            "sro_name": "Coimbatore North Joint 1"
+          },
+          {
+            "sro_id": "20122:1",
+            "sro_name": "Ganapathy"
+          },
+          {
+            "sro_id": "20114:1",
+            "sro_name": "Gandhipuram"
+          },
+          {
+            "sro_id": "20121:1",
+            "sro_name": "Mettupalayam"
+          },
+          {
+            "sro_id": "20119:1",
+            "sro_name": "Periyanayakkan Palayam"
+          },
+          {
+            "sro_id": "22610:1",
+            "sro_name": "Sarkarsamakulam"
+          },
+          {
+            "sro_id": "20118:1",
+            "sro_name": "Thondamuthur"
+          },
+          {
+            "sro_id": "20124:1",
+            "sro_name": "Vadavalli"
+          }
+        ]
+      },
+      {
+        "district_id": "50006",
+        "district_name": "Coimbatore South",
+        "sros": [
+          {
+            "sro_id": "20125:1",
+            "sro_name": "Anaimalai"
+          },
+          {
+            "sro_id": "20116:0",
+            "sro_name": "Coimbatore Joint II - Closed"
+          },
+          {
+            "sro_id": "22592:1",
+            "sro_name": "Coimbatore South Joint 1"
+          },
+          {
+            "sro_id": "22607:1",
+            "sro_name": "Karumathampatti"
+          },
+          {
+            "sro_id": "20128:1",
+            "sro_name": "Kinathukkadavu"
+          },
+          {
+            "sro_id": "20120:1",
+            "sro_name": "Madukkarai"
+          },
+          {
+            "sro_id": "20133:1",
+            "sro_name": "Negamam"
+          },
+          {
+            "sro_id": "20123:1",
+            "sro_name": "Peelamedu"
+          },
+          {
+            "sro_id": "20135:1",
+            "sro_name": "Pollachi"
+          },
+          {
+            "sro_id": "20117:1",
+            "sro_name": "Singanallur"
+          },
+          {
+            "sro_id": "20130:1",
+            "sro_name": "Sulur"
+          }
+        ]
+      },
+      {
+        "district_id": "20009",
+        "district_name": "Erode",
+        "sros": [
+          {
+            "sro_id": "20156:1",
+            "sro_name": "Ammapettai_Erode"
+          },
+          {
+            "sro_id": "20143:1",
+            "sro_name": "Anthiyur"
+          },
+          {
+            "sro_id": "20152:1",
+            "sro_name": "Avalpoondurai"
+          },
+          {
+            "sro_id": "20150:1",
+            "sro_name": "Bhavani"
+          },
+          {
+            "sro_id": "20148:1",
+            "sro_name": "Chennimalai"
+          },
+          {
+            "sro_id": "20144:1",
+            "sro_name": "Erode Joint I"
+          },
+          {
+            "sro_id": "20146:1",
+            "sro_name": "Kodumudi"
+          },
+          {
+            "sro_id": "20151:1",
+            "sro_name": "Perundurai"
+          },
+          {
+            "sro_id": "20147:1",
+            "sro_name": "Sivagiri_Erode"
+          },
+          {
+            "sro_id": "20154:1",
+            "sro_name": "Surampatti"
+          },
+          {
+            "sro_id": "20149:1",
+            "sro_name": "Thingalur"
+          }
+        ]
+      },
+      {
+        "district_id": "20010",
+        "district_name": "Gobichettipalayam",
+        "sros": [
+          {
+            "sro_id": "20161:1",
+            "sro_name": "Gobichettipalayam Joint I"
+          },
+          {
+            "sro_id": "20162:1",
+            "sro_name": "Gobichettipalayam Joint II"
+          },
+          {
+            "sro_id": "20159:1",
+            "sro_name": "Kavundapadi"
+          },
+          {
+            "sro_id": "20166:1",
+            "sro_name": "Nambiyur"
+          },
+          {
+            "sro_id": "20167:1",
+            "sro_name": "Punchaipuliyampatti"
+          },
+          {
+            "sro_id": "20163:1",
+            "sro_name": "Sathyamangalam"
+          },
+          {
+            "sro_id": "20164:1",
+            "sro_name": "Thalavadi"
+          },
+          {
+            "sro_id": "20165:1",
+            "sro_name": "Thookanaicken Palayam"
+          }
+        ]
+      },
+      {
+        "district_id": "20008",
+        "district_name": "Ooty",
+        "sros": [
+          {
+            "sro_id": "20138:1",
+            "sro_name": "Coonoor_Uthagamandalam"
+          },
+          {
+            "sro_id": "20139:1",
+            "sro_name": "Goodaloor"
+          },
+          {
+            "sro_id": "20140:1",
+            "sro_name": "Kothagiri"
+          },
+          {
+            "sro_id": "20141:1",
+            "sro_name": "Uthagamandalam -Joint I"
+          },
+          {
+            "sro_id": "20142:1",
+            "sro_name": "Uthagamandalam -Joint II"
+          }
+        ]
+      },
+      {
+        "district_id": "20007",
+        "district_name": "Thiruppur",
+        "sros": [
+          {
+            "sro_id": "20113:1",
+            "sro_name": "Avinasi"
+          },
+          {
+            "sro_id": "20155:1",
+            "sro_name": "Dharapuram"
+          },
+          {
+            "sro_id": "20129:1",
+            "sro_name": "Gomangalam"
+          },
+          {
+            "sro_id": "20153:1",
+            "sro_name": "Kangeyam"
+          },
+          {
+            "sro_id": "20127:1",
+            "sro_name": "Kaniyur"
+          },
+          {
+            "sro_id": "20160:1",
+            "sro_name": "Kunnathur"
+          },
+          {
+            "sro_id": "20157:1",
+            "sro_name": "Moolanur"
+          },
+          {
+            "sro_id": "20136:1",
+            "sro_name": "Nallur_Tiruppur"
+          },
+          {
+            "sro_id": "20134:1",
+            "sro_name": "Palladam"
+          },
+          {
+            "sro_id": "22598:1",
+            "sro_name": "Pongalur"
+          },
+          {
+            "sro_id": "20137:1",
+            "sro_name": "Thottipalayam"
+          },
+          {
+            "sro_id": "20131:1",
+            "sro_name": "Tiruppur Joint I"
+          },
+          {
+            "sro_id": "20132:1",
+            "sro_name": "Tiruppur Joint II"
+          },
+          {
+            "sro_id": "20126:1",
+            "sro_name": "Udumalpettai"
+          },
+          {
+            "sro_id": "20145:1",
+            "sro_name": "Uthukuli"
+          },
+          {
+            "sro_id": "20158:1",
+            "sro_name": "Vellakovil"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "3",
+    "zone_name": "Cuddalore",
+    "districts": [
+      {
+        "district_id": "20014",
+        "district_name": "Chidambaram",
+        "sros": [
+          {
+            "sro_id": "20204:1",
+            "sro_name": "Bhuvanagiri"
+          },
+          {
+            "sro_id": "20201:1",
+            "sro_name": "Chidambaram Joint I"
+          },
+          {
+            "sro_id": "20200:1",
+            "sro_name": "Kumarachi"
+          },
+          {
+            "sro_id": "20206:1",
+            "sro_name": "Mannargudi"
+          },
+          {
+            "sro_id": "20199:0",
+            "sro_name": "Oorathur_Closed"
+          },
+          {
+            "sro_id": "20203:1",
+            "sro_name": "Parangipettai"
+          },
+          {
+            "sro_id": "20205:1",
+            "sro_name": "Puduchattiram_Chidambaram"
+          },
+          {
+            "sro_id": "20202:1",
+            "sro_name": "Sethiyathope"
+          }
+        ]
+      },
+      {
+        "district_id": "20011",
+        "district_name": "Cuddalore",
+        "sros": [
+          {
+            "sro_id": "20168:1",
+            "sro_name": "Cuddalore Joint I"
+          },
+          {
+            "sro_id": "20169:1",
+            "sro_name": "Cuddalore Joint II"
+          },
+          {
+            "sro_id": "20170:1",
+            "sro_name": "Kadampuliyur"
+          },
+          {
+            "sro_id": "20172:1",
+            "sro_name": "Kullanchavadi"
+          },
+          {
+            "sro_id": "20171:1",
+            "sro_name": "Kurinchi padi"
+          },
+          {
+            "sro_id": "20174:1",
+            "sro_name": "Nellikuppam"
+          },
+          {
+            "sro_id": "20175:1",
+            "sro_name": "Panrutti"
+          },
+          {
+            "sro_id": "20176:1",
+            "sro_name": "Pudupettai"
+          },
+          {
+            "sro_id": "20173:1",
+            "sro_name": "Thirunavalur"
+          },
+          {
+            "sro_id": "20177:1",
+            "sro_name": "Vadalur"
+          }
+        ]
+      },
+      {
+        "district_id": "20013",
+        "district_name": "Kallakurichi",
+        "sros": [
+          {
+            "sro_id": "20193:1",
+            "sro_name": "Chinna selam"
+          },
+          {
+            "sro_id": "20189:1",
+            "sro_name": "Elavanasur"
+          },
+          {
+            "sro_id": "20190:1",
+            "sro_name": "Kallakurichi Joint I"
+          },
+          {
+            "sro_id": "20191:1",
+            "sro_name": "Kallakurichi Joint II"
+          },
+          {
+            "sro_id": "20198:1",
+            "sro_name": "Nagalur"
+          },
+          {
+            "sro_id": "20196:1",
+            "sro_name": "Rishivanthiyam"
+          },
+          {
+            "sro_id": "20192:1",
+            "sro_name": "Sankarapuram"
+          },
+          {
+            "sro_id": "20194:1",
+            "sro_name": "Thiyaga thurgam"
+          },
+          {
+            "sro_id": "20195:1",
+            "sro_name": "Vadakkananthal"
+          },
+          {
+            "sro_id": "20197:1",
+            "sro_name": "Vadaponparappi"
+          },
+          {
+            "sro_id": "22608:1",
+            "sro_name": "Vanapuram"
+          }
+        ]
+      },
+      {
+        "district_id": "20015",
+        "district_name": "Tindivanam",
+        "sros": [
+          {
+            "sro_id": "20208:1",
+            "sro_name": "Avaloorpettai"
+          },
+          {
+            "sro_id": "20207:1",
+            "sro_name": "Avarapakkam"
+          },
+          {
+            "sro_id": "20212:1",
+            "sro_name": "Dindivanam Joint I"
+          },
+          {
+            "sro_id": "20213:1",
+            "sro_name": "Dindivanam Joint II"
+          },
+          {
+            "sro_id": "20209:0",
+            "sro_name": "Endiyur_Closed"
+          },
+          {
+            "sro_id": "20211:1",
+            "sro_name": "Gingee"
+          },
+          {
+            "sro_id": "20214:1",
+            "sro_name": "Marakkanam"
+          },
+          {
+            "sro_id": "20215:1",
+            "sro_name": "Mayilam"
+          },
+          {
+            "sro_id": "20210:1",
+            "sro_name": "Sathyamangalam_Dindivanam"
+          },
+          {
+            "sro_id": "20217:1",
+            "sro_name": "Valathi"
+          },
+          {
+            "sro_id": "20216:1",
+            "sro_name": "Vallam_Dindivanam"
+          },
+          {
+            "sro_id": "20218:1",
+            "sro_name": "Vanur"
+          }
+        ]
+      },
+      {
+        "district_id": "20012",
+        "district_name": "Villupuram",
+        "sros": [
+          {
+            "sro_id": "20179:1",
+            "sro_name": "Ananthapuram"
+          },
+          {
+            "sro_id": "20178:1",
+            "sro_name": "Anniyur"
+          },
+          {
+            "sro_id": "20180:1",
+            "sro_name": "Aragandanallur"
+          },
+          {
+            "sro_id": "20187:1",
+            "sro_name": "Kandamangalam"
+          },
+          {
+            "sro_id": "20185:1",
+            "sro_name": "Manalurpettai"
+          },
+          {
+            "sro_id": "20182:1",
+            "sro_name": "Thirukovilur"
+          },
+          {
+            "sro_id": "20181:1",
+            "sro_name": "Thiruvennainallur"
+          },
+          {
+            "sro_id": "20186:1",
+            "sro_name": "Valavanur"
+          },
+          {
+            "sro_id": "20188:1",
+            "sro_name": "Vikkravandi"
+          },
+          {
+            "sro_id": "20183:1",
+            "sro_name": "Villupuram Joint I"
+          },
+          {
+            "sro_id": "20184:1",
+            "sro_name": "Villupuram Joint II"
+          }
+        ]
+      },
+      {
+        "district_id": "20016",
+        "district_name": "Viruthachalam",
+        "sros": [
+          {
+            "sro_id": "20222:1",
+            "sro_name": "Kammapuram"
+          },
+          {
+            "sro_id": "20224:1",
+            "sro_name": "Mangalamapettai"
+          },
+          {
+            "sro_id": "20225:1",
+            "sro_name": "Nallur_Virudhachalam"
+          },
+          {
+            "sro_id": "22305:0",
+            "sro_name": "Oothangaalmangalam - Closed"
+          },
+          {
+            "sro_id": "20229:1",
+            "sro_name": "Pennadam"
+          },
+          {
+            "sro_id": "20226:1",
+            "sro_name": "Sirupakkam"
+          },
+          {
+            "sro_id": "20221:1",
+            "sro_name": "Thirumuttam"
+          },
+          {
+            "sro_id": "20220:1",
+            "sro_name": "Thittakudi"
+          },
+          {
+            "sro_id": "20223:1",
+            "sro_name": "Thozhuudhur"
+          },
+          {
+            "sro_id": "20227:1",
+            "sro_name": "Ulundurpettai"
+          },
+          {
+            "sro_id": "20228:1",
+            "sro_name": "Veppur_Viruddchalam"
+          },
+          {
+            "sro_id": "20219:1",
+            "sro_name": "Virudhachalam Joint I"
+          },
+          {
+            "sro_id": "22304:0",
+            "sro_name": "Virudhachalam Joint II - Closed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "4",
+    "zone_name": "Madurai",
+    "districts": [
+      {
+        "district_id": "20019",
+        "district_name": "Dindugul",
+        "sros": [
+          {
+            "sro_id": "20248:1",
+            "sro_name": "Aathur_Dindugal"
+          },
+          {
+            "sro_id": "20249:1",
+            "sro_name": "Ayyampalayam"
+          },
+          {
+            "sro_id": "20250:1",
+            "sro_name": "Chinnalapatti"
+          },
+          {
+            "sro_id": "20257:1",
+            "sro_name": "Dindugal Joint I"
+          },
+          {
+            "sro_id": "20251:1",
+            "sro_name": "Dindugal Joint II"
+          },
+          {
+            "sro_id": "20253:1",
+            "sro_name": "Kannivadi"
+          },
+          {
+            "sro_id": "20252:1",
+            "sro_name": "Kodaikkanal"
+          },
+          {
+            "sro_id": "20254:1",
+            "sro_name": "Nagal nayakkampatti"
+          },
+          {
+            "sro_id": "20256:1",
+            "sro_name": "Natham"
+          },
+          {
+            "sro_id": "20255:1",
+            "sro_name": "Nilakkottai"
+          },
+          {
+            "sro_id": "20258:1",
+            "sro_name": "Sanarpatti"
+          },
+          {
+            "sro_id": "20259:1",
+            "sro_name": "Sendhurai_Dindigul"
+          },
+          {
+            "sro_id": "20260:1",
+            "sro_name": "Vathalagundu"
+          }
+        ]
+      },
+      {
+        "district_id": "20018",
+        "district_name": "Madurai North",
+        "sros": [
+          {
+            "sro_id": "20239:1",
+            "sro_name": "Alanganallur"
+          },
+          {
+            "sro_id": "22587:1",
+            "sro_name": "Chettikulam(Madurai North)"
+          },
+          {
+            "sro_id": "20241:1",
+            "sro_name": "Karungalakkudi"
+          },
+          {
+            "sro_id": "20245:1",
+            "sro_name": "KARUPPAYOORANI"
+          },
+          {
+            "sro_id": "22589:1",
+            "sro_name": "Kathakkinaru"
+          },
+          {
+            "sro_id": "20246:1",
+            "sro_name": "Madurai North Joint I"
+          },
+          {
+            "sro_id": "20242:0",
+            "sro_name": "Melur - Closed"
+          },
+          {
+            "sro_id": "22591:1",
+            "sro_name": "Melur(East)"
+          },
+          {
+            "sro_id": "22588:1",
+            "sro_name": "Melur(West)"
+          },
+          {
+            "sro_id": "20652:0",
+            "sro_name": "Othakadai - Closed"
+          },
+          {
+            "sro_id": "22586:1",
+            "sro_name": "Podumbu"
+          },
+          {
+            "sro_id": "20244:1",
+            "sro_name": "Thallakualam"
+          },
+          {
+            "sro_id": "20243:1",
+            "sro_name": "Thamaraipatti"
+          },
+          {
+            "sro_id": "20247:1",
+            "sro_name": "Vadipatti"
+          },
+          {
+            "sro_id": "20240:1",
+            "sro_name": "VILANGUDI"
+          }
+        ]
+      },
+      {
+        "district_id": "20017",
+        "district_name": "Madurai South",
+        "sros": [
+          {
+            "sro_id": "20231:1",
+            "sro_name": "Chekkanoorani"
+          },
+          {
+            "sro_id": "20290:1",
+            "sro_name": "CHELLAMPATTI"
+          },
+          {
+            "sro_id": "20236:1",
+            "sro_name": "Cholavanthan"
+          },
+          {
+            "sro_id": "20285:1",
+            "sro_name": "Ezhumalai"
+          },
+          {
+            "sro_id": "20234:1",
+            "sro_name": "Kallikudi"
+          },
+          {
+            "sro_id": "20233:1",
+            "sro_name": "Madurai South Joint 4"
+          },
+          {
+            "sro_id": "20232:1",
+            "sro_name": "Madurai South Joint I"
+          },
+          {
+            "sro_id": "20230:1",
+            "sro_name": "NAGAMALAI PUDUKOTTAI"
+          },
+          {
+            "sro_id": "20235:1",
+            "sro_name": "Peraiyur"
+          },
+          {
+            "sro_id": "22590:1",
+            "sro_name": "Samanatham"
+          },
+          {
+            "sro_id": "20237:1",
+            "sro_name": "Thirumangalam"
+          },
+          {
+            "sro_id": "20238:1",
+            "sro_name": "Thiruparankunram"
+          },
+          {
+            "sro_id": "20294:1",
+            "sro_name": "Usilampatti"
+          }
+        ]
+      },
+      {
+        "district_id": "20021",
+        "district_name": "Palani",
+        "sros": [
+          {
+            "sro_id": "20271:1",
+            "sro_name": "Chathirapatti"
+          },
+          {
+            "sro_id": "20280:0",
+            "sro_name": "Edayakottai(camp)_Closed"
+          },
+          {
+            "sro_id": "20272:0",
+            "sro_name": "Eriyodu_Closed"
+          },
+          {
+            "sro_id": "20281:1",
+            "sro_name": "Kallimandayam"
+          },
+          {
+            "sro_id": "20276:1",
+            "sro_name": "Keeranur"
+          },
+          {
+            "sro_id": "20277:1",
+            "sro_name": "Kujiliamparai"
+          },
+          {
+            "sro_id": "20274:1",
+            "sro_name": "Ottanchathiram"
+          },
+          {
+            "sro_id": "20275:1",
+            "sro_name": "Palani Joint I"
+          },
+          {
+            "sro_id": "20273:1",
+            "sro_name": "Palani Joint II"
+          },
+          {
+            "sro_id": "20278:1",
+            "sro_name": "Vada madurai"
+          },
+          {
+            "sro_id": "20279:1",
+            "sro_name": "Veda senthur"
+          }
+        ]
+      },
+      {
+        "district_id": "20022",
+        "district_name": "Periyakulam",
+        "sros": [
+          {
+            "sro_id": "20282:1",
+            "sro_name": "Andipatti"
+          },
+          {
+            "sro_id": "20283:1",
+            "sro_name": "Bodinayakkanur"
+          },
+          {
+            "sro_id": "20284:1",
+            "sro_name": "Chinnamanur"
+          },
+          {
+            "sro_id": "20288:1",
+            "sro_name": "Cumbum"
+          },
+          {
+            "sro_id": "20287:1",
+            "sro_name": "Kadamalaikundu"
+          },
+          {
+            "sro_id": "20289:1",
+            "sro_name": "Periyakulam Joint I"
+          },
+          {
+            "sro_id": "20286:1",
+            "sro_name": "Periyakulam Joint II"
+          },
+          {
+            "sro_id": "20291:1",
+            "sro_name": "Theni"
+          },
+          {
+            "sro_id": "20292:1",
+            "sro_name": "Thevaram"
+          },
+          {
+            "sro_id": "20293:1",
+            "sro_name": "Uthamapalayam"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "13",
+    "zone_name": "Ramanathapuram",
+    "districts": [
+      {
+        "district_id": "20020",
+        "district_name": "Karaikudi",
+        "sros": [
+          {
+            "sro_id": "20261:1",
+            "sro_name": "Aranthangi"
+          },
+          {
+            "sro_id": "20262:1",
+            "sro_name": "Devakkottai"
+          },
+          {
+            "sro_id": "20263:1",
+            "sro_name": "Karaikudi Joint II"
+          },
+          {
+            "sro_id": "20265:1",
+            "sro_name": "Karakudi Joint I"
+          },
+          {
+            "sro_id": "20264:1",
+            "sro_name": "Meemisal"
+          },
+          {
+            "sro_id": "20266:1",
+            "sro_name": "Ponnamaravathi"
+          },
+          {
+            "sro_id": "20267:1",
+            "sro_name": "Singampunari"
+          },
+          {
+            "sro_id": "20268:1",
+            "sro_name": "Thiruppathur_Karaikudi"
+          },
+          {
+            "sro_id": "20269:1",
+            "sro_name": "Thiruvadanai"
+          },
+          {
+            "sro_id": "20270:1",
+            "sro_name": "Thondi"
+          }
+        ]
+      },
+      {
+        "district_id": "20023",
+        "district_name": "Ramanathapuram",
+        "sros": [
+          {
+            "sro_id": "20295:1",
+            "sro_name": "Abiramam"
+          },
+          {
+            "sro_id": "20304:1",
+            "sro_name": "Boghalur"
+          },
+          {
+            "sro_id": "20297:1",
+            "sro_name": "Kadaladi_Ramanathapuram"
+          },
+          {
+            "sro_id": "20298:1",
+            "sro_name": "Kamudhi"
+          },
+          {
+            "sro_id": "20299:1",
+            "sro_name": "Keelakkarai"
+          },
+          {
+            "sro_id": "20300:1",
+            "sro_name": "Mudhukulathur"
+          },
+          {
+            "sro_id": "20303:1",
+            "sro_name": "Perunazhi"
+          },
+          {
+            "sro_id": "20301:1",
+            "sro_name": "Rajasinga mangalam"
+          },
+          {
+            "sro_id": "20306:1",
+            "sro_name": "Ramanathapuram Joint I"
+          },
+          {
+            "sro_id": "20296:1",
+            "sro_name": "Ramanathapuram Joint II"
+          },
+          {
+            "sro_id": "20302:1",
+            "sro_name": "Rameshvaram"
+          },
+          {
+            "sro_id": "20305:1",
+            "sro_name": "Sayalkudi"
+          },
+          {
+            "sro_id": "20307:1",
+            "sro_name": "Velipattinam"
+          }
+        ]
+      },
+      {
+        "district_id": "20025",
+        "district_name": "Sivagengai",
+        "sros": [
+          {
+            "sro_id": "20323:1",
+            "sro_name": "Ilayangudi"
+          },
+          {
+            "sro_id": "20325:1",
+            "sro_name": "Kalayarkoil"
+          },
+          {
+            "sro_id": "20327:1",
+            "sro_name": "Madakkupatti"
+          },
+          {
+            "sro_id": "20326:1",
+            "sro_name": "Manamadurai"
+          },
+          {
+            "sro_id": "20328:1",
+            "sro_name": "Nayinar kovil"
+          },
+          {
+            "sro_id": "20330:1",
+            "sro_name": "Paramakudi"
+          },
+          {
+            "sro_id": "20329:1",
+            "sro_name": "Sivagangai Joint I"
+          },
+          {
+            "sro_id": "20324:1",
+            "sro_name": "Sivagangai Joint II"
+          },
+          {
+            "sro_id": "20331:1",
+            "sro_name": "Thirupuvanam"
+          }
+        ]
+      },
+      {
+        "district_id": "20024",
+        "district_name": "Virudhunagar",
+        "sros": [
+          {
+            "sro_id": "20308:1",
+            "sro_name": "Aruppukkottai"
+          },
+          {
+            "sro_id": "20309:1",
+            "sro_name": "Coonoor_virudhunagar"
+          },
+          {
+            "sro_id": "20311:1",
+            "sro_name": "Kariapatti"
+          },
+          {
+            "sro_id": "20312:1",
+            "sro_name": "KeelaRajakularaman"
+          },
+          {
+            "sro_id": "22600:1",
+            "sro_name": "M.Rettiyapetty"
+          },
+          {
+            "sro_id": "20314:1",
+            "sro_name": "Panthalkudi"
+          },
+          {
+            "sro_id": "20315:1",
+            "sro_name": "Rajapalayam"
+          },
+          {
+            "sro_id": "20316:1",
+            "sro_name": "Sathur"
+          },
+          {
+            "sro_id": "20317:1",
+            "sro_name": "Sethur"
+          },
+          {
+            "sro_id": "20318:1",
+            "sro_name": "Sivakasi"
+          },
+          {
+            "sro_id": "20319:1",
+            "sro_name": "Srivilliputhur"
+          },
+          {
+            "sro_id": "20321:1",
+            "sro_name": "Thiruchuli"
+          },
+          {
+            "sro_id": "20320:1",
+            "sro_name": "Thiruthangal"
+          },
+          {
+            "sro_id": "20322:1",
+            "sro_name": "Vathirairuppu"
+          },
+          {
+            "sro_id": "20332:1",
+            "sro_name": "Veerachozhan"
+          },
+          {
+            "sro_id": "20313:1",
+            "sro_name": "Virudhunagar Joint I"
+          },
+          {
+            "sro_id": "20310:1",
+            "sro_name": "Virudhunagar Joint II"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "5",
+    "zone_name": "Salem",
+    "districts": [
+      {
+        "district_id": "20026",
+        "district_name": "Dharmapuri",
+        "sros": [
+          {
+            "sro_id": "20339:1",
+            "sro_name": "Barur"
+          },
+          {
+            "sro_id": "20343:1",
+            "sro_name": "Dharmapuri Joint I"
+          },
+          {
+            "sro_id": "20335:1",
+            "sro_name": "Dharmapuri Joint II"
+          },
+          {
+            "sro_id": "20334:1",
+            "sro_name": "Dharmapuri(West)"
+          },
+          {
+            "sro_id": "20333:1",
+            "sro_name": "Harur"
+          },
+          {
+            "sro_id": "20336:1",
+            "sro_name": "Kadathur"
+          },
+          {
+            "sro_id": "20337:1",
+            "sro_name": "Karimangalam"
+          },
+          {
+            "sro_id": "20344:1",
+            "sro_name": "Marandahalli"
+          },
+          {
+            "sro_id": "20338:1",
+            "sro_name": "Morapur"
+          },
+          {
+            "sro_id": "20340:1",
+            "sro_name": "Palacode"
+          },
+          {
+            "sro_id": "22609:1",
+            "sro_name": "Papparappatti"
+          },
+          {
+            "sro_id": "20341:1",
+            "sro_name": "Pappireddypatti"
+          },
+          {
+            "sro_id": "20342:1",
+            "sro_name": "Pennagaram"
+          }
+        ]
+      },
+      {
+        "district_id": "20027",
+        "district_name": "Krishnagiri",
+        "sros": [
+          {
+            "sro_id": "22599:1",
+            "sro_name": "Bagalur"
+          },
+          {
+            "sro_id": "20345:1",
+            "sro_name": "Bargur"
+          },
+          {
+            "sro_id": "20349:1",
+            "sro_name": "Hozur"
+          },
+          {
+            "sro_id": "20347:1",
+            "sro_name": "Kaveripattinam"
+          },
+          {
+            "sro_id": "20348:1",
+            "sro_name": "Kelamangalam"
+          },
+          {
+            "sro_id": "20356:1",
+            "sro_name": "Krishnagiri Joint I"
+          },
+          {
+            "sro_id": "20346:1",
+            "sro_name": "Krishnagiri Joint II"
+          },
+          {
+            "sro_id": "20354:1",
+            "sro_name": "Oothangarai"
+          },
+          {
+            "sro_id": "20350:1",
+            "sro_name": "Pochampalli"
+          },
+          {
+            "sro_id": "20351:1",
+            "sro_name": "Rayakottai"
+          },
+          {
+            "sro_id": "20352:1",
+            "sro_name": "Soolagiri"
+          },
+          {
+            "sro_id": "20353:1",
+            "sro_name": "Thenkanikottai"
+          },
+          {
+            "sro_id": "20355:1",
+            "sro_name": "Veppannapalli"
+          }
+        ]
+      },
+      {
+        "district_id": "20028",
+        "district_name": "Namakkal",
+        "sros": [
+          {
+            "sro_id": "20357:1",
+            "sro_name": "Erumaipatti"
+          },
+          {
+            "sro_id": "20373:0",
+            "sro_name": "Kolli Hills(Camp)"
+          },
+          {
+            "sro_id": "20359:1",
+            "sro_name": "Kumarapalayam"
+          },
+          {
+            "sro_id": "20360:1",
+            "sro_name": "Mallasamuthiram"
+          },
+          {
+            "sro_id": "20361:1",
+            "sro_name": "Moganur"
+          },
+          {
+            "sro_id": "20362:0",
+            "sro_name": "Nallur_Namakkal_Closed"
+          },
+          {
+            "sro_id": "20363:1",
+            "sro_name": "Namagiripettai"
+          },
+          {
+            "sro_id": "20364:1",
+            "sro_name": "Namakkal Joint I"
+          },
+          {
+            "sro_id": "20358:1",
+            "sro_name": "Namakkal Joint II"
+          },
+          {
+            "sro_id": "20367:1",
+            "sro_name": "Pallipalayam"
+          },
+          {
+            "sro_id": "20365:1",
+            "sro_name": "Paramathi"
+          },
+          {
+            "sro_id": "20366:1",
+            "sro_name": "Puduchathiram_Namakkal"
+          },
+          {
+            "sro_id": "20368:1",
+            "sro_name": "Rasipuram"
+          },
+          {
+            "sro_id": "20369:1",
+            "sro_name": "Senthamangalam"
+          },
+          {
+            "sro_id": "20370:1",
+            "sro_name": "Thiruchengode"
+          },
+          {
+            "sro_id": "20372:1",
+            "sro_name": "Velagoundampatti"
+          },
+          {
+            "sro_id": "20371:1",
+            "sro_name": "Velur"
+          }
+        ]
+      },
+      {
+        "district_id": "20029",
+        "district_name": "Salem East",
+        "sros": [
+          {
+            "sro_id": "20375:1",
+            "sro_name": "Aathur_Salem East"
+          },
+          {
+            "sro_id": "20382:1",
+            "sro_name": "Ayothiyapattinam"
+          },
+          {
+            "sro_id": "20377:1",
+            "sro_name": "Dadagapatti"
+          },
+          {
+            "sro_id": "20376:1",
+            "sro_name": "Gangavalli"
+          },
+          {
+            "sro_id": "20379:1",
+            "sro_name": "Pethanayakanpalayam"
+          },
+          {
+            "sro_id": "20374:1",
+            "sro_name": "Salem East Joint I"
+          },
+          {
+            "sro_id": "20381:1",
+            "sro_name": "Thalaivasal"
+          },
+          {
+            "sro_id": "20380:1",
+            "sro_name": "Thammampatti"
+          },
+          {
+            "sro_id": "20378:1",
+            "sro_name": "Vazhapadi"
+          },
+          {
+            "sro_id": "20383:1",
+            "sro_name": "Verapandi"
+          },
+          {
+            "sro_id": "20384:1",
+            "sro_name": "Yercaud"
+          }
+        ]
+      },
+      {
+        "district_id": "20030",
+        "district_name": "Salem West",
+        "sros": [
+          {
+            "sro_id": "20393:1",
+            "sro_name": "Edapadi"
+          },
+          {
+            "sro_id": "20392:1",
+            "sro_name": "Jalakandapuram"
+          },
+          {
+            "sro_id": "22602:1",
+            "sro_name": "Kadaiyampatty"
+          },
+          {
+            "sro_id": "20396:0",
+            "sro_name": "Kolathur(camp)"
+          },
+          {
+            "sro_id": "20394:1",
+            "sro_name": "Magudanchavadi"
+          },
+          {
+            "sro_id": "20391:1",
+            "sro_name": "Mecheri"
+          },
+          {
+            "sro_id": "20390:1",
+            "sro_name": "Mettur"
+          },
+          {
+            "sro_id": "20387:1",
+            "sro_name": "Omalur"
+          },
+          {
+            "sro_id": "20385:1",
+            "sro_name": "Salem West Joint I"
+          },
+          {
+            "sro_id": "20386:1",
+            "sro_name": "Salem West Joint III"
+          },
+          {
+            "sro_id": "20395:1",
+            "sro_name": "Sangagiri"
+          },
+          {
+            "sro_id": "20388:1",
+            "sro_name": "Suramangalam"
+          },
+          {
+            "sro_id": "20389:1",
+            "sro_name": "Tharamangalam"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "7",
+    "zone_name": "Tanjore",
+    "districts": [
+      {
+        "district_id": "20039",
+        "district_name": "Kumbakonam",
+        "sros": [
+          {
+            "sro_id": "20504:1",
+            "sro_name": "Kumbakonam Joint I"
+          },
+          {
+            "sro_id": "20508:1",
+            "sro_name": "Nachiyarkovil"
+          },
+          {
+            "sro_id": "20509:1",
+            "sro_name": "Papanasam"
+          },
+          {
+            "sro_id": "20505:1",
+            "sro_name": "Swamimalai"
+          },
+          {
+            "sro_id": "20507:1",
+            "sro_name": "Thiruppanandhal"
+          },
+          {
+            "sro_id": "20506:1",
+            "sro_name": "Thiruvidaimarudhur"
+          }
+        ]
+      },
+      {
+        "district_id": "20035",
+        "district_name": "Maiyaladuthurai",
+        "sros": [
+          {
+            "sro_id": "20452:1",
+            "sro_name": "Chembanarkovil"
+          },
+          {
+            "sro_id": "20454:1",
+            "sro_name": "Kollidam"
+          },
+          {
+            "sro_id": "20453:1",
+            "sro_name": "Kuthalam"
+          },
+          {
+            "sro_id": "20456:0",
+            "sro_name": "Manalmedu_Closed"
+          },
+          {
+            "sro_id": "20459:1",
+            "sro_name": "Mayiladuthurai Joint I"
+          },
+          {
+            "sro_id": "20457:1",
+            "sro_name": "Mayiladuthurai Joint II"
+          },
+          {
+            "sro_id": "20460:0",
+            "sro_name": "Poompuhar_Closed"
+          },
+          {
+            "sro_id": "20462:1",
+            "sro_name": "Seerkazhi"
+          },
+          {
+            "sro_id": "20463:1",
+            "sro_name": "Tharangampadi"
+          }
+        ]
+      },
+      {
+        "district_id": "20036",
+        "district_name": "Nagapattinam",
+        "sros": [
+          {
+            "sro_id": "20464:0",
+            "sro_name": "Ammapettai_Nagapattinam_Closed"
+          },
+          {
+            "sro_id": "20470:1",
+            "sro_name": "Nagapatinam Joint I"
+          },
+          {
+            "sro_id": "20469:1",
+            "sro_name": "Nagoor"
+          },
+          {
+            "sro_id": "20476:1",
+            "sro_name": "Thakkattur"
+          },
+          {
+            "sro_id": "20471:0",
+            "sro_name": "Thalaignayiru_Closed"
+          },
+          {
+            "sro_id": "20479:1",
+            "sro_name": "Thirukuvalai"
+          },
+          {
+            "sro_id": "20475:0",
+            "sro_name": "Thirumarugal_Closed"
+          },
+          {
+            "sro_id": "20472:1",
+            "sro_name": "Thirupoondi"
+          },
+          {
+            "sro_id": "20477:0",
+            "sro_name": "Vaduvur_Closed"
+          },
+          {
+            "sro_id": "20478:1",
+            "sro_name": "Vedharanyam"
+          }
+        ]
+      },
+      {
+        "district_id": "20037",
+        "district_name": "Pattukkottai",
+        "sros": [
+          {
+            "sro_id": "20480:1",
+            "sro_name": "Adhiramapattinam"
+          },
+          {
+            "sro_id": "20481:1",
+            "sro_name": "Erandampulikadu"
+          },
+          {
+            "sro_id": "20483:1",
+            "sro_name": "Keeramangalam"
+          },
+          {
+            "sro_id": "20484:1",
+            "sro_name": "Madukkur"
+          },
+          {
+            "sro_id": "20485:0",
+            "sro_name": "Melauzhavur_Closed"
+          },
+          {
+            "sro_id": "20487:1",
+            "sro_name": "Orathanadu"
+          },
+          {
+            "sro_id": "20488:1",
+            "sro_name": "Pappanadu"
+          },
+          {
+            "sro_id": "20486:1",
+            "sro_name": "Pattukottai Joint I"
+          },
+          {
+            "sro_id": "20482:1",
+            "sro_name": "Pattukottai Joint II"
+          },
+          {
+            "sro_id": "20490:1",
+            "sro_name": "Peravoorani"
+          },
+          {
+            "sro_id": "20489:0",
+            "sro_name": "Perumagalur_Closed"
+          },
+          {
+            "sro_id": "20491:1",
+            "sro_name": "Subbramaniyapuram"
+          },
+          {
+            "sro_id": "20493:0",
+            "sro_name": "Thiruchitrambalam_Closed"
+          },
+          {
+            "sro_id": "20492:1",
+            "sro_name": "Thiruvonam"
+          }
+        ]
+      },
+      {
+        "district_id": "20038",
+        "district_name": "Thanjavur",
+        "sros": [
+          {
+            "sro_id": "22597:1",
+            "sro_name": "Ammapettai-Thanjavur"
+          },
+          {
+            "sro_id": "20495:1",
+            "sro_name": "Ayyampettai"
+          },
+          {
+            "sro_id": "20496:1",
+            "sro_name": "Boothalur"
+          },
+          {
+            "sro_id": "20498:1",
+            "sro_name": "Karunthattankudi"
+          },
+          {
+            "sro_id": "20499:1",
+            "sro_name": "Makarnonbuchavadi"
+          },
+          {
+            "sro_id": "20500:0",
+            "sro_name": "Melattur_Closed"
+          },
+          {
+            "sro_id": "20497:1",
+            "sro_name": "Thanjavur Joint I"
+          },
+          {
+            "sro_id": "20501:1",
+            "sro_name": "Thirukattupalli"
+          },
+          {
+            "sro_id": "20502:1",
+            "sro_name": "Thiruvaiyaru"
+          },
+          {
+            "sro_id": "20503:1",
+            "sro_name": "Vallam_Thanjavur"
+          }
+        ]
+      },
+      {
+        "district_id": "50004",
+        "district_name": "Thiruvarur",
+        "sros": [
+          {
+            "sro_id": "20455:1",
+            "sro_name": "Kodavasal"
+          },
+          {
+            "sro_id": "20465:1",
+            "sro_name": "Koothanalur"
+          },
+          {
+            "sro_id": "20466:1",
+            "sro_name": "Mannarkudi"
+          },
+          {
+            "sro_id": "20467:1",
+            "sro_name": "Muthupettai"
+          },
+          {
+            "sro_id": "20458:1",
+            "sro_name": "Nannilam"
+          },
+          {
+            "sro_id": "20468:1",
+            "sro_name": "Needamangalam"
+          },
+          {
+            "sro_id": "20461:1",
+            "sro_name": "Peralam"
+          },
+          {
+            "sro_id": "20473:1",
+            "sro_name": "Thiruthuraipoondi"
+          },
+          {
+            "sro_id": "20474:1",
+            "sro_name": "Thiruvarur Joint 1"
+          },
+          {
+            "sro_id": "20494:1",
+            "sro_name": "Ullikottai"
+          },
+          {
+            "sro_id": "20510:1",
+            "sro_name": "Valankaiman"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "8",
+    "zone_name": "Thirunelveli",
+    "districts": [
+      {
+        "district_id": "20040",
+        "district_name": "Cheranmahadevi",
+        "sros": [
+          {
+            "sro_id": "20511:1",
+            "sro_name": "Ambasamudhiram"
+          },
+          {
+            "sro_id": "20517:1",
+            "sro_name": "Cheranmahadevi Joint I"
+          },
+          {
+            "sro_id": "20512:1",
+            "sro_name": "Cheranmahadevi Joint II"
+          },
+          {
+            "sro_id": "20513:1",
+            "sro_name": "Kadayam"
+          },
+          {
+            "sro_id": "20514:1",
+            "sro_name": "Kalakkadu"
+          },
+          {
+            "sro_id": "20515:1",
+            "sro_name": "Kallidaikurichi"
+          },
+          {
+            "sro_id": "20516:1",
+            "sro_name": "Mukkoodal"
+          },
+          {
+            "sro_id": "20518:1",
+            "sro_name": "Vadakkuveeravanallur"
+          },
+          {
+            "sro_id": "20519:1",
+            "sro_name": "Vickramasingapuram"
+          }
+        ]
+      },
+      {
+        "district_id": "20041",
+        "district_name": "Kaniyakumari",
+        "sros": [
+          {
+            "sro_id": "20520:1",
+            "sro_name": "Boothapandi"
+          },
+          {
+            "sro_id": "20521:1",
+            "sro_name": "Eranial"
+          },
+          {
+            "sro_id": "20522:1",
+            "sro_name": "Idalagudi"
+          },
+          {
+            "sro_id": "20526:1",
+            "sro_name": "Kanyakumari Joint I"
+          },
+          {
+            "sro_id": "20523:1",
+            "sro_name": "Kottaram"
+          },
+          {
+            "sro_id": "20524:1",
+            "sro_name": "Kulatchal"
+          },
+          {
+            "sro_id": "20525:1",
+            "sro_name": "Manavalakurichi"
+          },
+          {
+            "sro_id": "20527:1",
+            "sro_name": "Palliyadi"
+          },
+          {
+            "sro_id": "20528:1",
+            "sro_name": "Rajackamangalam"
+          },
+          {
+            "sro_id": "20529:1",
+            "sro_name": "Thackalai"
+          },
+          {
+            "sro_id": "20531:1",
+            "sro_name": "Thovalai"
+          },
+          {
+            "sro_id": "20530:1",
+            "sro_name": "Vadaseri"
+          }
+        ]
+      },
+      {
+        "district_id": "20042",
+        "district_name": "Marthandam",
+        "sros": [
+          {
+            "sro_id": "20532:1",
+            "sro_name": "Arumanai"
+          },
+          {
+            "sro_id": "20535:1",
+            "sro_name": "Karungal"
+          },
+          {
+            "sro_id": "20534:1",
+            "sro_name": "Kollankodu"
+          },
+          {
+            "sro_id": "20537:1",
+            "sro_name": "Marthandam Joint I"
+          },
+          {
+            "sro_id": "20533:1",
+            "sro_name": "Marthandam Joint II"
+          },
+          {
+            "sro_id": "20536:1",
+            "sro_name": "Munchirai"
+          },
+          {
+            "sro_id": "20538:1",
+            "sro_name": "Palugal"
+          },
+          {
+            "sro_id": "20539:1",
+            "sro_name": "Thiruvattar"
+          },
+          {
+            "sro_id": "20540:1",
+            "sro_name": "Verkilambi"
+          }
+        ]
+      },
+      {
+        "district_id": "20043",
+        "district_name": "Palayankottai",
+        "sros": [
+          {
+            "sro_id": "20541:1",
+            "sro_name": "Alwarthirunagari"
+          },
+          {
+            "sro_id": "20542:1",
+            "sro_name": "Burkitmanagaram"
+          },
+          {
+            "sro_id": "20543:1",
+            "sro_name": "Ettayapuram"
+          },
+          {
+            "sro_id": "20544:1",
+            "sro_name": "Kadambur"
+          },
+          {
+            "sro_id": "20549:0",
+            "sro_name": "Kalingappatti(camp)_Closed"
+          },
+          {
+            "sro_id": "20545:1",
+            "sro_name": "Kalugumalai"
+          },
+          {
+            "sro_id": "20548:1",
+            "sro_name": "Kayathar"
+          },
+          {
+            "sro_id": "20547:1",
+            "sro_name": "Kommadikottai"
+          },
+          {
+            "sro_id": "20546:1",
+            "sro_name": "Kovilpatii"
+          },
+          {
+            "sro_id": "20550:1",
+            "sro_name": "Melapapalayam"
+          },
+          {
+            "sro_id": "20551:1",
+            "sro_name": "Murapanadu"
+          },
+          {
+            "sro_id": "20552:1",
+            "sro_name": "Nazareth"
+          },
+          {
+            "sro_id": "20554:0",
+            "sro_name": "Padukapathu (camp)_Closed"
+          },
+          {
+            "sro_id": "20553:1",
+            "sro_name": "Palayankottai joint I"
+          },
+          {
+            "sro_id": "20555:1",
+            "sro_name": "Sathankulam"
+          },
+          {
+            "sro_id": "20556:1",
+            "sro_name": "Srivaikundam"
+          },
+          {
+            "sro_id": "20557:0",
+            "sro_name": "Thiruvenkadam_Closed"
+          },
+          {
+            "sro_id": "20558:1",
+            "sro_name": "Thisaiyanvilai"
+          }
+        ]
+      },
+      {
+        "district_id": "20046",
+        "district_name": "Tenkasi",
+        "sros": [
+          {
+            "sro_id": "20585:1",
+            "sro_name": "Alangulam"
+          },
+          {
+            "sro_id": "20586:1",
+            "sro_name": "Idaikkal"
+          },
+          {
+            "sro_id": "20588:1",
+            "sro_name": "Kadayanallur"
+          },
+          {
+            "sro_id": "20589:1",
+            "sro_name": "Karivalamvandanallur"
+          },
+          {
+            "sro_id": "20590:1",
+            "sro_name": "Melaneelithanallur"
+          },
+          {
+            "sro_id": "20591:1",
+            "sro_name": "Panpozhi"
+          },
+          {
+            "sro_id": "20592:1",
+            "sro_name": "Pavoorchathram"
+          },
+          {
+            "sro_id": "20593:1",
+            "sro_name": "Puliyangudi"
+          },
+          {
+            "sro_id": "20594:1",
+            "sro_name": "Sankaranainarkoil"
+          },
+          {
+            "sro_id": "20597:1",
+            "sro_name": "Senkottai"
+          },
+          {
+            "sro_id": "20595:1",
+            "sro_name": "Sivagiri_Tenkasi"
+          },
+          {
+            "sro_id": "20596:1",
+            "sro_name": "Surandai"
+          },
+          {
+            "sro_id": "20599:1",
+            "sro_name": "Tenkasi Joint I"
+          },
+          {
+            "sro_id": "20587:1",
+            "sro_name": "Tenkasi Joint II"
+          },
+          {
+            "sro_id": "20598:1",
+            "sro_name": "Uthumalai"
+          },
+          {
+            "sro_id": "20600:1",
+            "sro_name": "Vasudevanallur"
+          },
+          {
+            "sro_id": "20601:1",
+            "sro_name": "Veerasigamani"
+          }
+        ]
+      },
+      {
+        "district_id": "20044",
+        "district_name": "Tirunelveli",
+        "sros": [
+          {
+            "sro_id": "20559:1",
+            "sro_name": "Gangaikondan"
+          },
+          {
+            "sro_id": "20561:1",
+            "sro_name": "Moolakaraipatti"
+          },
+          {
+            "sro_id": "20562:1",
+            "sro_name": "Nanguneri"
+          },
+          {
+            "sro_id": "20564:1",
+            "sro_name": "Panagudi"
+          },
+          {
+            "sro_id": "20565:1",
+            "sro_name": "Pettai"
+          },
+          {
+            "sro_id": "20566:1",
+            "sro_name": "Radhapuram"
+          },
+          {
+            "sro_id": "20567:1",
+            "sro_name": "Thirukurungudi"
+          },
+          {
+            "sro_id": "20563:1",
+            "sro_name": "Tirunelveli Joint I"
+          },
+          {
+            "sro_id": "20560:1",
+            "sro_name": "Tirunelveli Joint II"
+          },
+          {
+            "sro_id": "20568:1",
+            "sro_name": "Valliyur"
+          }
+        ]
+      },
+      {
+        "district_id": "20045",
+        "district_name": "Tuticorin",
+        "sros": [
+          {
+            "sro_id": "20569:1",
+            "sro_name": "Eral"
+          },
+          {
+            "sro_id": "20571:1",
+            "sro_name": "Kayalpattinam"
+          },
+          {
+            "sro_id": "20573:1",
+            "sro_name": "Keezhur"
+          },
+          {
+            "sro_id": "20572:0",
+            "sro_name": "Kurumbur_Closed"
+          },
+          {
+            "sro_id": "20575:0",
+            "sro_name": "Meignanapuram_Closed"
+          },
+          {
+            "sro_id": "20574:1",
+            "sro_name": "Melur_Tuticorin"
+          },
+          {
+            "sro_id": "20576:0",
+            "sro_name": "Nagalapuram_Closed"
+          },
+          {
+            "sro_id": "20578:1",
+            "sro_name": "Ottapidaram"
+          },
+          {
+            "sro_id": "20581:1",
+            "sro_name": "Perungulam"
+          },
+          {
+            "sro_id": "20580:1",
+            "sro_name": "Pudukkottai"
+          },
+          {
+            "sro_id": "20579:1",
+            "sro_name": "Pudur"
+          },
+          {
+            "sro_id": "20582:1",
+            "sro_name": "Tiruchendur"
+          },
+          {
+            "sro_id": "20577:1",
+            "sro_name": "Tuticorin Joint I"
+          },
+          {
+            "sro_id": "20570:1",
+            "sro_name": "Tuticorin Joint II"
+          },
+          {
+            "sro_id": "20583:1",
+            "sro_name": "Udankudi"
+          },
+          {
+            "sro_id": "20584:1",
+            "sro_name": "Vilathikulam"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "6",
+    "zone_name": "Trichy",
+    "districts": [
+      {
+        "district_id": "20031",
+        "district_name": "Ariyalur",
+        "sros": [
+          {
+            "sro_id": "20397:1",
+            "sro_name": "Aandimadam"
+          },
+          {
+            "sro_id": "20404:1",
+            "sro_name": "Ariyalur Joint I"
+          },
+          {
+            "sro_id": "20398:0",
+            "sro_name": "Ariyalur Joint II Closed"
+          },
+          {
+            "sro_id": "20416:1",
+            "sro_name": "Erumbulikurichi"
+          },
+          {
+            "sro_id": "20400:1",
+            "sro_name": "Jayakondam"
+          },
+          {
+            "sro_id": "20401:1",
+            "sro_name": "Keezhaapazhur"
+          },
+          {
+            "sro_id": "20402:1",
+            "sro_name": "Lalkudi"
+          },
+          {
+            "sro_id": "20403:1",
+            "sro_name": "Meensurutti"
+          },
+          {
+            "sro_id": "20406:1",
+            "sro_name": "Pullampadi"
+          },
+          {
+            "sro_id": "20407:1",
+            "sro_name": "Sendhurai_Ariyalur"
+          },
+          {
+            "sro_id": "20408:1",
+            "sro_name": "Tha.Pazhur"
+          },
+          {
+            "sro_id": "20409:1",
+            "sro_name": "Thuraiyur"
+          },
+          {
+            "sro_id": "20410:1",
+            "sro_name": "Udayarpalayam"
+          },
+          {
+            "sro_id": "20411:1",
+            "sro_name": "Uppiliyapuram"
+          },
+          {
+            "sro_id": "20413:1",
+            "sro_name": "Vikramangalam"
+          }
+        ]
+      },
+      {
+        "district_id": "20032",
+        "district_name": "Karur",
+        "sros": [
+          {
+            "sro_id": "20417:1",
+            "sro_name": "Aravakurichi"
+          },
+          {
+            "sro_id": "20418:1",
+            "sro_name": "Chinnadarapuram"
+          },
+          {
+            "sro_id": "20420:1",
+            "sro_name": "Karur Joint I"
+          },
+          {
+            "sro_id": "20419:1",
+            "sro_name": "Karur Joint II"
+          },
+          {
+            "sro_id": "20422:1",
+            "sro_name": "Krishnarayapuram"
+          },
+          {
+            "sro_id": "20421:1",
+            "sro_name": "Kulithalai"
+          },
+          {
+            "sro_id": "20423:1",
+            "sro_name": "Melakarur"
+          },
+          {
+            "sro_id": "20424:1",
+            "sro_name": "Nangavaram"
+          },
+          {
+            "sro_id": "20425:1",
+            "sro_name": "Tharagampatti"
+          },
+          {
+            "sro_id": "20427:1",
+            "sro_name": "Velayuthampalayam"
+          },
+          {
+            "sro_id": "20426:1",
+            "sro_name": "Velliyanai"
+          }
+        ]
+      },
+      {
+        "district_id": "50001",
+        "district_name": "Perambalur",
+        "sros": [
+          {
+            "sro_id": "20399:1",
+            "sro_name": "Chettikulam"
+          },
+          {
+            "sro_id": "22580:1",
+            "sro_name": "Kolakkanatham"
+          },
+          {
+            "sro_id": "20405:1",
+            "sro_name": "Perambalur Joint 1"
+          },
+          {
+            "sro_id": "20412:1",
+            "sro_name": "Valighandapuram"
+          },
+          {
+            "sro_id": "20415:1",
+            "sro_name": "Veppanthattai"
+          },
+          {
+            "sro_id": "20414:1",
+            "sro_name": "Veppur_Perambalur"
+          }
+        ]
+      },
+      {
+        "district_id": "20033",
+        "district_name": "Pudukottai",
+        "sros": [
+          {
+            "sro_id": "20428:1",
+            "sro_name": "Alangudi"
+          },
+          {
+            "sro_id": "20429:1",
+            "sro_name": "Annavasal"
+          },
+          {
+            "sro_id": "20430:1",
+            "sro_name": "Iluppur"
+          },
+          {
+            "sro_id": "20433:1",
+            "sro_name": "Kantharvakottai"
+          },
+          {
+            "sro_id": "20431:1",
+            "sro_name": "Karambakudi"
+          },
+          {
+            "sro_id": "20432:1",
+            "sro_name": "Keelanilai"
+          },
+          {
+            "sro_id": "20434:1",
+            "sro_name": "Kolathur"
+          },
+          {
+            "sro_id": "20435:1",
+            "sro_name": "Manamelkudi"
+          },
+          {
+            "sro_id": "20437:1",
+            "sro_name": "Perungalur"
+          },
+          {
+            "sro_id": "20436:1",
+            "sro_name": "Pudukkottai Joint I"
+          },
+          {
+            "sro_id": "20438:1",
+            "sro_name": "Thirumayam"
+          },
+          {
+            "sro_id": "20439:1",
+            "sro_name": "Viralimalai"
+          }
+        ]
+      },
+      {
+        "district_id": "20034",
+        "district_name": "Trichy",
+        "sros": [
+          {
+            "sro_id": "22596:1",
+            "sro_name": "Kanakiliyanallur"
+          },
+          {
+            "sro_id": "20441:1",
+            "sro_name": "Kattuputhur"
+          },
+          {
+            "sro_id": "20442:1",
+            "sro_name": "Keezhsathanur"
+          },
+          {
+            "sro_id": "20443:1",
+            "sro_name": "Manaparai"
+          },
+          {
+            "sro_id": "20451:1",
+            "sro_name": "Mannachanallur"
+          },
+          {
+            "sro_id": "20444:1",
+            "sro_name": "Musiri"
+          },
+          {
+            "sro_id": "20446:1",
+            "sro_name": "Srirangam"
+          },
+          {
+            "sro_id": "20447:1",
+            "sro_name": "Thathaiyangarpettai"
+          },
+          {
+            "sro_id": "22594:1",
+            "sro_name": "Thillai Nagar"
+          },
+          {
+            "sro_id": "20448:1",
+            "sro_name": "Thiruvarumpur"
+          },
+          {
+            "sro_id": "20449:1",
+            "sro_name": "Thuvarankurichi"
+          },
+          {
+            "sro_id": "20440:1",
+            "sro_name": "Trichi Joint III"
+          },
+          {
+            "sro_id": "20445:1",
+            "sro_name": "Trichy Joint 1"
+          },
+          {
+            "sro_id": "20450:1",
+            "sro_name": "Urayur"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone_id": "9",
+    "zone_name": "Vellore",
+    "districts": [
+      {
+        "district_id": "20048",
+        "district_name": "Cheyyar",
+        "sros": [
+          {
+            "sro_id": "20614:1",
+            "sro_name": "Arani_Cheyyar"
+          },
+          {
+            "sro_id": "20621:1",
+            "sro_name": "Cheyyar Joint I"
+          },
+          {
+            "sro_id": "20617:1",
+            "sro_name": "Cheyyar Joint II"
+          },
+          {
+            "sro_id": "20615:0",
+            "sro_name": "Desur_Closed"
+          },
+          {
+            "sro_id": "20616:1",
+            "sro_name": "Dusi"
+          },
+          {
+            "sro_id": "20618:1",
+            "sro_name": "Kalampur"
+          },
+          {
+            "sro_id": "20619:1",
+            "sro_name": "Kannamangalam"
+          },
+          {
+            "sro_id": "20620:1",
+            "sro_name": "Kilkodungalur"
+          },
+          {
+            "sro_id": "20622:1",
+            "sro_name": "Peranamallur"
+          },
+          {
+            "sro_id": "20623:1",
+            "sro_name": "Thellar"
+          },
+          {
+            "sro_id": "20624:1",
+            "sro_name": "Vandavasi"
+          },
+          {
+            "sro_id": "20625:1",
+            "sro_name": "Vembakkam"
+          }
+        ]
+      },
+      {
+        "district_id": "20047",
+        "district_name": "Ranipet",
+        "sros": [
+          {
+            "sro_id": "22585:1",
+            "sro_name": "Arakkonam"
+          },
+          {
+            "sro_id": "20609:0",
+            "sro_name": "Arakonam Joint I Closed"
+          },
+          {
+            "sro_id": "20605:0",
+            "sro_name": "Arakonam Joint II closed"
+          },
+          {
+            "sro_id": "20602:1",
+            "sro_name": "Arcot"
+          },
+          {
+            "sro_id": "20603:0",
+            "sro_name": "Brahmadesam_Closed"
+          },
+          {
+            "sro_id": "20604:0",
+            "sro_name": "Guruvarajapettai_Closed"
+          },
+          {
+            "sro_id": "20606:1",
+            "sro_name": "Kalavai"
+          },
+          {
+            "sro_id": "20607:1",
+            "sro_name": "Kaveripakkam"
+          },
+          {
+            "sro_id": "20608:1",
+            "sro_name": "Nemili"
+          },
+          {
+            "sro_id": "20610:0",
+            "sro_name": "Panapakkam_Closed"
+          },
+          {
+            "sro_id": "22583:1",
+            "sro_name": "Ranipet Joint I"
+          },
+          {
+            "sro_id": "20611:1",
+            "sro_name": "Sholingar"
+          },
+          {
+            "sro_id": "20612:0",
+            "sro_name": "Timiri_Closed"
+          },
+          {
+            "sro_id": "20613:1",
+            "sro_name": "Walaja"
+          }
+        ]
+      },
+      {
+        "district_id": "20049",
+        "district_name": "Thiruvannamalai",
+        "sros": [
+          {
+            "sro_id": "20626:1",
+            "sro_name": "Chengam"
+          },
+          {
+            "sro_id": "20627:1",
+            "sro_name": "Chetput"
+          },
+          {
+            "sro_id": "20628:0",
+            "sro_name": "Devigapuram_Closed"
+          },
+          {
+            "sro_id": "20630:1",
+            "sro_name": "Kadaladi_Thiruvannamalai"
+          },
+          {
+            "sro_id": "20631:1",
+            "sro_name": "Kalasapakkam"
+          },
+          {
+            "sro_id": "20632:1",
+            "sro_name": "Kilpennathur"
+          },
+          {
+            "sro_id": "20633:1",
+            "sro_name": "Mangalam"
+          },
+          {
+            "sro_id": "20635:1",
+            "sro_name": "Polur"
+          },
+          {
+            "sro_id": "20637:1",
+            "sro_name": "Thaanipadi"
+          },
+          {
+            "sro_id": "20636:1",
+            "sro_name": "Thandarampattu"
+          },
+          {
+            "sro_id": "20634:1",
+            "sro_name": "Thiruvannamalai Joint I"
+          },
+          {
+            "sro_id": "20629:1",
+            "sro_name": "Thiruvannamalai Joint II"
+          },
+          {
+            "sro_id": "20638:1",
+            "sro_name": "Vettavalam"
+          }
+        ]
+      },
+      {
+        "district_id": "50002",
+        "district_name": "Tirupathur",
+        "sros": [
+          {
+            "sro_id": "20639:1",
+            "sro_name": "Ambur"
+          },
+          {
+            "sro_id": "20640:1",
+            "sro_name": "Jolarpettai"
+          },
+          {
+            "sro_id": "20644:1",
+            "sro_name": "Natrampalli"
+          },
+          {
+            "sro_id": "20649:0",
+            "sro_name": "Thirupathur_closed"
+          },
+          {
+            "sro_id": "22581:1",
+            "sro_name": "Thirupathur Joint 1"
+          },
+          {
+            "sro_id": "22582:1",
+            "sro_name": "Thirupathur Joint 2"
+          },
+          {
+            "sro_id": "20650:1",
+            "sro_name": "Vaniyampadi"
+          }
+        ]
+      },
+      {
+        "district_id": "20050",
+        "district_name": "Vellore",
+        "sros": [
+          {
+            "sro_id": "20642:1",
+            "sro_name": "Kaniyampadi"
+          },
+          {
+            "sro_id": "20641:1",
+            "sro_name": "Katpadi"
+          },
+          {
+            "sro_id": "20651:1",
+            "sro_name": "Keezh Vazhi ThunaiyanKuppam"
+          },
+          {
+            "sro_id": "20643:1",
+            "sro_name": "Kudiyatham"
+          },
+          {
+            "sro_id": "20646:1",
+            "sro_name": "Odugathur"
+          },
+          {
+            "sro_id": "20647:1",
+            "sro_name": "Pallikonda"
+          },
+          {
+            "sro_id": "20648:1",
+            "sro_name": "Pernampattu"
+          },
+          {
+            "sro_id": "20645:1",
+            "sro_name": "Vellore Joint I"
+          }
+        ]
+      }
+    ]
+  }
+]

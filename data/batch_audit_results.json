@@ -1,0 +1,1172 @@
+{
+  "document_1579_2021.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\document_1579_2021.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "02-Nov-2026",
+      "search_query_doc": "1579",
+      "search_query_year": "2021",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "1579",
+          "registration_year": "2021",
+          "document_id": "1579/2021",
+          "nature_of_deed": "Sale deed",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "11-Mar-2021",
+            "presentation_date": "11-Mar-2021",
+            "registration_date": "11-Mar-2021"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "Rs. 64,00,000/-",
+          "consideration_value_num": 6400000.0,
+          "market_value_raw": "Rs. 64,00,000/-",
+          "market_value_num": 6400000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "ெவங்கட்ராமன்",
+              "name": "ெவங்கட்ராமன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "பாலமுருகன்",
+              "name": "பாலமுருகன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "2776/1983",
+          "pr_documents": [
+            {
+              "doc_no": "2776",
+              "year": "1983",
+              "formatted": "2776/1983"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot With Building",
+            "extent": {
+              "raw": "2340.0 SQUARE FEET",
+              "sqft": 2340.0,
+              "sq_meters": 217.39
+            },
+            "village": "Ward -AG (K.Abishekapuram)",
+            "street": "INDIAN BANK COLONY (INCLUDING DAVID COLONY)",
+            "survey_number": {
+              "raw": "173/2H",
+              "survey": "173",
+              "subdivision": "2H"
+            },
+            "plot_no": "Plot No 26",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிழக்கு - திரு.எட்வர்டு அவர்களின் கதவு எண் 40 உள்ள வீடு , மேற்கு - கே,ஆர்.வள்ளியம்மை அவர்களின் கதவு எண் 42 உள்ள வீடு , வடக்கு - 20 அடி அகல ரோடு, தெற்கு - திரு.சுந்தரமூர்த்தி அவர்களின் பிளாட் எண் 39 உள்ள மனை",
+              "east": "திரு.எட்வர்டு அவர்களின் கதவு எண் 40 உள்ள வீடு",
+              "west": "கே,ஆர்.வள்ளியம்மை அவர்களின் கதவு எண் 42 உள்ள வீடு",
+              "north": "20 அடி அகல ரோடு",
+              "south": "திரு.சுந்தரமூர்த்தி அவர்களின் பிளாட் எண் 39 உள்ள மனை"
+            },
+            "linear_dimensions": {
+              "east_west_north": "47 அடி",
+              "east_west_south": "30 அடி",
+              "north_south_east": "61 அடி",
+              "north_south_west": "60 அடி",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "173/2",
+              "subdivided_surveys": [
+                "173/2",
+                "173/2எச்"
+              ],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "கே.அபிஷேகபுரம் கிராமம், வார்டு ஏஜி, பிளாக் 0014, டி எஸ் எல் ஆர் சர்வே எண் 13, இந்தியன் வங்கி காலனி, 2வது கிராஸ், அயன் புஞ்சை சர்வே எண் 173/2-க்கு உட்பிரிவின்படி சர்வே எண் 173/2எச்-ல் கட்டுப்பட்ட பிளாட் எண் 26 -க்கு 2340 சதுரடி உள்ள மனைக்கு கிழமேல் ஜாதியடி வடபுறம் 47 தென்புறம் 30 தென்வடல் ஜாதியடி கீழ்புறம் 61 மேல்புறம் 60 ஆக கூடுதல் 2340 சதுரடிக்கு 217.39 சதுர மிட்டர் பரப்பளவு கொண்ட மனையும். மேற்படி மனையில் கட்டப்பட்டுள்ள கீழ்த்தள ஆர் சி சி கெட்டி மெத்தை வீடு வகையறா உள்படவும்."
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 58,
+        "character_count": 1732
+      },
+      {
+        "page_number": 2,
+        "line_count": 26,
+        "character_count": 2658
+      }
+    ],
+    "error": null
+  },
+  "document_1583_2021.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\document_1583_2021.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "03-Nov-2026",
+      "search_query_doc": "1583",
+      "search_query_year": "2021",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "1583",
+          "registration_year": "2021",
+          "document_id": "1583/2021",
+          "nature_of_deed": "Deposit of Title",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "11-Mar-2021",
+            "presentation_date": "11-Mar-2021",
+            "registration_date": "11-Mar-2021"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "-",
+          "consideration_value_num": 0.0,
+          "market_value_raw": "ரூ. 61,33,000/-",
+          "market_value_num": 6133000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "பாலமுருகன்",
+              "name": "பாலமுருகன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "ேபங்க் ஆப் பேராடா",
+              "name": "ேபங்க் ஆப் பேராடா",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "1579/2021, 2776/1983",
+          "pr_documents": [
+            {
+              "doc_no": "1579",
+              "year": "2021",
+              "formatted": "1579/2021"
+            },
+            {
+              "doc_no": "2776",
+              "year": "1983",
+              "formatted": "2776/1983"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot With Building",
+            "extent": {
+              "raw": "2340.0 SQUARE FEET",
+              "sqft": 2340.0,
+              "sq_meters": 217.39
+            },
+            "village": "Ward -AG (K.Abishekapuram)",
+            "street": "INDIAN BANK COLONY (INCLUDING DAVID COLONY)",
+            "survey_number": {
+              "raw": "173/2H",
+              "survey": "173",
+              "subdivision": "2H"
+            },
+            "plot_no": "Plot No 26",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிழக்கு - திரு.எட்வர்டு அவர்களின் கதவு எண் 40 உள்ள வீடு , மேற்கு - கே,ஆர்.வள்ளியம்மை அவர்களின் கதவு எண் 42 உள்ள வீடு , வடக்கு - 20 அடி அகல ரோடு, தெற்கு - திரு.சுந்தரமூர்த்தி அவர்களின் பிளாட் எண் 39 உள்ள மனை Number of Entries/பதிவுகளின் எண்ணிக்கை: 1",
+              "east": "திரு.எட்வர்டு அவர்களின் கதவு எண் 40 உள்ள வீடு",
+              "west": "கே,ஆர்.வள்ளியம்மை அவர்களின் கதவு எண் 42 உள்ள வீடு",
+              "north": "20 அடி அகல ரோடு",
+              "south": "திரு.சுந்தரமூர்த்தி அவர்களின் பிளாட் எண் 39 உள்ள மனை Number of Entries/பதிவுகளின் எண்ணிக்கை: 1"
+            },
+            "linear_dimensions": {
+              "east_west_north": "",
+              "east_west_south": "",
+              "north_south_east": "",
+              "north_south_west": "",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "The acts and Encumbrances shown in the certificate are those discovered with reference to the description of properties furnished by the applicant. If the same properties have been described in the registered documents in a manner different from the way in which the applicant described them, transaction evidenced by such documents will not be included in the certificate. Under section 57 of the Registration Act and Rule 137(1), persons desiring to inspect entries in the registers and indexes or required copies thereof, or requiring certificates of encumbrances on specified properties should make the search by themselves, then the registers and indexes will be placed before them on payment of the prescribed fees. But as in present case, the applicant has not undertaken the search by himself in office and applied EC through online, this certificate has been automatically generated through the system taking the input fed by the applicant.Hence the department will not, on any account, hold itself responsible for any errors in the result of the search embodied in this certificate. இந்த உறுதிமொழிச் சான்றிதழில் குறிப்பிடப்பட்டுள்ள விவரங்களும், வில்லங்கங்களும், மனுதாரரால் தெரிவிக்கப்பட்ட சொத்துக்களின் விவரத்தின் அடிப்படையில் கண்டறியப்பட்டவையாகும். மனுதாரர் குறிப்பிட்டுள்ள விவரங்கள் அல்லாமல் பதிவு செய்யப்பட்ட ஆவணங்களில் அதே சொத்துக்கள் வேறு மாதிரியான விவரங்களைக் கொண்டிருக்குமாயின் அப்படிப்பட்ட ஆவணங்களால் புலப்படுத்தப்பட்ட விவரங்கள் இச்சான்றிதழில் சேர்க்கப்படமாட்டாது. பதிவுச் சட்டத்தின் 57 ஆம் பிரிவிற்கேற்பவும், 137(1) ஆம் விதிக்கேற்பவும், பதிவேடுகளிலும், அட்டவணைகளிலும் உள்ள பதிவுகளைப் பார்வையிட வ��ரும்புவோரும், அவற்றின் படிகளை அல்லது குறிப்பிட்ட சொத்துக்களுக்குரிய வில்லங்கச் சான்றிதழ்களபை் பறெ்றுக் கொள்ள விரும்புவோரும், பதிவடேுகளயைும், அட்டவணகைளயைும் தாங்களே சரிபார்த்துக் கொள்ள வணே்டும். அதற்கனெ அறுதியிடப்பட்ட கட்டணங்களசை் சலெுத்திய பின்னர் பதிவடேுகளும் அட்டவணகைளும் அவர்கள் பார்வகை்கு வகை்கப்படும். சார்பதிவாளர் அலுவலகத்தில் சரிபார்க்கவில்லை என்பதாலும் இணயைதளம் மூலம் விண்ணப்பித்ததாலும் மனுதாரர் உள்ளீடு செய்த விவரங்களின் அடிப்படியில் இந்த வில்லங்கசான்று கணினி மூலம் தானாக உருவாக்கப்பட்டுள்ளது. ஆகையால் இந்தச் சான்றிதழில் உள்ள முடிவுகளில் பிழைகள் ஏதேனும் இருப்பின் அவற்றுக்கு இத்துறை பொறுப்பேற்காது. ஏதேனும் சந்தேகங்கள்/குறைகள் இருப்பின் கீழ்க்கண்ட வழிமுறைகளில் தெரிவிக்கலாம் கட்டணமில்லா தொலைபேசி எண் கட்டணமில்லா தொலைபேசி எண் 1800 102 5174 மின்னஞ்சல் முகவரி helpdesk@tnreginet.net"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 56,
+        "character_count": 1430
+      },
+      {
+        "page_number": 2,
+        "line_count": 22,
+        "character_count": 2443
+      }
+    ],
+    "error": null
+  },
+  "document_1590_2021.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\document_1590_2021.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "05-Nov-2026",
+      "search_query_doc": "1590",
+      "search_query_year": "2021",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "1590",
+          "registration_year": "2021",
+          "document_id": "1590/2021",
+          "nature_of_deed": "Settlement",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "11-Mar-2021",
+            "presentation_date": "11-Mar-2021",
+            "registration_date": "11-Mar-2021"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "-",
+          "consideration_value_num": 0.0,
+          "market_value_raw": "Rs. 35,00,000/-",
+          "market_value_num": 3500000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "ராமச்சந்திரன்",
+              "name": "ராமச்சந்திரன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "பாலாஜி",
+              "name": "பாலாஜி",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "3586/2004",
+          "pr_documents": [
+            {
+              "doc_no": "3586",
+              "year": "2004",
+              "formatted": "3586/2004"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot With Building",
+            "extent": {
+              "raw": "2355.0 SQUARE FEET",
+              "sqft": 2355.0,
+              "sq_meters": 218.79
+            },
+            "village": "WARD -AK (K.Abhishekapuram)",
+            "street": "SHAKTHI NAGAR STREETS (1 -12)",
+            "survey_number": {
+              "raw": "101/7, 101/8",
+              "survey": "101",
+              "subdivision": "7, 101/8"
+            },
+            "plot_no": "16",
+            "new_door_no": "8",
+            "old_door_no": "77/10",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "8",
+              "old_door_no": "77/10",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிழக்கு - தட்சிணாமூர்த்தி அவர்களின் பிளாட் எண். 17, மேற்கு - சர்வே எண் 101/6 ல் கட்டுப்பட்ட இடம் , வடக்கு - பிளாட் எண் 15, தெற்கு - மேற்படி லே அவுட்டில் கிமே ஓடும் லே அவுட் ரோடு",
+              "east": "தட்சிணாமூர்த்தி அவர்களின் பிளாட் எண். 17",
+              "west": "சர்வே எண் 101/6 ல் கட்டுப்பட்ட இடம்",
+              "north": "பிளாட் எண் 15",
+              "south": "மேற்படி லே அவுட்டில் கிமே ஓடும் லே அவுட் ரோடு"
+            },
+            "linear_dimensions": {
+              "east_west_north": "39 அடி",
+              "east_west_south": "39 அடி",
+              "north_south_east": "60 அடி",
+              "north_south_west": "60 அடி",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "திருச்சி ஜில்லா, திருச்சி தாலுக்கா, ஷை ரிடி., ஜாயிண்ட் 1 &2 சப்ரிடியைச் சேர்ந்த கோ.அபிஷேகபுரம் கிராமம், அயன் புஞ்சை சர்வே எண்கள். 101/7-ல் ஏக். 1.20 சென்ட், 101/8-ல் ஏக். 1.70 சென்ட் ஆகக் கூடுதல் ஏக். 2.90 சென்ட் நிலத்தை லேஅவுட் போட்டு மனைகளாகப் பிரித்திருப்பதில் கட்டுப்பட்ட பிளாட் எண். 16-க்கு விஸ்தீர்ணம் 2355 சதுரடிகள் கொண்ட மனையிடம், அதில் கட்டியிருக்கும் கெட்டிமெத்தை வீடு மனை வகையறா அடங்கிய சொத்திற்கு நான்கெல்லை விபரம் : வடக்கில் : பிளாட் எண். 15, தெற்கில் : மேற்படி லேஅவுட்டில் கிழமேலாக ஓடும் லேஅவுட் ரோடு, கிழக்கில் : தட்சிணாமூர்த்தி அவர்களின் பிளாட் எண். 17, மேற்கில் : சர்வே எண். 101/6-ல் கட்டுப்பட்ட இடம், இந்த நான்கெல்லைக்குட்பட்டது கிழமேல் ஜாதியடி வடபுறம் 39, தென்புறம் 39.1/2, தென்வடல் ஜாதியடி மேல்புறம் 60, கீழ்புறம் 60 ஆகக் கூடுதல் 2355 சதுரடிக்கு 218.78 சதுரமீட்டர் கொண்ட மனையிடம், அதில் கட்டியிருக்கும் கெட்டிமெத்தை வீடு அதிலுள்ள எலெக்ட்ரிக் லைட் பிட்டிங்ஸ், மீட்டர், மீட்டர் டெபாசிட் தொகை, தண்ணீர் இணைப்பு மற்றும் அதன் சகல கட்டிட தளவாடங்கள், இதர ஈஸ்மெண்ட் பாதை பாத்தியங்கள் உள்படவும், இந்த செட்டில்மெண்ட் பத்திரத்திற்கு கட்டுப்பட்டது. ஷை சொத்திற்கு மாநகராட்சி பதிவேட்டின் படி புதிய வார்டு ஏஎல், புதிய பிளாக் 3, புதிய டி.எஸ்.நெ.28/1 ஆகும். வழிகாட்டி பதிவேட்டின் படி புதிய வார்டு ஏகே ஆகும். மேற்படி வீட்டிற்கு கதவு எண். பழைய எண். 77/10, புதிய எண். 8, வீட்டு வரிவிதிப்பு எண். 086/045/02728-க்கு பழைய எண். 086/45001913 குடிநீர் இணைப்பு எண். 086/045/00919-க்கு பழைய எண். 086/4/14427, மின் இணைப்பு எண்கள். 213-005-844, 214-005-1949. மேற்படி சொத்து திருச்சிராப்பள்ளி மாநகராட்சி எல்லைக்குட்பட்ட கோ.அபிஷேகபுரம் கிராமம், சக்தி நகர் 4வது தெருவில் அமைந்துள்ளது."
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 58,
+        "character_count": 1678
+      },
+      {
+        "page_number": 2,
+        "line_count": 38,
+        "character_count": 3645
+      },
+      {
+        "page_number": 3,
+        "line_count": 5,
+        "character_count": 191
+      }
+    ],
+    "error": null
+  },
+  "document_2367_2010.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\document_2367_2010.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "05-Nov-2026",
+      "search_query_doc": "2367",
+      "search_query_year": "2010",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "2367",
+          "registration_year": "2010",
+          "document_id": "2367/2010",
+          "nature_of_deed": "Conveyance",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "31-Aug-2010",
+            "presentation_date": "31-Aug-2010",
+            "registration_date": "31-Aug-2010"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "-",
+          "consideration_value_num": 0.0,
+          "market_value_raw": "Rs. 63,700/-",
+          "market_value_num": 63700.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "சங்கீதா(எ)வீரம்மாள்(முதல்வர்)",
+              "name": "சங்கீதா(எ)வீரம்மாள்(முதல்வர்)",
+              "initial_verbatim": "",
+              "party_type": "ORGANIZATION"
+            },
+            {
+              "raw": "கல்யாணசுந்தரம்(முகவர்)",
+              "name": "கல்யாணசுந்தரம்(முகவர்)",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "ஆர் . ெஜயாஜான்சி",
+              "name": "ஆர் . ெஜயாஜான்சி",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "27/ 1982",
+          "pr_documents": [
+            {
+              "doc_no": "27",
+              "year": "1982",
+              "formatted": "27/1982"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "House Site",
+            "extent": {
+              "raw": "2275 சதுரடி",
+              "sqft": 2275.0,
+              "sq_meters": 211.35
+            },
+            "village": "Poolampatti",
+            "street": "Poolampatti (V & T)",
+            "survey_number": {
+              "raw": "106/2",
+              "survey": "106",
+              "subdivision": "2"
+            },
+            "plot_no": "134",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "(வ) 30அடி ரோடு, (கி) பிளாட்நிர் 133, (தெ) பிளாட்நிர் 96, (மே) பிளாட்நிர் 135",
+              "east": "பிளாட்நிர் 133",
+              "west": "பிளாட்நிர் 135",
+              "north": "30அடி ரோடு",
+              "south": "பிளாட்நிர் 96"
+            },
+            "linear_dimensions": {
+              "east_west_north": "",
+              "east_west_south": "",
+              "north_south_east": "",
+              "north_south_west": "",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "பட்டா 40 ல் ரீசர்வே 106/2 ஹெக் 0.79.5க்கு ஏக்கர் 1.96ல் விக்டரி கார்டன் ல்பிளாட்நிர் 134 இதற்குள்பட்ட கிமே 35 தெவ 50க்கு சஅடி 1750ம் ஈவு சஅடி 525 ம் சேர்த்து சஅடி 2275 ம் பாதைபாத்தியமும். Number of Entries/பதிவுகளின் எண்ணிக்கை: 1 The acts and Encumbrances shown in the certificate are those discovered with reference to the description of properties furnished by the applicant. If the same properties have been described in the registered documents in a manner different from the way in which the applicant described them, transaction evidenced by such documents will not be included in the certificate. Under section 57 of the Registration Act and Rule 137(1), persons desiring to inspect entries in the registers and indexes or required copies thereof, or requiring certificates of encumbrances on specified properties should make the search by themselves, then the registers and indexes will be placed before them on payment of the prescribed fees. But as in present case, the applicant has not undertaken the search by himself in office and applied EC through online, this certificate has been automatically generated through the system taking the input fed by the applicant.Hence the department will not, on any account, hold itself responsible for any errors in the result of the search embodied in this certificate. இந்த உறுதிமொழிச் சான்றிதழில் குறிப்பிடப்பட்டுள்ள விவரங்களும், வில்லங்கங்களும், மனுதாரரால் தெரிவிக்கப்பட்ட சொத்துக்களின் விவரத்தின் அடிப்படையில் கண்டறியப்பட்டவையாகும். மனுதாரர் குறிப்பிட்டுள்ள விவரங்கள் அல்லாமல் பதிவு செய்யப்பட்ட ஆவணங்களில் அதே சொத்துக்கள் வேறு மாதிரியான விவரங்களைக் கொண்டிருக்குமாயின் அப்படிப்பட்ட ஆவணங்களால் புலப்படுத்தப்பட்ட விவரங்கள் இச்சான்றிதழில் சேர்க்கப்படமாட்டாது. பதிவுச் சட்டத்தின் 57 ஆம் பிரிவிற்கேற்பவும், 137(1) ஆம் விதிக்கேற்பவும், பதிவேடுகளிலும், அட்டவணைகளிலும் உள்ள பதிவுகளைப் பார்வையிட விரும்புவோரும், அவற்றின் படிகளை அல்லது குறிப்பிட்ட சொத்துக்களுக்குரிய வில்லங்கச் சான்றிதழ்களைப் பெற்றுக் கொள்ள விரும்புவோரும், பதிவேடுகளையும், அட்டவணைகளையும் தாங்களே சரிபார்த்துக் கொள்ள வேண்டும். அதற்கென அறுதியிடப்பட்ட கட்டணங்களைச் செலுத்திய பின்னர் பதிவேடுகளும் அட்டவணைகளும் அவர்கள் பார்வைக்கு வைக்கப்படும். சார்பதிவாளர் அலுவலகத்தில் சரிபார்க்கவில்லை என்பதாலும் இணையதளம் மூலம் விண்ணப்பித்ததாலும் மனுதாரர் உள்ளீடு செய்த விவரங்களின் அடிப்படியில் இந்த வில்லங்கசான்று கணினி மூலம் தானாக உருவாக்கப்பட்டுள்ளது. ஆகையால் இந்தச் சான்றிதழில் உள்ள முடிவுகளில் பிழைகள் ஏதேனும் இருப்பின் அவற்றுக்கு இத்துறை பொறுப்பேற்காது. ஏதேனும் சந்தேகங்கள்/குறைகள் இருப்பின் கீழ்க்கண்ட வழிமுறைகளில் தெரிவிக்கலாம் கட்டணமில்லா தொலைபேசி எண் கட்டணமில்லா தொலைபேசி எண் 1800 102 5174 மின்னஞ்சல் முகவரி helpdesk@tnreginet.net"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 58,
+        "character_count": 1501
+      },
+      {
+        "page_number": 2,
+        "line_count": 22,
+        "character_count": 2440
+      }
+    ],
+    "error": null
+  },
+  "document_83_2024.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\document_83_2024.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "03-Nov-2026",
+      "search_query_doc": "83",
+      "search_query_year": "2024",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "83",
+          "registration_year": "2024",
+          "document_id": "83/2024",
+          "nature_of_deed": "Deposit of Title",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "04-Jan-2024",
+            "presentation_date": "04-Jan-2024",
+            "registration_date": "04-Jan-2024"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "-",
+          "consideration_value_num": 0.0,
+          "market_value_raw": "Rs. 10,92,000/-",
+          "market_value_num": 1092000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "பாலமுருகன்",
+              "name": "பாலமுருகன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "ேபங்க் ஆப் பேராடா",
+              "name": "ேபங்க் ஆப் பேராடா",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "1579/2021",
+          "pr_documents": [
+            {
+              "doc_no": "1579",
+              "year": "2021",
+              "formatted": "1579/2021"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot With Building",
+            "extent": {
+              "raw": "",
+              "sqft": 0.0,
+              "sq_meters": 0.0
+            },
+            "village": "Ward -AG (K.Abishekapuram)",
+            "street": "INDIAN BANK COLONY (INCLUDING DAVID COLONY)",
+            "survey_number": {
+              "raw": "",
+              "survey": "",
+              "subdivision": ""
+            },
+            "plot_no": "26",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிழக்கு - ஏட்வேட் வீடு, மேற்கு - வள்ளிம்மை வீடு , வடக்கு - 20 அடிரோடு, தெற்கு - மனை எண் 39 சுந்தரமுர்த்தி",
+              "east": "ஏட்வேட் வீடு",
+              "west": "வள்ளிம்மை வீடு",
+              "north": "20 அடிரோடு",
+              "south": "மனை எண் 39 சுந்தரமுர்த்தி"
+            },
+            "linear_dimensions": {
+              "east_west_north": "",
+              "east_west_south": "",
+              "north_south_east": "",
+              "north_south_west": "",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "முன் ஆவண எண்கள் 1579/2021 மற்றும் 1583/2021 Number of Entries/பதிவுகளின் எண்ணிக்கை: 1 The acts and Encumbrances shown in the certificate are those discovered with reference to the description of properties furnished by the applicant. If the same properties have been described in the registered documents in a manner different from the way in which the applicant described them, transaction evidenced by such documents will not be included in the certificate. Under section 57 of the Registration Act and Rule 137(1), persons desiring to inspect entries in the registers and indexes or required copies thereof, or requiring certificates of encumbrances on specified properties should make the search by themselves, then the registers and indexes will be placed before them on payment of the prescribed fees. But as in present case, the applicant has not undertaken the search by himself in office and applied EC through online, this certificate has been automatically generated through the system taking the input fed by the applicant.Hence the department will not, on any account, hold itself responsible for any errors in the result of the search embodied in this certificate. இந்த உறுதிமொழிச் சான்றிதழில் குறிப்பிடப்பட்டுள்ள விவரங்களும், வில்லங்கங்களும், மனுதாரரால் தெரிவிக்கப்பட்ட சொத்துக்களின் விவரத்தின் அடிப்படையில் கண்டறியப்பட்டவையாகும். மனுதாரர் குறிப்பிட்டுள்ள விவரங்கள் அல்லாமல் பதிவு செய்யப்பட்ட ஆவணங்களில் அதே சொத்துக்கள் வேறு மாதிரியான விவரங்களைக் கொண்டிருக்குமாயின் அப்படிப்பட்ட ஆவணங்களால் புலப்படுத்தப்பட்ட விவரங்கள் இச்சான்றிதழில் சேர்க்கப்படமாட்டாது. பதிவுச் சட்டத்தின் 57 ஆம் பிரிவிற்கேற்பவும், 137(1) ஆம் விதிக்கேற்பவும், பதிவேடுகளிலும், அட்டவணைகளிலும் உள்ள பதிவுகளைப் பார்வையிட விரும்புவோரும், அவற்றின் படிகளை அல்லது குறிப்பிட்ட சொத்துக்களுக்குரிய வில்லங்கச் சான்றிதழ்களைப் பெற்றுக் கொள்ள விரும்புவோரும், பதிவேடுகளையும், அட்டவணைகளையும் தாங்களே சரிபார்த்துக் கொள்ள வேண்டும். அதற்கென அறுதியிடப்பட்ட கட்டணங்களைச் செலுத்திய பின்னர் பதிவேடுகளும் அட்டவணைகளும் அவர்கள் பார்வைக்கு வைக்கப்படும். சார்பதிவாளர் அலுவலகத்தில் சரிபார்க்கவில்லை என்பதாலும் இணையதளம் மூலம் விண்ணப்பித்ததாலும் மனுதாரர் உள்ளீடு செய்த விவரங்களின் அடிப்படியில் இந்த வில்லங்கசான்று கணினி மூலம் தானாக உருவாக்கப்பட்டுள்ளது. ஆகையால் இந்தச் சான்றிதழில் உள்ள முடிவுகளில் பிழைகள் ஏதேனும் இருப்பின் அவற்றுக்கு இத்துறை பொறுப்பேற்காது. ஏதேனும் சந்தேகங்கள்/குறைகள் இருப்பின் கீழ்க்கண்ட வழிமுறைகளில் தெரிவிக்கலாம் கட்டணமில்லா தொலைபேசி எண் கட்டணமில்லா தொலைபேசி எண் 1800 102 5174 மின்னஞ்சல் முகவரி helpdesk@tnreginet.net"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 55,
+        "character_count": 1381
+      },
+      {
+        "page_number": 2,
+        "line_count": 22,
+        "character_count": 2440
+      }
+    ],
+    "error": null
+  },
+  "sample_doc_208_2005.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\digital_scrutiny_engine\\sample_doc_208_2005.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "Trichy Joint 1",
+      "certificate_date": "06-Nov-2026",
+      "search_query_doc": "",
+      "search_query_year": "",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "",
+          "registration_year": "",
+          "document_id": "/",
+          "nature_of_deed": "Conveyance",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "24-Jan-2005",
+            "presentation_date": "24-Jan-2005",
+            "registration_date": "24-Jan-2005"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "ரூ. 6,00,000/-",
+          "consideration_value_num": 600000.0,
+          "market_value_raw": "ரூ. 12,00,000/-",
+          "market_value_num": 1200000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "S.. ரவி",
+              "name": "ரவி",
+              "initial_verbatim": "S..",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "R.. ஸ்ரீனிவாசன்",
+              "name": "ஸ்ரீனிவாசன்",
+              "initial_verbatim": "R..",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "3292/ 1991",
+          "pr_documents": [
+            {
+              "doc_no": "3292",
+              "year": "1991",
+              "formatted": "3292/1991"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot",
+            "extent": {
+              "raw": "",
+              "sqft": 0.0,
+              "sq_meters": 0.0
+            },
+            "village": "",
+            "street": "",
+            "survey_number": {
+              "raw": "",
+              "survey": "",
+              "subdivision": ""
+            },
+            "plot_no": "",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிருஷ்ணாபுரம் தெற்கில் பிளாட் நம்பர் 18,, கிழக்கில் பிளாட் நம்பர் 20,, மேற்கில் 30அடி லேஅவுட் ரோடு,, வடக்கில் 30அடி லேஅவுட் ரோடு,",
+              "east": "",
+              "west": "",
+              "north": "",
+              "south": ""
+            },
+            "linear_dimensions": {
+              "east_west_north": "",
+              "east_west_south": "",
+              "north_south_east": "",
+              "north_south_west": "",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "=கிமேஜா வபு 60, தெபு 45, தெவஜா மேபு 62, கீபு 60 ஆக 3205சதுரடி ஷை மனையும் அதில் கட்டியுள்ள கட்டிட வகையறாக்களும் பாதை மற்றும் இதர பாத்தியங்களும், ஆவணத்தில் கண்டுள்ளவாறு Schedule 1 Details: Property Type/சொத்தின் வகைப்பாடு: LAND WITH BUILDING Property Extent/சொத்தின் விஸ்தீர்ணம்: 3205சதுரடி Village & Street/கிராமம் மற்றும் தெரு: Piratiyur(East), PIRATIYUR KRISHNA NAGAR E. PUTHUR Survey No./புல எண் : 274/1A3A, 274/1A3B1 New Door No./புதிய கதவு எண்: 8/80 Plot No./மனை எண் : 19 எல்லை விபரங்கள்: கிருஷ்ணாபுரம் தெற்கில் பிளாட் நம்பர் 18,, கிழக்கில் பிளாட் நம்பர் 20,, மேற்கில் 30அடி லேஅவுட் ரோடு,, வடக்கில் 30அடி லேஅவுட் ரோடு,"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 59,
+        "character_count": 1671
+      },
+      {
+        "page_number": 2,
+        "line_count": 21,
+        "character_count": 1316
+      }
+    ],
+    "error": null
+  },
+  "sample_dindigul_235_2021.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\testing_lab\\sample_dindigul_235_2021.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "Dindugal Joint I",
+      "certificate_date": "10-Nov-2026",
+      "search_query_doc": "235",
+      "search_query_year": "2021",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "235",
+          "registration_year": "2021",
+          "document_id": "235/2021",
+          "nature_of_deed": "Sale deed",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "25-Jan-2021",
+            "presentation_date": "25-Jan-2021",
+            "registration_date": "25-Jan-2021"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "ரூ. 1,90,000/-",
+          "consideration_value_num": 190000.0,
+          "market_value_raw": "ரூ. 2,23,000/-",
+          "market_value_num": 223000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "நல்லதம்பி",
+              "name": "நல்லதம்பி",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "ெசல்வம்",
+              "name": "ெசல்வம்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "3775/2011, 461/2020",
+          "pr_documents": [
+            {
+              "doc_no": "3775",
+              "year": "2011",
+              "formatted": "3775/2011"
+            },
+            {
+              "doc_no": "461",
+              "year": "2020",
+              "formatted": "461/2020"
+            }
+          ]
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Plot",
+            "extent": {
+              "raw": "2200.0 SQUARE FEET",
+              "sqft": 2200.0,
+              "sq_meters": 204.39
+            },
+            "village": "Seelapadi",
+            "street": "",
+            "survey_number": {
+              "raw": "142/1A1A1",
+              "survey": "142",
+              "subdivision": "1A1A1"
+            },
+            "plot_no": "14",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "கிழக்கு - 10 அடி அகல தென்வடல் ரோடு , மேற்கு - 20 அடி அகல தென்வடல் ரோடு , வடக்கு - சர்வே 143ம் நம்பர் ஸ்தலம், தெற்கு - 13ம் நம்பர் மனை",
+              "east": "10 அடி அகல தென்வடல் ரோடு",
+              "west": "20 அடி அகல தென்வடல் ரோடு",
+              "north": "சர்வே 143ம் நம்பர் ஸ்தலம்",
+              "south": "13ம் நம்பர் மனை"
+            },
+            "linear_dimensions": {
+              "east_west_north": "50 அடி",
+              "east_west_south": "50 அடி",
+              "north_south_east": "44 அடி",
+              "north_south_west": "44 அடி",
+              "calculated_sqft": 2200.0,
+              "calculated_sqm": 204.38
+            },
+            "planning_approval": {
+              "regularization_order": "டி, எல், பி , எ எண் 62/2018",
+              "panchayat_approval": "ந.க.எண் 65/2020 நாள் 31.01.2020"
+            },
+            "patta_and_parent_land": {
+              "patta_no": "4270",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": "எ நம்பர் புஞ்சை ஹெக் 0.58.50-ல் மேல்புறம் முக்கோண வடிவில் ஹெக் 0.17.30 உள்ள இடம் நீங்கலாக கீழ்புறத்தில் ஹெக் 0.41.20க்கு ஏ 1 செ 1.3/4ம் சர்வே 142/3எ நிர் புஞ்சை ஹெக் 0.73.50-ல் வடகிழக்கு மூலையில் ஹெக் 0.01.50க்கு செ 3.3/4ம் ஆகமொத்தம் புஞ்சை ஹெக் 0.42.70க்கு ஏ1"
+            },
+            "schedule_remarks_full": "திண்டுக்கல் ரீடி, திண்டுக்கல் ஜாயிண்ட் 1ம் சார்பதிவகம் திண்டுக்கல் மேற்கு தாலூகா, சீலப்பாடி கிராமபுலத்தில் அயன் சர்வே 142/1 நம்பருக்கு தற்போது சப் டிவிஷன் படி பட்டா நம்பர் 4270-ல் கண்ட அயன் சர்வே 142/1எ நம்பர் புஞ்சை ஹெக் 0.58.50-ல் மேல்புறம் முக்கோண வடிவில் ஹெக் 0.17.30 உள்ள இடம் நீங்கலாக கீழ்புறத்தில் ஹெக் 0.41.20க்கு ஏ 1 செ 1.3/4ம் சர்வே 142/3எ நிர் புஞ்சை ஹெக் 0.73.50-ல் வடகிழக்கு மூலையில் ஹெக் 0.01.50க்கு செ 3.3/4ம் ஆகமொத்தம் புஞ்சை ஹெக் 0.42.70க்கு ஏ1செ5.1/2 உள்ள நிலத்தை உத்தேச வீட்டடி மனைகளாக பிரித்து அதில் 14-ம் நம்பர் மனையை வரன்முறைப்படுத்த உரிய அலுவலகத்தில் முறைப்படி மனு செய்தும் அதற்குரிய வரைபடம் தயார் செய்து உரிய கட்டணத்தை செலுத்தி அதன் பின் திண்டுக்கல் உள்ளூர் திட்ட குழுமம் உறுப்பினர் செயலர் அவர்களால் டி, எல், பி , எ எண் 62/2018-ன் படி வழங்கப்பட்ட வரன்முறைப்படுத்தபட்ட பிளானில் கண்டதும் சீலப்பாடி ஊராட்சி தனி அலுவலர்/வட்டார வளர்ச்சி அலுவலர் அவர்களால் ந.க.எண் 65/2020 நாள் 31.01.2020-ன் நம்பராக அங்கீகாரம் வழங்கப்பட்டபடி உள்ள 14-ம் மனைக்கு நிலத்துக்கு நான்குமால் விபரம் :- சர்வே 143ம் நம்பர் ஸ்தலத்திற்கும் .தெற்கு 13ம் நம்பர் மனைக்கும் வடக்கு 20 அடி அகல தென்வடல் ரோட்டிற்கும் கிழக்கு 10 அடி அகல தென்வடல் ரோட்டிற்கும் மேற்கு இதற்குள் கிழமேலில் வடபுறமும் அடி 50 தென்புறம் 50 தென்வடலில் கீழ்புறம் அடி 44 மேல்புறம் 44க்கு சதுரடி2200 ச.மீ.204.38 உள்ள மனையிடமும்"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 58,
+        "character_count": 1831
+      },
+      {
+        "page_number": 2,
+        "line_count": 24,
+        "character_count": 1582
+      }
+    ],
+    "error": null
+  },
+  "official_encumbrance_certificate.pdf": {
+    "success": true,
+    "pdf_source": "D:\\Ai_legal\\testing_lab\\output\\engine_a_output\\test_lineage_run\\deeds\\02_PR_Doc_2776_1983\\official_encumbrance_certificate.pdf",
+    "document_metadata": {
+      "certificate_title": "Certificate of Encumbrance on Property (சொத்து தொடர்பான வில்லங்கச் சான்று)",
+      "sro_name": "",
+      "certificate_date": "10-Nov-2026",
+      "search_query_doc": "2776",
+      "search_query_year": "1983",
+      "total_entries_count": 1
+    },
+    "entries": [
+      {
+        "entry_index": 1,
+        "registration_particulars": {
+          "document_number": "2776",
+          "registration_year": "1983",
+          "document_id": "2776/1983",
+          "nature_of_deed": "Sale deed",
+          "volume_no": null,
+          "page_no": null,
+          "dates": {
+            "execution_date": "23-Apr-1983",
+            "presentation_date": "27-Apr-1983",
+            "registration_date": "23-Apr-1983"
+          }
+        },
+        "financials": {
+          "consideration_value_raw": "ரூ. 82,000/-",
+          "consideration_value_num": 82000.0,
+          "market_value_raw": "ரூ. 82,000/-",
+          "market_value_num": 82000.0,
+          "currency": "INR"
+        },
+        "parties": {
+          "executants": [
+            {
+              "raw": "சுப்ரமணியன்",
+              "name": "சுப்ரமணியன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ],
+          "claimants": [
+            {
+              "raw": "ெவங்கட்ராமன்",
+              "name": "ெவங்கட்ராமன்",
+              "initial_verbatim": "",
+              "party_type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "pr_lineage": {
+          "pr_raw": "-",
+          "pr_documents": []
+        },
+        "schedules": [
+          {
+            "schedule_id": "Schedule 1",
+            "property_type": "Agricultural Land",
+            "extent": {
+              "raw": "0.42 acre",
+              "sqft": 0.42,
+              "sq_meters": 0.04
+            },
+            "village": "K-Abishekapuram",
+            "street": "ABDULKABOORSTREET",
+            "survey_number": {
+              "raw": "173/2",
+              "survey": "173",
+              "subdivision": "2"
+            },
+            "plot_no": "",
+            "new_door_no": "",
+            "old_door_no": "",
+            "door_no": "",
+            "floor_no": "",
+            "flat_no": "",
+            "block_no": "",
+            "ward_no": "",
+            "flat_details": {
+              "is_flat": false,
+              "new_door_no": "",
+              "old_door_no": "",
+              "door_no": "",
+              "floor_no": "",
+              "flat_no": "",
+              "block_no": "",
+              "ward_no": "",
+              "undivided_share_land_sqft": 0.0,
+              "undivided_share_ratio": "",
+              "super_built_up_area_sqft": 0.0,
+              "facing_or_location": ""
+            },
+            "boundaries": {
+              "raw": "-, -, -,",
+              "east": "",
+              "west": "",
+              "north": "",
+              "south": ""
+            },
+            "linear_dimensions": {
+              "east_west_north": "",
+              "east_west_south": "",
+              "north_south_east": "",
+              "north_south_west": "",
+              "calculated_sqft": 0.0,
+              "calculated_sqm": 0.0
+            },
+            "planning_approval": {
+              "regularization_order": "",
+              "panchayat_approval": ""
+            },
+            "patta_and_parent_land": {
+              "patta_no": "",
+              "parent_survey": "",
+              "subdivided_surveys": [],
+              "total_land_extent_raw": ""
+            },
+            "schedule_remarks_full": "- (விஸ்தீர்ணம் : 0.42 ஏக்கர்) Number of Entries/பதிவுகளின் எண்ணிக்கை: 1 The acts and Encumbrances shown in the certificate are those discovered with reference to the description of properties furnished by the applicant. If the same properties have been described in the registered documents in a manner different from the way in which the applicant described them, transaction evidenced by such documents will not be included in the certificate. Under section 57 of the Registration Act and Rule 137(1), persons desiring to inspect entries in the registers and indexes or required copies thereof, or requiring certificates of encumbrances on specified properties should make the search by themselves, then the registers and indexes will be placed before them on payment of the prescribed fees. But as in present case, the applicant has not undertaken the search by himself in office and applied EC through online, this certificate has been automatically generated through the system taking the input fed by the applicant.Hence the department will not, on any account, hold itself responsible for any errors in the result of the search embodied in this certificate. இந்த உறுதிமொழிச் சான்றிதழில் குறிப்பிடப்பட்டுள்ள விவரங்களும், வில்லங்கங்களும், மனுதாரரால் தெரிவிக்கப்பட்ட சொத்துக்களின் விவரத்தின் அடிப்படையில் கண்டறியப்பட்டவையாகும். மனுதாரர் குறிப்பிட்டுள்ள விவரங்கள் அல்லாமல் பதிவு செய்யப்பட்ட ஆவணங்களில் அதே சொத்துக்கள் வேறு மாதிரியான விவரங்களைக் கொண்டிருக்குமாயின் அப்படிப்பட்ட ஆவணங்களால் புலப்படுத்தப்பட்ட விவரங்கள் இச்சான்றிதழில் சேர்க்கப்படமாட்டாது. பதிவுச் சட்டத்தின் 57 ஆம் பிரிவிற்கேற்பவும், 137(1) ஆம் விதிக்கேற்பவும், பதிவேடுகளிலும், அட்டவணைகளிலும் உள்ள பதிவுகளைப் பார்வையிட வ��ரும்புவோரும், அவற்றின் படிகளை அல்லது குறிப்பிட்ட சொத்துக்களுக்குரிய வில்லங்கச் சான்றிதழ்களபை் பறெ்றுக் கொள்ள விரும்புவோரும், பதிவடேுகளயைும், அட்டவணகைளயைும் தாங்களே சரிபார்த்துக் கொள்ள வணே்டும். அதற்கனெ அறுதியிடப்பட்ட கட்டணங்களசை் சலெுத்திய பின்னர் பதிவடேுகளும் அட்டவணகைளும் அவர்கள் பார்வகை்கு வகை்கப்படும். சார்பதிவாளர் அலுவலகத்தில் சரிபார்க்கவில்லை என்பதாலும் இணயைதளம் மூலம் விண்ணப்பித்ததாலும் மனுதாரர் உள்ளீடு செய்த விவரங்களின் அடிப்படியில் இந்த வில்லங்கசான்று கணினி மூலம் தானாக உருவாக்கப்பட்டுள்ளது. ஆகையால் இந்தச் சான்றிதழில் உள்ள முடிவுகளில் பிழைகள் ஏதேனும் இருப்பின் அவற்றுக்கு இத்துறை பொறுப்பேற்காது. ஏதேனும் சந்தேகங்கள்/குறைகள் இருப்பின் கீழ்க்கண்ட வழிமுறைகளில் தெரிவிக்கலாம் கட்டணமில்லா தொலைபேசி எண் கட்டணமில்லா தொலைபேசி எண் 1800 102 5174 மின்னஞ்சல் முகவரி helpdesk@tnreginet.net"
+          }
+        ]
+      }
+    ],
+    "raw_text_by_page": [
+      {
+        "page_number": 1,
+        "line_count": 55,
+        "character_count": 1247
+      },
+      {
+        "page_number": 2,
+        "line_count": 22,
+        "character_count": 2441
+      }
+    ],
+    "error": null
+  }
+}

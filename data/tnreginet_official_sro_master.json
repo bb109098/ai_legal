@@ -1,0 +1,3942 @@
+{
+  "Chengalpattu (Chengalpattu)": [
+    {
+      "id": "20088:1",
+      "name": "Acchirapakkam",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20092:1",
+      "name": "Chengleput Joint I",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20093:1",
+      "name": "Chengleput Joint II",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20094:1",
+      "name": "Cheyyur",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20091:0",
+      "name": "Chittamur_Closed",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "22605:1",
+      "name": "Kelampakkam",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20097:1",
+      "name": "Madurandakam",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "22604:1",
+      "name": "Navalur",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20090:1",
+      "name": "Salavakkam",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20098:1",
+      "name": "Sriperumpudur",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20654:1",
+      "name": "Sunguvarchattram",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20095:1",
+      "name": "Thirukazhukundram",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20096:1",
+      "name": "Thiruporur",
+      "zone_id": "15",
+      "district_id": "20004"
+    },
+    {
+      "id": "20089:1",
+      "name": "Uthiramerur",
+      "zone_id": "15",
+      "district_id": "20004"
+    }
+  ],
+  "Kancheepuram (Chengalpattu)": [
+    {
+      "id": "20100:1",
+      "name": "Kanchipuram Joint I",
+      "zone_id": "15",
+      "district_id": "20005"
+    },
+    {
+      "id": "20101:1",
+      "name": "Kanchipuram Joint II",
+      "zone_id": "15",
+      "district_id": "20005"
+    },
+    {
+      "id": "20102:1",
+      "name": "Kanchipuram Joint IV",
+      "zone_id": "15",
+      "district_id": "20005"
+    },
+    {
+      "id": "22306:0",
+      "name": "Periyakanchipuram",
+      "zone_id": "15",
+      "district_id": "20005"
+    },
+    {
+      "id": "20103:1",
+      "name": "Thamal",
+      "zone_id": "15",
+      "district_id": "20005"
+    },
+    {
+      "id": "20111:1",
+      "name": "Walajabad",
+      "zone_id": "15",
+      "district_id": "20005"
+    }
+  ],
+  "Tambaram (Chengalpattu)": [
+    {
+      "id": "20060:1",
+      "name": "Gooduvancheri",
+      "zone_id": "15",
+      "district_id": "50007"
+    },
+    {
+      "id": "20057:1",
+      "name": "Pallavaram",
+      "zone_id": "15",
+      "district_id": "50007"
+    },
+    {
+      "id": "20065:1",
+      "name": "Pammal",
+      "zone_id": "15",
+      "district_id": "50007"
+    },
+    {
+      "id": "20653:1",
+      "name": "Selaiyur",
+      "zone_id": "15",
+      "district_id": "50007"
+    },
+    {
+      "id": "20053:1",
+      "name": "Tambaram Joint 1",
+      "zone_id": "15",
+      "district_id": "50007"
+    },
+    {
+      "id": "22601:1",
+      "name": "Vandaloor",
+      "zone_id": "15",
+      "district_id": "50007"
+    }
+  ],
+  "Chennai Central (Chennai)": [
+    {
+      "id": "20078:1",
+      "name": "AnnaNagar",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20087:1",
+      "name": "Ashok Nagar",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20083:1",
+      "name": "Chennai Central Joint I",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20085:1",
+      "name": "Chennai Central Joint II",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20079:1",
+      "name": "Kodambakkam",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20084:1",
+      "name": "Mylapore",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20082:1",
+      "name": "Periamet",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20081:1",
+      "name": "Purasaivakkam",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20080:1",
+      "name": "Triplicane",
+      "zone_id": "1",
+      "district_id": "20003"
+    },
+    {
+      "id": "20086:1",
+      "name": "Villivakkam",
+      "zone_id": "1",
+      "district_id": "20003"
+    }
+  ],
+  "Chennai North (Chennai)": [
+    {
+      "id": "20067:1",
+      "name": "Ambattur",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "22308:0",
+      "name": "Chennai Central_Chennai North Joint I",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20072:1",
+      "name": "Chennai North Joint I",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "22307:0",
+      "name": "Chennai South_Chennai North Joint I",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20077:1",
+      "name": "Konnur",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20655:1",
+      "name": "Madhavaram",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "22309:0",
+      "name": "Muthialpet_Chennai North Joint I",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20069:1",
+      "name": "Royapuram",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20071:1",
+      "name": "Sembiam",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20073:1",
+      "name": "Sowcarpet",
+      "zone_id": "1",
+      "district_id": "20002"
+    },
+    {
+      "id": "20074:1",
+      "name": "Thiruvottiyur",
+      "zone_id": "1",
+      "district_id": "20002"
+    }
+  ],
+  "Chennai South (Chennai)": [
+    {
+      "id": "20051:1",
+      "name": "Adayar",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20052:1",
+      "name": "Alandur",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20054:1",
+      "name": "Chennai South Joint I",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20055:1",
+      "name": "Chennai South Joint II",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20061:1",
+      "name": "Kunrathur",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20066:1",
+      "name": "Neelankarai",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20062:1",
+      "name": "Padappai",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20056:1",
+      "name": "Thiyagaraya nagar",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20063:1",
+      "name": "Velacheri",
+      "zone_id": "1",
+      "district_id": "20001"
+    },
+    {
+      "id": "20059:1",
+      "name": "Virugambakkam",
+      "zone_id": "1",
+      "district_id": "20001"
+    }
+  ],
+  "Thiruvalur (Chennai)": [
+    {
+      "id": "20068:1",
+      "name": "Arani_Tiruvallur",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20064:1",
+      "name": "Avadi",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20070:1",
+      "name": "Gummidipoondi",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20109:1",
+      "name": "Manavalanagar",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20099:1",
+      "name": "Oothukkottai",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20106:1",
+      "name": "Pallipattu",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20107:1",
+      "name": "Perambakkam",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20075:1",
+      "name": "Ponneri",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20058:1",
+      "name": "Poonamallee",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20110:1",
+      "name": "Ramakrishna Rajupettai",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20076:1",
+      "name": "Redhills",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20104:1",
+      "name": "Thiruttani",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20108:1",
+      "name": "Thiruvalankadu",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "20105:1",
+      "name": "Tiruvallur Joint 1",
+      "zone_id": "1",
+      "district_id": "50003"
+    },
+    {
+      "id": "22603:1",
+      "name": "Tiruvallur Joint 2",
+      "zone_id": "1",
+      "district_id": "50003"
+    }
+  ],
+  "Coimbatore North (Coimbatore)": [
+    {
+      "id": "20112:1",
+      "name": "Annur",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20115:1",
+      "name": "Coimbatore North Joint 1",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20122:1",
+      "name": "Ganapathy",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20114:1",
+      "name": "Gandhipuram",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20121:1",
+      "name": "Mettupalayam",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20119:1",
+      "name": "Periyanayakkan Palayam",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "22610:1",
+      "name": "Sarkarsamakulam",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20118:1",
+      "name": "Thondamuthur",
+      "zone_id": "2",
+      "district_id": "20006"
+    },
+    {
+      "id": "20124:1",
+      "name": "Vadavalli",
+      "zone_id": "2",
+      "district_id": "20006"
+    }
+  ],
+  "Coimbatore South (Coimbatore)": [
+    {
+      "id": "20125:1",
+      "name": "Anaimalai",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20116:0",
+      "name": "Coimbatore Joint II - Closed",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "22592:1",
+      "name": "Coimbatore South Joint 1",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "22607:1",
+      "name": "Karumathampatti",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20128:1",
+      "name": "Kinathukkadavu",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20120:1",
+      "name": "Madukkarai",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20133:1",
+      "name": "Negamam",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20123:1",
+      "name": "Peelamedu",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20135:1",
+      "name": "Pollachi",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20117:1",
+      "name": "Singanallur",
+      "zone_id": "2",
+      "district_id": "50006"
+    },
+    {
+      "id": "20130:1",
+      "name": "Sulur",
+      "zone_id": "2",
+      "district_id": "50006"
+    }
+  ],
+  "Erode (Coimbatore)": [
+    {
+      "id": "20156:1",
+      "name": "Ammapettai_Erode",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20143:1",
+      "name": "Anthiyur",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20152:1",
+      "name": "Avalpoondurai",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20150:1",
+      "name": "Bhavani",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20148:1",
+      "name": "Chennimalai",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20144:1",
+      "name": "Erode Joint I",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20146:1",
+      "name": "Kodumudi",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20151:1",
+      "name": "Perundurai",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20147:1",
+      "name": "Sivagiri_Erode",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20154:1",
+      "name": "Surampatti",
+      "zone_id": "2",
+      "district_id": "20009"
+    },
+    {
+      "id": "20149:1",
+      "name": "Thingalur",
+      "zone_id": "2",
+      "district_id": "20009"
+    }
+  ],
+  "Gobichettipalayam (Coimbatore)": [
+    {
+      "id": "20161:1",
+      "name": "Gobichettipalayam Joint I",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20162:1",
+      "name": "Gobichettipalayam Joint II",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20159:1",
+      "name": "Kavundapadi",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20166:1",
+      "name": "Nambiyur",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20167:1",
+      "name": "Punchaipuliyampatti",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20163:1",
+      "name": "Sathyamangalam",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20164:1",
+      "name": "Thalavadi",
+      "zone_id": "2",
+      "district_id": "20010"
+    },
+    {
+      "id": "20165:1",
+      "name": "Thookanaicken Palayam",
+      "zone_id": "2",
+      "district_id": "20010"
+    }
+  ],
+  "Ooty (Coimbatore)": [
+    {
+      "id": "20138:1",
+      "name": "Coonoor_Uthagamandalam",
+      "zone_id": "2",
+      "district_id": "20008"
+    },
+    {
+      "id": "20139:1",
+      "name": "Goodaloor",
+      "zone_id": "2",
+      "district_id": "20008"
+    },
+    {
+      "id": "20140:1",
+      "name": "Kothagiri",
+      "zone_id": "2",
+      "district_id": "20008"
+    },
+    {
+      "id": "20141:1",
+      "name": "Uthagamandalam -Joint I",
+      "zone_id": "2",
+      "district_id": "20008"
+    },
+    {
+      "id": "20142:1",
+      "name": "Uthagamandalam -Joint II",
+      "zone_id": "2",
+      "district_id": "20008"
+    }
+  ],
+  "Thiruppur (Coimbatore)": [
+    {
+      "id": "20113:1",
+      "name": "Avinasi",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20155:1",
+      "name": "Dharapuram",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20129:1",
+      "name": "Gomangalam",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20153:1",
+      "name": "Kangeyam",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20127:1",
+      "name": "Kaniyur",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20160:1",
+      "name": "Kunnathur",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20157:1",
+      "name": "Moolanur",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20136:1",
+      "name": "Nallur_Tiruppur",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20134:1",
+      "name": "Palladam",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "22598:1",
+      "name": "Pongalur",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20137:1",
+      "name": "Thottipalayam",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20131:1",
+      "name": "Tiruppur Joint I",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20132:1",
+      "name": "Tiruppur Joint II",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20126:1",
+      "name": "Udumalpettai",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20145:1",
+      "name": "Uthukuli",
+      "zone_id": "2",
+      "district_id": "20007"
+    },
+    {
+      "id": "20158:1",
+      "name": "Vellakovil",
+      "zone_id": "2",
+      "district_id": "20007"
+    }
+  ],
+  "Chidambaram (Cuddalore)": [
+    {
+      "id": "20204:1",
+      "name": "Bhuvanagiri",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20201:1",
+      "name": "Chidambaram Joint I",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20200:1",
+      "name": "Kumarachi",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20206:1",
+      "name": "Mannargudi",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20199:0",
+      "name": "Oorathur_Closed",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20203:1",
+      "name": "Parangipettai",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20205:1",
+      "name": "Puduchattiram_Chidambaram",
+      "zone_id": "3",
+      "district_id": "20014"
+    },
+    {
+      "id": "20202:1",
+      "name": "Sethiyathope",
+      "zone_id": "3",
+      "district_id": "20014"
+    }
+  ],
+  "Cuddalore (Cuddalore)": [
+    {
+      "id": "20168:1",
+      "name": "Cuddalore Joint I",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20169:1",
+      "name": "Cuddalore Joint II",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20170:1",
+      "name": "Kadampuliyur",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20172:1",
+      "name": "Kullanchavadi",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20171:1",
+      "name": "Kurinchi padi",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20174:1",
+      "name": "Nellikuppam",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20175:1",
+      "name": "Panrutti",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20176:1",
+      "name": "Pudupettai",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20173:1",
+      "name": "Thirunavalur",
+      "zone_id": "3",
+      "district_id": "20011"
+    },
+    {
+      "id": "20177:1",
+      "name": "Vadalur",
+      "zone_id": "3",
+      "district_id": "20011"
+    }
+  ],
+  "Kallakurichi (Cuddalore)": [
+    {
+      "id": "20193:1",
+      "name": "Chinna selam",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20189:1",
+      "name": "Elavanasur",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20190:1",
+      "name": "Kallakurichi Joint I",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20191:1",
+      "name": "Kallakurichi Joint II",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20198:1",
+      "name": "Nagalur",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20196:1",
+      "name": "Rishivanthiyam",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20192:1",
+      "name": "Sankarapuram",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20194:1",
+      "name": "Thiyaga thurgam",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20195:1",
+      "name": "Vadakkananthal",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "20197:1",
+      "name": "Vadaponparappi",
+      "zone_id": "3",
+      "district_id": "20013"
+    },
+    {
+      "id": "22608:1",
+      "name": "Vanapuram",
+      "zone_id": "3",
+      "district_id": "20013"
+    }
+  ],
+  "Tindivanam (Cuddalore)": [
+    {
+      "id": "20208:1",
+      "name": "Avaloorpettai",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20207:1",
+      "name": "Avarapakkam",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20212:1",
+      "name": "Dindivanam Joint I",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20213:1",
+      "name": "Dindivanam Joint II",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20209:0",
+      "name": "Endiyur_Closed",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20211:1",
+      "name": "Gingee",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20214:1",
+      "name": "Marakkanam",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20215:1",
+      "name": "Mayilam",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20210:1",
+      "name": "Sathyamangalam_Dindivanam",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20217:1",
+      "name": "Valathi",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20216:1",
+      "name": "Vallam_Dindivanam",
+      "zone_id": "3",
+      "district_id": "20015"
+    },
+    {
+      "id": "20218:1",
+      "name": "Vanur",
+      "zone_id": "3",
+      "district_id": "20015"
+    }
+  ],
+  "Villupuram (Cuddalore)": [
+    {
+      "id": "20179:1",
+      "name": "Ananthapuram",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20178:1",
+      "name": "Anniyur",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20180:1",
+      "name": "Aragandanallur",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20187:1",
+      "name": "Kandamangalam",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20185:1",
+      "name": "Manalurpettai",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20182:1",
+      "name": "Thirukovilur",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20181:1",
+      "name": "Thiruvennainallur",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20186:1",
+      "name": "Valavanur",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20188:1",
+      "name": "Vikkravandi",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20183:1",
+      "name": "Villupuram Joint I",
+      "zone_id": "3",
+      "district_id": "20012"
+    },
+    {
+      "id": "20184:1",
+      "name": "Villupuram Joint II",
+      "zone_id": "3",
+      "district_id": "20012"
+    }
+  ],
+  "Viruthachalam (Cuddalore)": [
+    {
+      "id": "20222:1",
+      "name": "Kammapuram",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20224:1",
+      "name": "Mangalamapettai",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20225:1",
+      "name": "Nallur_Virudhachalam",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "22305:0",
+      "name": "Oothangaalmangalam - Closed",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20229:1",
+      "name": "Pennadam",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20226:1",
+      "name": "Sirupakkam",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20221:1",
+      "name": "Thirumuttam",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20220:1",
+      "name": "Thittakudi",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20223:1",
+      "name": "Thozhuudhur",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20227:1",
+      "name": "Ulundurpettai",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20228:1",
+      "name": "Veppur_Viruddchalam",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "20219:1",
+      "name": "Virudhachalam Joint I",
+      "zone_id": "3",
+      "district_id": "20016"
+    },
+    {
+      "id": "22304:0",
+      "name": "Virudhachalam Joint II - Closed",
+      "zone_id": "3",
+      "district_id": "20016"
+    }
+  ],
+  "Dindugul (Madurai)": [
+    {
+      "id": "20248:1",
+      "name": "Aathur_Dindugal",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20249:1",
+      "name": "Ayyampalayam",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20250:1",
+      "name": "Chinnalapatti",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20257:1",
+      "name": "Dindugal Joint I",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20251:1",
+      "name": "Dindugal Joint II",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20253:1",
+      "name": "Kannivadi",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20252:1",
+      "name": "Kodaikkanal",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20254:1",
+      "name": "Nagal nayakkampatti",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20256:1",
+      "name": "Natham",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20255:1",
+      "name": "Nilakkottai",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20258:1",
+      "name": "Sanarpatti",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20259:1",
+      "name": "Sendhurai_Dindigul",
+      "zone_id": "4",
+      "district_id": "20019"
+    },
+    {
+      "id": "20260:1",
+      "name": "Vathalagundu",
+      "zone_id": "4",
+      "district_id": "20019"
+    }
+  ],
+  "Madurai North (Madurai)": [
+    {
+      "id": "20239:1",
+      "name": "Alanganallur",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "22587:1",
+      "name": "Chettikulam(Madurai North)",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20241:1",
+      "name": "Karungalakkudi",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20245:1",
+      "name": "KARUPPAYOORANI",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "22589:1",
+      "name": "Kathakkinaru",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20246:1",
+      "name": "Madurai North Joint I",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20242:0",
+      "name": "Melur - Closed",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "22591:1",
+      "name": "Melur(East)",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "22588:1",
+      "name": "Melur(West)",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20652:0",
+      "name": "Othakadai - Closed",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "22586:1",
+      "name": "Podumbu",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20244:1",
+      "name": "Thallakualam",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20243:1",
+      "name": "Thamaraipatti",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20247:1",
+      "name": "Vadipatti",
+      "zone_id": "4",
+      "district_id": "20018"
+    },
+    {
+      "id": "20240:1",
+      "name": "VILANGUDI",
+      "zone_id": "4",
+      "district_id": "20018"
+    }
+  ],
+  "Madurai South (Madurai)": [
+    {
+      "id": "20231:1",
+      "name": "Chekkanoorani",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20290:1",
+      "name": "CHELLAMPATTI",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20236:1",
+      "name": "Cholavanthan",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20285:1",
+      "name": "Ezhumalai",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20234:1",
+      "name": "Kallikudi",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20233:1",
+      "name": "Madurai South Joint 4",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20232:1",
+      "name": "Madurai South Joint I",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20230:1",
+      "name": "NAGAMALAI PUDUKOTTAI",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20235:1",
+      "name": "Peraiyur",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "22590:1",
+      "name": "Samanatham",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20237:1",
+      "name": "Thirumangalam",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20238:1",
+      "name": "Thiruparankunram",
+      "zone_id": "4",
+      "district_id": "20017"
+    },
+    {
+      "id": "20294:1",
+      "name": "Usilampatti",
+      "zone_id": "4",
+      "district_id": "20017"
+    }
+  ],
+  "Palani (Madurai)": [
+    {
+      "id": "20271:1",
+      "name": "Chathirapatti",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20280:0",
+      "name": "Edayakottai(camp)_Closed",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20272:0",
+      "name": "Eriyodu_Closed",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20281:1",
+      "name": "Kallimandayam",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20276:1",
+      "name": "Keeranur",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20277:1",
+      "name": "Kujiliamparai",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20274:1",
+      "name": "Ottanchathiram",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20275:1",
+      "name": "Palani Joint I",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20273:1",
+      "name": "Palani Joint II",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20278:1",
+      "name": "Vada madurai",
+      "zone_id": "4",
+      "district_id": "20021"
+    },
+    {
+      "id": "20279:1",
+      "name": "Veda senthur",
+      "zone_id": "4",
+      "district_id": "20021"
+    }
+  ],
+  "Periyakulam (Madurai)": [
+    {
+      "id": "20282:1",
+      "name": "Andipatti",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20283:1",
+      "name": "Bodinayakkanur",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20284:1",
+      "name": "Chinnamanur",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20288:1",
+      "name": "Cumbum",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20287:1",
+      "name": "Kadamalaikundu",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20289:1",
+      "name": "Periyakulam Joint I",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20286:1",
+      "name": "Periyakulam Joint II",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20291:1",
+      "name": "Theni",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20292:1",
+      "name": "Thevaram",
+      "zone_id": "4",
+      "district_id": "20022"
+    },
+    {
+      "id": "20293:1",
+      "name": "Uthamapalayam",
+      "zone_id": "4",
+      "district_id": "20022"
+    }
+  ],
+  "Karaikudi (Ramanathapuram)": [
+    {
+      "id": "20261:1",
+      "name": "Aranthangi",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20262:1",
+      "name": "Devakkottai",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20263:1",
+      "name": "Karaikudi Joint II",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20265:1",
+      "name": "Karakudi Joint I",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20264:1",
+      "name": "Meemisal",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20266:1",
+      "name": "Ponnamaravathi",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20267:1",
+      "name": "Singampunari",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20268:1",
+      "name": "Thiruppathur_Karaikudi",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20269:1",
+      "name": "Thiruvadanai",
+      "zone_id": "13",
+      "district_id": "20020"
+    },
+    {
+      "id": "20270:1",
+      "name": "Thondi",
+      "zone_id": "13",
+      "district_id": "20020"
+    }
+  ],
+  "Ramanathapuram (Ramanathapuram)": [
+    {
+      "id": "20295:1",
+      "name": "Abiramam",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20304:1",
+      "name": "Boghalur",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20297:1",
+      "name": "Kadaladi_Ramanathapuram",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20298:1",
+      "name": "Kamudhi",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20299:1",
+      "name": "Keelakkarai",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20300:1",
+      "name": "Mudhukulathur",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20303:1",
+      "name": "Perunazhi",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20301:1",
+      "name": "Rajasinga mangalam",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20306:1",
+      "name": "Ramanathapuram Joint I",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20296:1",
+      "name": "Ramanathapuram Joint II",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20302:1",
+      "name": "Rameshvaram",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20305:1",
+      "name": "Sayalkudi",
+      "zone_id": "13",
+      "district_id": "20023"
+    },
+    {
+      "id": "20307:1",
+      "name": "Velipattinam",
+      "zone_id": "13",
+      "district_id": "20023"
+    }
+  ],
+  "Sivagengai (Ramanathapuram)": [
+    {
+      "id": "20323:1",
+      "name": "Ilayangudi",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20325:1",
+      "name": "Kalayarkoil",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20327:1",
+      "name": "Madakkupatti",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20326:1",
+      "name": "Manamadurai",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20328:1",
+      "name": "Nayinar kovil",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20330:1",
+      "name": "Paramakudi",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20329:1",
+      "name": "Sivagangai Joint I",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20324:1",
+      "name": "Sivagangai Joint II",
+      "zone_id": "13",
+      "district_id": "20025"
+    },
+    {
+      "id": "20331:1",
+      "name": "Thirupuvanam",
+      "zone_id": "13",
+      "district_id": "20025"
+    }
+  ],
+  "Virudhunagar (Ramanathapuram)": [
+    {
+      "id": "20308:1",
+      "name": "Aruppukkottai",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20309:1",
+      "name": "Coonoor_virudhunagar",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20311:1",
+      "name": "Kariapatti",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20312:1",
+      "name": "KeelaRajakularaman",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "22600:1",
+      "name": "M.Rettiyapetty",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20314:1",
+      "name": "Panthalkudi",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20315:1",
+      "name": "Rajapalayam",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20316:1",
+      "name": "Sathur",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20317:1",
+      "name": "Sethur",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20318:1",
+      "name": "Sivakasi",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20319:1",
+      "name": "Srivilliputhur",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20321:1",
+      "name": "Thiruchuli",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20320:1",
+      "name": "Thiruthangal",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20322:1",
+      "name": "Vathirairuppu",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20332:1",
+      "name": "Veerachozhan",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20313:1",
+      "name": "Virudhunagar Joint I",
+      "zone_id": "13",
+      "district_id": "20024"
+    },
+    {
+      "id": "20310:1",
+      "name": "Virudhunagar Joint II",
+      "zone_id": "13",
+      "district_id": "20024"
+    }
+  ],
+  "Dharmapuri (Salem)": [
+    {
+      "id": "20339:1",
+      "name": "Barur",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20343:1",
+      "name": "Dharmapuri Joint I",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20335:1",
+      "name": "Dharmapuri Joint II",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20334:1",
+      "name": "Dharmapuri(West)",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20333:1",
+      "name": "Harur",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20336:1",
+      "name": "Kadathur",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20337:1",
+      "name": "Karimangalam",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20344:1",
+      "name": "Marandahalli",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20338:1",
+      "name": "Morapur",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20340:1",
+      "name": "Palacode",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "22609:1",
+      "name": "Papparappatti",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20341:1",
+      "name": "Pappireddypatti",
+      "zone_id": "5",
+      "district_id": "20026"
+    },
+    {
+      "id": "20342:1",
+      "name": "Pennagaram",
+      "zone_id": "5",
+      "district_id": "20026"
+    }
+  ],
+  "Krishnagiri (Salem)": [
+    {
+      "id": "22599:1",
+      "name": "Bagalur",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20345:1",
+      "name": "Bargur",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20349:1",
+      "name": "Hozur",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20347:1",
+      "name": "Kaveripattinam",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20348:1",
+      "name": "Kelamangalam",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20356:1",
+      "name": "Krishnagiri Joint I",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20346:1",
+      "name": "Krishnagiri Joint II",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20354:1",
+      "name": "Oothangarai",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20350:1",
+      "name": "Pochampalli",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20351:1",
+      "name": "Rayakottai",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20352:1",
+      "name": "Soolagiri",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20353:1",
+      "name": "Thenkanikottai",
+      "zone_id": "5",
+      "district_id": "20027"
+    },
+    {
+      "id": "20355:1",
+      "name": "Veppannapalli",
+      "zone_id": "5",
+      "district_id": "20027"
+    }
+  ],
+  "Namakkal (Salem)": [
+    {
+      "id": "20357:1",
+      "name": "Erumaipatti",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20373:0",
+      "name": "Kolli Hills(Camp)",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20359:1",
+      "name": "Kumarapalayam",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20360:1",
+      "name": "Mallasamuthiram",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20361:1",
+      "name": "Moganur",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20362:0",
+      "name": "Nallur_Namakkal_Closed",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20363:1",
+      "name": "Namagiripettai",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20364:1",
+      "name": "Namakkal Joint I",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20358:1",
+      "name": "Namakkal Joint II",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20367:1",
+      "name": "Pallipalayam",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20365:1",
+      "name": "Paramathi",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20366:1",
+      "name": "Puduchathiram_Namakkal",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20368:1",
+      "name": "Rasipuram",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20369:1",
+      "name": "Senthamangalam",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20370:1",
+      "name": "Thiruchengode",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20372:1",
+      "name": "Velagoundampatti",
+      "zone_id": "5",
+      "district_id": "20028"
+    },
+    {
+      "id": "20371:1",
+      "name": "Velur",
+      "zone_id": "5",
+      "district_id": "20028"
+    }
+  ],
+  "Salem East (Salem)": [
+    {
+      "id": "20375:1",
+      "name": "Aathur_Salem East",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20382:1",
+      "name": "Ayothiyapattinam",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20377:1",
+      "name": "Dadagapatti",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20376:1",
+      "name": "Gangavalli",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20379:1",
+      "name": "Pethanayakanpalayam",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20374:1",
+      "name": "Salem East Joint I",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20381:1",
+      "name": "Thalaivasal",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20380:1",
+      "name": "Thammampatti",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20378:1",
+      "name": "Vazhapadi",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20383:1",
+      "name": "Verapandi",
+      "zone_id": "5",
+      "district_id": "20029"
+    },
+    {
+      "id": "20384:1",
+      "name": "Yercaud",
+      "zone_id": "5",
+      "district_id": "20029"
+    }
+  ],
+  "Salem West (Salem)": [
+    {
+      "id": "20393:1",
+      "name": "Edapadi",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20392:1",
+      "name": "Jalakandapuram",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "22602:1",
+      "name": "Kadaiyampatty",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20396:0",
+      "name": "Kolathur(camp)",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20394:1",
+      "name": "Magudanchavadi",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20391:1",
+      "name": "Mecheri",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20390:1",
+      "name": "Mettur",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20387:1",
+      "name": "Omalur",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20385:1",
+      "name": "Salem West Joint I",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20386:1",
+      "name": "Salem West Joint III",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20395:1",
+      "name": "Sangagiri",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20388:1",
+      "name": "Suramangalam",
+      "zone_id": "5",
+      "district_id": "20030"
+    },
+    {
+      "id": "20389:1",
+      "name": "Tharamangalam",
+      "zone_id": "5",
+      "district_id": "20030"
+    }
+  ],
+  "Kumbakonam (Tanjore)": [
+    {
+      "id": "20504:1",
+      "name": "Kumbakonam Joint I",
+      "zone_id": "7",
+      "district_id": "20039"
+    },
+    {
+      "id": "20508:1",
+      "name": "Nachiyarkovil",
+      "zone_id": "7",
+      "district_id": "20039"
+    },
+    {
+      "id": "20509:1",
+      "name": "Papanasam",
+      "zone_id": "7",
+      "district_id": "20039"
+    },
+    {
+      "id": "20505:1",
+      "name": "Swamimalai",
+      "zone_id": "7",
+      "district_id": "20039"
+    },
+    {
+      "id": "20507:1",
+      "name": "Thiruppanandhal",
+      "zone_id": "7",
+      "district_id": "20039"
+    },
+    {
+      "id": "20506:1",
+      "name": "Thiruvidaimarudhur",
+      "zone_id": "7",
+      "district_id": "20039"
+    }
+  ],
+  "Maiyaladuthurai (Tanjore)": [
+    {
+      "id": "20452:1",
+      "name": "Chembanarkovil",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20454:1",
+      "name": "Kollidam",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20453:1",
+      "name": "Kuthalam",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20456:0",
+      "name": "Manalmedu_Closed",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20459:1",
+      "name": "Mayiladuthurai Joint I",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20457:1",
+      "name": "Mayiladuthurai Joint II",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20460:0",
+      "name": "Poompuhar_Closed",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20462:1",
+      "name": "Seerkazhi",
+      "zone_id": "7",
+      "district_id": "20035"
+    },
+    {
+      "id": "20463:1",
+      "name": "Tharangampadi",
+      "zone_id": "7",
+      "district_id": "20035"
+    }
+  ],
+  "Nagapattinam (Tanjore)": [
+    {
+      "id": "20464:0",
+      "name": "Ammapettai_Nagapattinam_Closed",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20470:1",
+      "name": "Nagapatinam Joint I",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20469:1",
+      "name": "Nagoor",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20476:1",
+      "name": "Thakkattur",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20471:0",
+      "name": "Thalaignayiru_Closed",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20479:1",
+      "name": "Thirukuvalai",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20475:0",
+      "name": "Thirumarugal_Closed",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20472:1",
+      "name": "Thirupoondi",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20477:0",
+      "name": "Vaduvur_Closed",
+      "zone_id": "7",
+      "district_id": "20036"
+    },
+    {
+      "id": "20478:1",
+      "name": "Vedharanyam",
+      "zone_id": "7",
+      "district_id": "20036"
+    }
+  ],
+  "Pattukkottai (Tanjore)": [
+    {
+      "id": "20480:1",
+      "name": "Adhiramapattinam",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20481:1",
+      "name": "Erandampulikadu",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20483:1",
+      "name": "Keeramangalam",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20484:1",
+      "name": "Madukkur",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20485:0",
+      "name": "Melauzhavur_Closed",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20487:1",
+      "name": "Orathanadu",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20488:1",
+      "name": "Pappanadu",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20486:1",
+      "name": "Pattukottai Joint I",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20482:1",
+      "name": "Pattukottai Joint II",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20490:1",
+      "name": "Peravoorani",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20489:0",
+      "name": "Perumagalur_Closed",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20491:1",
+      "name": "Subbramaniyapuram",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20493:0",
+      "name": "Thiruchitrambalam_Closed",
+      "zone_id": "7",
+      "district_id": "20037"
+    },
+    {
+      "id": "20492:1",
+      "name": "Thiruvonam",
+      "zone_id": "7",
+      "district_id": "20037"
+    }
+  ],
+  "Thanjavur (Tanjore)": [
+    {
+      "id": "22597:1",
+      "name": "Ammapettai-Thanjavur",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20495:1",
+      "name": "Ayyampettai",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20496:1",
+      "name": "Boothalur",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20498:1",
+      "name": "Karunthattankudi",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20499:1",
+      "name": "Makarnonbuchavadi",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20500:0",
+      "name": "Melattur_Closed",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20497:1",
+      "name": "Thanjavur Joint I",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20501:1",
+      "name": "Thirukattupalli",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20502:1",
+      "name": "Thiruvaiyaru",
+      "zone_id": "7",
+      "district_id": "20038"
+    },
+    {
+      "id": "20503:1",
+      "name": "Vallam_Thanjavur",
+      "zone_id": "7",
+      "district_id": "20038"
+    }
+  ],
+  "Thiruvarur (Tanjore)": [
+    {
+      "id": "20455:1",
+      "name": "Kodavasal",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20465:1",
+      "name": "Koothanalur",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20466:1",
+      "name": "Mannarkudi",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20467:1",
+      "name": "Muthupettai",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20458:1",
+      "name": "Nannilam",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20468:1",
+      "name": "Needamangalam",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20461:1",
+      "name": "Peralam",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20473:1",
+      "name": "Thiruthuraipoondi",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20474:1",
+      "name": "Thiruvarur Joint 1",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20494:1",
+      "name": "Ullikottai",
+      "zone_id": "7",
+      "district_id": "50004"
+    },
+    {
+      "id": "20510:1",
+      "name": "Valankaiman",
+      "zone_id": "7",
+      "district_id": "50004"
+    }
+  ],
+  "Cheranmahadevi (Thirunelveli)": [
+    {
+      "id": "20511:1",
+      "name": "Ambasamudhiram",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20517:1",
+      "name": "Cheranmahadevi Joint I",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20512:1",
+      "name": "Cheranmahadevi Joint II",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20513:1",
+      "name": "Kadayam",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20514:1",
+      "name": "Kalakkadu",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20515:1",
+      "name": "Kallidaikurichi",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20516:1",
+      "name": "Mukkoodal",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20518:1",
+      "name": "Vadakkuveeravanallur",
+      "zone_id": "8",
+      "district_id": "20040"
+    },
+    {
+      "id": "20519:1",
+      "name": "Vickramasingapuram",
+      "zone_id": "8",
+      "district_id": "20040"
+    }
+  ],
+  "Kaniyakumari (Thirunelveli)": [
+    {
+      "id": "20520:1",
+      "name": "Boothapandi",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20521:1",
+      "name": "Eranial",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20522:1",
+      "name": "Idalagudi",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20526:1",
+      "name": "Kanyakumari Joint I",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20523:1",
+      "name": "Kottaram",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20524:1",
+      "name": "Kulatchal",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20525:1",
+      "name": "Manavalakurichi",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20527:1",
+      "name": "Palliyadi",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20528:1",
+      "name": "Rajackamangalam",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20529:1",
+      "name": "Thackalai",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20531:1",
+      "name": "Thovalai",
+      "zone_id": "8",
+      "district_id": "20041"
+    },
+    {
+      "id": "20530:1",
+      "name": "Vadaseri",
+      "zone_id": "8",
+      "district_id": "20041"
+    }
+  ],
+  "Marthandam (Thirunelveli)": [
+    {
+      "id": "20532:1",
+      "name": "Arumanai",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20535:1",
+      "name": "Karungal",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20534:1",
+      "name": "Kollankodu",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20537:1",
+      "name": "Marthandam Joint I",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20533:1",
+      "name": "Marthandam Joint II",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20536:1",
+      "name": "Munchirai",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20538:1",
+      "name": "Palugal",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20539:1",
+      "name": "Thiruvattar",
+      "zone_id": "8",
+      "district_id": "20042"
+    },
+    {
+      "id": "20540:1",
+      "name": "Verkilambi",
+      "zone_id": "8",
+      "district_id": "20042"
+    }
+  ],
+  "Palayankottai (Thirunelveli)": [
+    {
+      "id": "20541:1",
+      "name": "Alwarthirunagari",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20542:1",
+      "name": "Burkitmanagaram",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20543:1",
+      "name": "Ettayapuram",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20544:1",
+      "name": "Kadambur",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20549:0",
+      "name": "Kalingappatti(camp)_Closed",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20545:1",
+      "name": "Kalugumalai",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20548:1",
+      "name": "Kayathar",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20547:1",
+      "name": "Kommadikottai",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20546:1",
+      "name": "Kovilpatii",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20550:1",
+      "name": "Melapapalayam",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20551:1",
+      "name": "Murapanadu",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20552:1",
+      "name": "Nazareth",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20554:0",
+      "name": "Padukapathu (camp)_Closed",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20553:1",
+      "name": "Palayankottai joint I",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20555:1",
+      "name": "Sathankulam",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20556:1",
+      "name": "Srivaikundam",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20557:0",
+      "name": "Thiruvenkadam_Closed",
+      "zone_id": "8",
+      "district_id": "20043"
+    },
+    {
+      "id": "20558:1",
+      "name": "Thisaiyanvilai",
+      "zone_id": "8",
+      "district_id": "20043"
+    }
+  ],
+  "Tenkasi (Thirunelveli)": [
+    {
+      "id": "20585:1",
+      "name": "Alangulam",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20586:1",
+      "name": "Idaikkal",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20588:1",
+      "name": "Kadayanallur",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20589:1",
+      "name": "Karivalamvandanallur",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20590:1",
+      "name": "Melaneelithanallur",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20591:1",
+      "name": "Panpozhi",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20592:1",
+      "name": "Pavoorchathram",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20593:1",
+      "name": "Puliyangudi",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20594:1",
+      "name": "Sankaranainarkoil",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20597:1",
+      "name": "Senkottai",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20595:1",
+      "name": "Sivagiri_Tenkasi",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20596:1",
+      "name": "Surandai",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20599:1",
+      "name": "Tenkasi Joint I",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20587:1",
+      "name": "Tenkasi Joint II",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20598:1",
+      "name": "Uthumalai",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20600:1",
+      "name": "Vasudevanallur",
+      "zone_id": "8",
+      "district_id": "20046"
+    },
+    {
+      "id": "20601:1",
+      "name": "Veerasigamani",
+      "zone_id": "8",
+      "district_id": "20046"
+    }
+  ],
+  "Tirunelveli (Thirunelveli)": [
+    {
+      "id": "20559:1",
+      "name": "Gangaikondan",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20561:1",
+      "name": "Moolakaraipatti",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20562:1",
+      "name": "Nanguneri",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20564:1",
+      "name": "Panagudi",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20565:1",
+      "name": "Pettai",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20566:1",
+      "name": "Radhapuram",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20567:1",
+      "name": "Thirukurungudi",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20563:1",
+      "name": "Tirunelveli Joint I",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20560:1",
+      "name": "Tirunelveli Joint II",
+      "zone_id": "8",
+      "district_id": "20044"
+    },
+    {
+      "id": "20568:1",
+      "name": "Valliyur",
+      "zone_id": "8",
+      "district_id": "20044"
+    }
+  ],
+  "Tuticorin (Thirunelveli)": [
+    {
+      "id": "20569:1",
+      "name": "Eral",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20571:1",
+      "name": "Kayalpattinam",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20573:1",
+      "name": "Keezhur",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20572:0",
+      "name": "Kurumbur_Closed",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20575:0",
+      "name": "Meignanapuram_Closed",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20574:1",
+      "name": "Melur_Tuticorin",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20576:0",
+      "name": "Nagalapuram_Closed",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20578:1",
+      "name": "Ottapidaram",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20581:1",
+      "name": "Perungulam",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20580:1",
+      "name": "Pudukkottai",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20579:1",
+      "name": "Pudur",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20582:1",
+      "name": "Tiruchendur",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20577:1",
+      "name": "Tuticorin Joint I",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20570:1",
+      "name": "Tuticorin Joint II",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20583:1",
+      "name": "Udankudi",
+      "zone_id": "8",
+      "district_id": "20045"
+    },
+    {
+      "id": "20584:1",
+      "name": "Vilathikulam",
+      "zone_id": "8",
+      "district_id": "20045"
+    }
+  ],
+  "Ariyalur (Trichy)": [
+    {
+      "id": "20397:1",
+      "name": "Aandimadam",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20404:1",
+      "name": "Ariyalur Joint I",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20398:0",
+      "name": "Ariyalur Joint II Closed",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20416:1",
+      "name": "Erumbulikurichi",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20400:1",
+      "name": "Jayakondam",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20401:1",
+      "name": "Keezhaapazhur",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20402:1",
+      "name": "Lalkudi",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20403:1",
+      "name": "Meensurutti",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20406:1",
+      "name": "Pullampadi",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20407:1",
+      "name": "Sendhurai_Ariyalur",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20408:1",
+      "name": "Tha.Pazhur",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20409:1",
+      "name": "Thuraiyur",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20410:1",
+      "name": "Udayarpalayam",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20411:1",
+      "name": "Uppiliyapuram",
+      "zone_id": "6",
+      "district_id": "20031"
+    },
+    {
+      "id": "20413:1",
+      "name": "Vikramangalam",
+      "zone_id": "6",
+      "district_id": "20031"
+    }
+  ],
+  "Karur (Trichy)": [
+    {
+      "id": "20417:1",
+      "name": "Aravakurichi",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20418:1",
+      "name": "Chinnadarapuram",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20420:1",
+      "name": "Karur Joint I",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20419:1",
+      "name": "Karur Joint II",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20422:1",
+      "name": "Krishnarayapuram",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20421:1",
+      "name": "Kulithalai",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20423:1",
+      "name": "Melakarur",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20424:1",
+      "name": "Nangavaram",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20425:1",
+      "name": "Tharagampatti",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20427:1",
+      "name": "Velayuthampalayam",
+      "zone_id": "6",
+      "district_id": "20032"
+    },
+    {
+      "id": "20426:1",
+      "name": "Velliyanai",
+      "zone_id": "6",
+      "district_id": "20032"
+    }
+  ],
+  "Perambalur (Trichy)": [
+    {
+      "id": "20399:1",
+      "name": "Chettikulam",
+      "zone_id": "6",
+      "district_id": "50001"
+    },
+    {
+      "id": "22580:1",
+      "name": "Kolakkanatham",
+      "zone_id": "6",
+      "district_id": "50001"
+    },
+    {
+      "id": "20405:1",
+      "name": "Perambalur Joint 1",
+      "zone_id": "6",
+      "district_id": "50001"
+    },
+    {
+      "id": "20412:1",
+      "name": "Valighandapuram",
+      "zone_id": "6",
+      "district_id": "50001"
+    },
+    {
+      "id": "20415:1",
+      "name": "Veppanthattai",
+      "zone_id": "6",
+      "district_id": "50001"
+    },
+    {
+      "id": "20414:1",
+      "name": "Veppur_Perambalur",
+      "zone_id": "6",
+      "district_id": "50001"
+    }
+  ],
+  "Pudukottai (Trichy)": [
+    {
+      "id": "20428:1",
+      "name": "Alangudi",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20429:1",
+      "name": "Annavasal",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20430:1",
+      "name": "Iluppur",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20433:1",
+      "name": "Kantharvakottai",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20431:1",
+      "name": "Karambakudi",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20432:1",
+      "name": "Keelanilai",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20434:1",
+      "name": "Kolathur",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20435:1",
+      "name": "Manamelkudi",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20437:1",
+      "name": "Perungalur",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20436:1",
+      "name": "Pudukkottai Joint I",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20438:1",
+      "name": "Thirumayam",
+      "zone_id": "6",
+      "district_id": "20033"
+    },
+    {
+      "id": "20439:1",
+      "name": "Viralimalai",
+      "zone_id": "6",
+      "district_id": "20033"
+    }
+  ],
+  "Trichy (Trichy)": [
+    {
+      "id": "22596:1",
+      "name": "Kanakiliyanallur",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20441:1",
+      "name": "Kattuputhur",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20442:1",
+      "name": "Keezhsathanur",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20443:1",
+      "name": "Manaparai",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20451:1",
+      "name": "Mannachanallur",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20444:1",
+      "name": "Musiri",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20446:1",
+      "name": "Srirangam",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20447:1",
+      "name": "Thathaiyangarpettai",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "22594:1",
+      "name": "Thillai Nagar",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20448:1",
+      "name": "Thiruvarumpur",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20449:1",
+      "name": "Thuvarankurichi",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20440:1",
+      "name": "Trichi Joint III",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20445:1",
+      "name": "Trichy Joint 1",
+      "zone_id": "6",
+      "district_id": "20034"
+    },
+    {
+      "id": "20450:1",
+      "name": "Urayur",
+      "zone_id": "6",
+      "district_id": "20034"
+    }
+  ],
+  "Cheyyar (Vellore)": [
+    {
+      "id": "20614:1",
+      "name": "Arani_Cheyyar",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20621:1",
+      "name": "Cheyyar Joint I",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20617:1",
+      "name": "Cheyyar Joint II",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20615:0",
+      "name": "Desur_Closed",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20616:1",
+      "name": "Dusi",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20618:1",
+      "name": "Kalampur",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20619:1",
+      "name": "Kannamangalam",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20620:1",
+      "name": "Kilkodungalur",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20622:1",
+      "name": "Peranamallur",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20623:1",
+      "name": "Thellar",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20624:1",
+      "name": "Vandavasi",
+      "zone_id": "9",
+      "district_id": "20048"
+    },
+    {
+      "id": "20625:1",
+      "name": "Vembakkam",
+      "zone_id": "9",
+      "district_id": "20048"
+    }
+  ],
+  "Ranipet (Vellore)": [
+    {
+      "id": "22585:1",
+      "name": "Arakkonam",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20609:0",
+      "name": "Arakonam Joint I Closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20605:0",
+      "name": "Arakonam Joint II closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20602:1",
+      "name": "Arcot",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20603:0",
+      "name": "Brahmadesam_Closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20604:0",
+      "name": "Guruvarajapettai_Closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20606:1",
+      "name": "Kalavai",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20607:1",
+      "name": "Kaveripakkam",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20608:1",
+      "name": "Nemili",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20610:0",
+      "name": "Panapakkam_Closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "22583:1",
+      "name": "Ranipet Joint I",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20611:1",
+      "name": "Sholingar",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20612:0",
+      "name": "Timiri_Closed",
+      "zone_id": "9",
+      "district_id": "20047"
+    },
+    {
+      "id": "20613:1",
+      "name": "Walaja",
+      "zone_id": "9",
+      "district_id": "20047"
+    }
+  ],
+  "Thiruvannamalai (Vellore)": [
+    {
+      "id": "20626:1",
+      "name": "Chengam",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20627:1",
+      "name": "Chetput",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20628:0",
+      "name": "Devigapuram_Closed",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20630:1",
+      "name": "Kadaladi_Thiruvannamalai",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20631:1",
+      "name": "Kalasapakkam",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20632:1",
+      "name": "Kilpennathur",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20633:1",
+      "name": "Mangalam",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20635:1",
+      "name": "Polur",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20637:1",
+      "name": "Thaanipadi",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20636:1",
+      "name": "Thandarampattu",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20634:1",
+      "name": "Thiruvannamalai Joint I",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20629:1",
+      "name": "Thiruvannamalai Joint II",
+      "zone_id": "9",
+      "district_id": "20049"
+    },
+    {
+      "id": "20638:1",
+      "name": "Vettavalam",
+      "zone_id": "9",
+      "district_id": "20049"
+    }
+  ],
+  "Tirupathur (Vellore)": [
+    {
+      "id": "20639:1",
+      "name": "Ambur",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "20640:1",
+      "name": "Jolarpettai",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "20644:1",
+      "name": "Natrampalli",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "20649:0",
+      "name": "Thirupathur_closed",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "22581:1",
+      "name": "Thirupathur Joint 1",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "22582:1",
+      "name": "Thirupathur Joint 2",
+      "zone_id": "9",
+      "district_id": "50002"
+    },
+    {
+      "id": "20650:1",
+      "name": "Vaniyampadi",
+      "zone_id": "9",
+      "district_id": "50002"
+    }
+  ],
+  "Vellore (Vellore)": [
+    {
+      "id": "20642:1",
+      "name": "Kaniyampadi",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20641:1",
+      "name": "Katpadi",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20651:1",
+      "name": "Keezh Vazhi ThunaiyanKuppam",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20643:1",
+      "name": "Kudiyatham",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20646:1",
+      "name": "Odugathur",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20647:1",
+      "name": "Pallikonda",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20648:1",
+      "name": "Pernampattu",
+      "zone_id": "9",
+      "district_id": "20050"
+    },
+    {
+      "id": "20645:1",
+      "name": "Vellore Joint I",
+      "zone_id": "9",
+      "district_id": "20050"
+    }
+  ]
+}
