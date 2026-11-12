@@ -22,6 +22,7 @@ import os
 import sys
 import re
 import json
+import datetime
 from typing import Dict, List, Any, Optional, Tuple
 import pypdf
 import pdfplumber
@@ -365,8 +366,16 @@ class PDFDeterministicExtractor:
                         pr_m = re.search(r'(?:PR\s*Number|முந்ைதய\s*ஆவண\s*எண்|முந்தைய\s*ஆவண\s*எண்)[^\:]*[\:\-]\s*([^\n\r]+)', c, re.I)
                         if pr_m:
                             pr_val = pr_m.group(1).strip()
+                            # A PR cell can wrap across several physical lines when a deed cites
+                            # multiple parents (e.g. "1572/ 2007, 1644/\n2007, 1904/ 2007").
+                            # Stitch the continuation lines of the same cell deterministically.
+                            pr_full = cls._stitch_pr_cell_continuation(c[pr_m.start(1):])
+                            if pr_full:
+                                pr_val = pr_full
                             current_entry["pr_lineage"]["pr_raw"] = pr_val
-                            current_entry["pr_lineage"]["pr_documents"] = cls._parse_pr_string(pr_val)
+                            current_entry["pr_lineage"]["pr_documents"] = cls._parse_pr_string(
+                                pr_val, exclude_doc_id=current_entry["registration_particulars"].get("document_id", "")
+                            )
 
                     # 2. Schedule Marker detection
                     for c in r:
@@ -839,6 +848,24 @@ class PDFDeterministicExtractor:
             elif any(k in l for k in ['PR Number', 'முந்ைதய ஆவண எண்', 'முந்தைய ஆவண எண்']):
                 if i + 1 < len(all_lines): pr_raw = all_lines[i + 1].strip()
 
+        # Robust PR citation harvesting (superset of the legacy next-line rule above):
+        #  - scans the whole entry header (not just the first 80 lines; large layout /
+        #    consolidation deeds with many parties push the PR row far down),
+        #  - reads values printed on the SAME line as the label,
+        #  - stitches wrapped multi-parent lists across continuation lines,
+        #  - is not masked when the PR label shares a line with Consideration/Market Value.
+        # Legacy citations are always retained (never silently discarded).
+        self_doc_id = f"{doc_no}/{year}" if doc_no and year else ""
+        legacy_pr_docs = cls._parse_pr_string(pr_raw, exclude_doc_id=self_doc_id)
+        robust_pr_raw = cls._extract_pr_raw_from_lines(all_lines)
+        robust_pr_docs = cls._parse_pr_string(robust_pr_raw, exclude_doc_id=self_doc_id)
+        merged_pr_docs = list(robust_pr_docs)
+        for p_doc in legacy_pr_docs:
+            if not any(m["formatted"] == p_doc["formatted"] for m in merged_pr_docs):
+                merged_pr_docs.append(p_doc)
+        if robust_pr_docs and (not legacy_pr_docs or len(robust_pr_docs) >= len(legacy_pr_docs)):
+            pr_raw = robust_pr_raw
+
         entry["financials"] = {
             "consideration_value_raw": con_raw,
             "consideration_value_num": cls._extract_numeric_value(con_raw),
@@ -849,7 +876,7 @@ class PDFDeterministicExtractor:
 
         entry["pr_lineage"] = {
             "pr_raw": pr_raw,
-            "pr_documents": cls._parse_pr_string(pr_raw)
+            "pr_documents": merged_pr_docs
         }
 
         # -------------------------------------------------------------
@@ -1311,19 +1338,134 @@ class PDFDeterministicExtractor:
             "party_type": party_type
         }
 
+    # ------------------------------------------------------------------
+    # PR (prior document / முந்தைய ஆவண எண்) citation parsing
+    # ------------------------------------------------------------------
+    # Doc-number / year token. Lookbehinds stop date fragments such as
+    # "12-05-2007" from being read as document "05/2007".
+    PR_TOKEN_RE = re.compile(
+        r'(?<![0-9])(?<![0-9]/)(?<![0-9]-)(?<![0-9]\.)([0-9]{1,7})\s*[\/\-]\s*([12][09][0-9]{2})(?![0-9])'
+    )
+    PR_LABEL_RE = re.compile(
+        r'(?:(?<![A-Za-z])PR\s*Number|(?<![A-Za-z])PR\s*No\b\.?|முந்ைதய\s*ஆவண\s*எண்(?:கள்)?|முந்தைய\s*ஆவண\s*எண்(?:கள்)?)',
+        re.I
+    )
+    # Labels of neighbouring EC cells; a PR value never continues past one of these.
+    PR_STOP_LABEL_RE = re.compile(
+        r'(?:Consideration\s*Value|Market\s*Value|Document\s*Remarks|Schedule\s*(?:[0-9]+\s*)?Details|Schedule\s*Remarks|'
+        r'Property\s*Type|Property\s*Extent|Survey\s*No|Village|Boundary|Nature|Executant|Claimant|'
+        r'Number\s*of\s*Entries|ைகமாற்றுத்|கைமாற்றுத்|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு|ஆவணக்?\s*குறிப்பு|'
+        r'அட்டவைண|அட்டவணை|சொத்தின்|ெசாத்தின்|புல\s*எண்|கிராமம்|எல்லை|எல்ைல|பதிவுகளின்)',
+        re.I
+    )
+    PR_PURE_TOKEN_LINE_RE = re.compile(r'^[\s0-9\/\-\,\;\.&]*(?:(?:and|மற்றும்)[\s0-9\/\-\,\;\.&]*)*$', re.I)
+
     @classmethod
-    def _parse_pr_string(cls, pr_str: str) -> List[Dict[str, str]]:
-        """Parses comma-separated PR deeds into individual {doc_no, year} objects."""
-        pr_list = []
-        for part in re.split(r'[\,\;]', pr_str):
-            clean = part.strip()
-            m = re.search(r'([0-9]+)\s*[\/\-]\s*([12][09][0-9]{2})', clean)
-            if m:
-                pr_list.append({
-                    "doc_no": m.group(1),
-                    "year": m.group(2),
-                    "formatted": f"{m.group(1)}/{m.group(2)}"
-                })
+    def _is_pr_continuation_line(cls, prev_text: str, line: str) -> bool:
+        """A following physical line belongs to the PR value only if it carries doc tokens and
+        either the previous text visibly continues (trailing , / - &) or the line is token-only."""
+        if not line or cls.PR_STOP_LABEL_RE.search(line) or cls.PR_LABEL_RE.search(line):
+            return False
+        if not re.search(r'[0-9]', line):
+            return False
+        prev = (prev_text or "").rstrip()
+        if prev.endswith((',', '/', '-', '&', ';')) or re.search(r'(?:and|மற்றும்)$', prev, re.I):
+            return True
+        return bool(cls.PR_PURE_TOKEN_LINE_RE.match(line.strip()))
+
+    @classmethod
+    def _stitch_pr_cell_continuation(cls, cell_tail: str) -> str:
+        """Joins the PR value of a table cell that wraps across several lines."""
+        if not cell_tail:
+            return ""
+        lines = [l.strip() for l in str(cell_tail).replace('\r', '\n').split('\n')]
+        lines = [l for l in lines if l]
+        if not lines:
+            return ""
+        acc = lines[0]
+        stop = cls.PR_STOP_LABEL_RE.search(acc)
+        if stop:
+            acc = acc[:stop.start()].strip()
+        for l in lines[1:]:
+            if cls._is_pr_continuation_line(acc, l):
+                acc = f"{acc} {l}".strip()
+            else:
+                break
+        return acc.strip()
+
+    @classmethod
+    def _extract_pr_raw_from_lines(cls, all_lines: List[str]) -> str:
+        """
+        Deterministically harvests the PR citation value from EC text lines.
+        Search window: from the top of the entry up to the first schedule header
+        (PR row always precedes the schedule block). The first PR label wins.
+        """
+        if not all_lines:
+            return ""
+        end = len(all_lines)
+        for i, l in enumerate(all_lines):
+            if re.search(r'(?:Schedule\s*[0-9]+\s*Details|அட்டவைண\s*[0-9]+\s*விவரங்கள்|அட்டவணை\s*[0-9]+\s*விவரங்கள்)', l, re.I) \
+                    and not any(k in l for k in ['Schedule Remarks', 'ெசாத்து விவரம்', 'சொத்து விவரம்']):
+                end = i
+                break
+
+        for i in range(end):
+            line = all_lines[i]
+            labels = list(cls.PR_LABEL_RE.finditer(line))
+            if not labels:
+                continue
+            remainder = line[labels[-1].end():]
+            remainder = re.sub(r'^[^\:\-0-9]{0,40}?[\:\-]', '', remainder, count=1).strip()
+            stop = cls.PR_STOP_LABEL_RE.search(remainder)
+            if stop:
+                remainder = remainder[:stop.start()].strip()
+            acc = remainder
+            j = i + 1
+            # Legacy behaviour: value printed on the next line under the label.
+            if not cls.PR_TOKEN_RE.search(acc) and j < len(all_lines):
+                nxt = all_lines[j].strip()
+                if not cls.PR_STOP_LABEL_RE.search(nxt) and not cls.PR_LABEL_RE.search(nxt):
+                    acc = f"{acc} {nxt}".strip() if acc and acc not in ('-', ':') else nxt
+                    j += 1
+            # Wrapped continuation lines (bounded look-ahead).
+            while j < len(all_lines) and j < i + 8:
+                nxt = all_lines[j].strip()
+                if cls._is_pr_continuation_line(acc, nxt):
+                    acc = f"{acc} {nxt}".strip()
+                    j += 1
+                else:
+                    break
+            return acc.strip()
+        return ""
+
+    @classmethod
+    def _parse_pr_string(cls, pr_str: str, exclude_doc_id: str = "") -> List[Dict[str, str]]:
+        """
+        Parses PR citations into individual {doc_no, year} objects.
+        Accepts comma / semicolon / 'and' / 'மற்றும்' / whitespace separated lists and
+        spaced slashes ("1572/ 2007, 1644/ 2007, 1904/ 2007"). Order preserved, duplicates
+        and self-citations removed, implausible years rejected.
+        """
+        pr_list: List[Dict[str, str]] = []
+        if not pr_str:
+            return pr_list
+        max_year = datetime.date.today().year + 1
+        excl = re.sub(r'\s+', '', str(exclude_doc_id or ""))
+        seen = set()
+        for m in cls.PR_TOKEN_RE.finditer(str(pr_str)):
+            d_no = m.group(1)
+            yr = m.group(2)
+            if not (1800 <= int(yr) <= max_year):
+                continue
+            formatted = f"{d_no}/{yr}"
+            if formatted in seen or (excl and formatted == excl):
+                continue
+            seen.add(formatted)
+            pr_list.append({
+                "doc_no": d_no,
+                "year": yr,
+                "formatted": formatted
+            })
         return pr_list
 
     @staticmethod

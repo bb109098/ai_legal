@@ -214,7 +214,10 @@ class TitleScrutinyEngine:
             visited_upstream.add(curr_doc_id)
             cites = pr_citations_map.get(curr_doc_id, [])
             if cites:
-                parent_id = cites[0]
+                # Multi-parent deeds (layout / consolidation deeds citing several PRs, e.g.
+                # "1572/2007, 1644/2007, 1904/2007"): follow the first cited parent that is
+                # actually present in the evidence set; fall back to the first citation (legacy).
+                parent_id = next((c for c in cites if c in tx_lookup and c not in visited_upstream), cites[0])
                 if parent_id in tx_lookup or any(p in parent_id for p in ["197", "198", "199", "200", "201", "202"]):
                     upstream_chain.append(parent_id)
                     curr_doc_id = parent_id
@@ -430,7 +433,10 @@ class TitleScrutinyEngine:
                         c_rem = ""
                         for s in cand_tx.get("schedules", []): c_rem += " " + s.get("schedule_remarks_full", "")
 
-                        if d_id in c_pr or d_id in c_rem:
+                        c_pr_ids = {cls.normalize_doc_id(p.get("doc_no"), p.get("year"))
+                                    for p in cand_tx.get("pr_lineage", {}).get("pr_documents", [])
+                                    if p.get("doc_no") and p.get("year")}
+                        if d_id in c_pr or d_id in c_rem or d_id in c_pr_ids:
                             # Verify bank match
                             c_execs = [cls.normalize_party_name(p.get("name", "")) for p in cand_tx.get("parties", {}).get("executants", [])]
                             if any(cls.are_parties_equivalent(me, ce) for me in m_claimants for ce in c_execs if me and ce):

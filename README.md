@@ -13,3 +13,13 @@ An end-to-end deterministic system designed for property legal scrutiny across T
 python run_scrutiny_pipeline.py --doc 1579 --year 2021 --sro "Trichy Joint 1" --sro_id "20445:1" --plot 26
 ```
 Or double-click `RUN_LEGAL_SCRUTINY.bat`.
+
+## Tests
+```bash
+pip install -r requirements.txt -r requirements-dev.txt
+python -m pytest tests -q
+```
+Deterministic offline tests (no portal access) cover PR-citation harvesting, recursive PR lineage
+traversal across administrative boundary shifts (8396/2022 -> 3086/2007 -> 1572/1644/1904 of 2007),
+urban TSLR (Ward / Block / T.S. No.) planning, and parity with the pre-fix planner on the benchmark
+extractions in `data/batch_audit_results.json`.
