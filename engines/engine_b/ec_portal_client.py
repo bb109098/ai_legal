@@ -546,6 +546,51 @@ class ECPortalClient:
             "total_options_available": len(all_portal_options)
         }
 
+    # Portal "busy" pages that are delivered as a (valid-looking) PDF instead of a certificate.
+    EC_ERROR_PAGE_RE = re.compile(r'(?:Please\s*try\s*after\s*some\s*time|HTML_CONTENT|try\s*again\s*later)', re.I)
+    EC_ERROR_COUNT_RE = re.compile(r'No\.?\s*Of\s*Records\s*:+\s*([0-9]+)', re.I)
+    EC_CERT_MARKER_RE = re.compile(r'(?:Encumbrance|வில்லங்க|Number\s*of\s*Entries|Document\s*No)', re.I)
+
+    @classmethod
+    def inspect_ec_pdf(cls, content: bytes) -> Dict[str, Any]:
+        """
+        Deterministically classifies downloaded bytes as an authentic EC certificate or not.
+        Byte-level checks alone miss error pages because PDF text streams are compressed,
+        so the text layer of the first pages is inspected.
+        Returns {"authentic", "reason", "pages", "error_record_count"}.
+        """
+        info = {"authentic": False, "reason": "", "pages": 0, "error_record_count": None}
+        if not content or not content.startswith(b'%PDF'):
+            info["reason"] = "NOT_A_PDF"
+            return info
+        if b'HTML_CONTENT' in content or b'Please try after sometime' in content:
+            info["reason"] = "PORTAL_ERROR_PAGE"
+            return info
+        try:
+            import io
+            import pypdf
+            reader = pypdf.PdfReader(io.BytesIO(content))
+            info["pages"] = len(reader.pages)
+            text = " ".join((reader.pages[i].extract_text() or "") for i in range(min(2, len(reader.pages))))
+        except Exception as e:
+            info["reason"] = f"UNREADABLE_PDF: {e}"
+            return info
+        cnt = cls.EC_ERROR_COUNT_RE.search(text)
+        if cls.EC_ERROR_PAGE_RE.search(text):
+            info["reason"] = "PORTAL_ERROR_PAGE"
+            if cnt:
+                info["error_record_count"] = int(cnt.group(1))
+            return info
+        if info["pages"] == 0 or not text.strip():
+            info["reason"] = "EMPTY_PDF"
+            return info
+        if not cls.EC_CERT_MARKER_RE.search(text):
+            info["reason"] = "NOT_AN_EC_CERTIFICATE"
+            return info
+        info["authentic"] = True
+        info["reason"] = "OK"
+        return info
+
     @classmethod
     def execute_ec_search(
         cls,
@@ -716,6 +761,7 @@ class ECPortalClient:
         # 1. Parse authoritative record count from TNREGINET form field
         count_match = re.search(r'name=["\']countNoRecords["\'][^>]*value=["\'](\d+)["\']', resp.text, re.I)
         rec_count = int(count_match.group(1)) if count_match else 0
+        count_field_present = bool(count_match)
         # 2. Check if table rows are actually rendered
         soup_resp = BeautifulSoup(resp.text, 'html.parser')
         doc_table = soup_resp.find('table', id='DocPropertyDesc')
@@ -735,7 +781,10 @@ class ECPortalClient:
                 "success": False,
                 "overflow": True,
                 "split_needed": True,
-                "error": f"Portal overflow ({rec_count} records) - date halving required"
+                "error": f"Portal overflow ({rec_count} records) - date halving required",
+                "pdf_status": "OVERFLOW",
+                "portal_record_count": rec_count,
+                "count_field_present": count_field_present
             }
         if not has_results and rec_count == 0:
             log(f"      [i] Nil encumbrance: No documents registered during search period ({start_date} to {end_date}).")
@@ -746,11 +795,16 @@ class ECPortalClient:
                 "nil": True,
                 "entries_found": 0,
                 "pdf_saved": None,
-                "records": []
+                "records": [],
+                "pdf_status": "NIL",
+                "portal_record_count": rec_count,
+                "count_field_present": count_field_present
             }
 
         # 3. Trigger official PDF generation on portal (directPrintDwnLoad screenId=700786)
         pdf_downloaded_path = None
+        pdf_status = "NOT_GENERATED"
+        pdf_inspection: Dict[str, Any] = {}
         for p_attempt in range(1, 4):
             try:
                 print_payload = list(payload)
@@ -783,16 +837,32 @@ class ECPortalClient:
                     pdf_url = f"https://tnreginet.gov.in/portal/{pdf_rel}" if not pdf_rel.startswith('http') else pdf_rel
                     log(f"      [✓] Acknowledgement received from TNREGINET: Official Government EC PDF ready at {pdf_url}")
                     dl_resp = session.get(pdf_url, verify=False, timeout=60)
-                    is_error_pdf = b'HTML_CONTENT' in dl_resp.content or b'Please try after sometime' in dl_resp.content
-                    if dl_resp.content.startswith(b'%PDF') and len(dl_resp.content) > 10000 and not is_error_pdf and output_pdf_path:
+                    pdf_inspection = cls.inspect_ec_pdf(dl_resp.content)
+                    if pdf_inspection.get("authentic") and output_pdf_path:
                         with open(output_pdf_path, 'wb') as pf:
                             pf.write(dl_resp.content)
                         pdf_downloaded_path = output_pdf_path
-                        log(f"      [✓] Successfully downloaded raw government EC PDF ({len(dl_resp.content)} bytes) -> {output_pdf_path}")
+                        pdf_status = "CERTIFIED"
+                        log(f"      [✓] Successfully downloaded raw government EC PDF ({len(dl_resp.content)} bytes, {pdf_inspection.get('pages')} pages) -> {output_pdf_path}")
                         break
-                    elif is_error_pdf or len(dl_resp.content) < 10000:
-                        log(f"      [!] Notice: Received portal error/placeholder from portal ({len(dl_resp.content)} bytes). Discarding placeholder.")
-                        break
+                    err_cnt = pdf_inspection.get("error_record_count")
+                    log(f"      [!] Portal returned a non-certificate PDF ({pdf_inspection.get('reason')}, {len(dl_resp.content)} bytes"
+                        f"{', No Of Records: ' + str(err_cnt) if err_cnt is not None else ''}). Not saved as an EC.")
+                    if err_cnt is not None and err_cnt >= 200:
+                        # The certificate generator refuses >= 200 records: same rule as the HTML count.
+                        return {
+                            "success": False,
+                            "overflow": True,
+                            "split_needed": True,
+                            "error": f"Portal certificate overflow ({err_cnt} records) - date halving required",
+                            "pdf_status": "OVERFLOW",
+                            "portal_record_count": max(rec_count, err_cnt),
+                            "count_field_present": count_field_present
+                        }
+                    pdf_status = "ERROR_PAGE"
+                    if p_attempt < 3:
+                        time.sleep(2 * p_attempt)
+                        continue
                 break
             except (ConnectionResetError, requests.exceptions.RequestException, Exception) as e_print:
                 log(f"      [!] directPrintDwnLoad network notice (attempt {p_attempt}/3): {e_print}")
@@ -870,7 +940,11 @@ class ECPortalClient:
             "entries_found": len(all_records),
             "records": all_records,
             "records_json": records_json_path,
-            "pdf_saved": pdf_downloaded_path
+            "pdf_saved": pdf_downloaded_path,
+            "pdf_status": pdf_status,
+            "pdf_inspection": pdf_inspection,
+            "portal_record_count": rec_count,
+            "count_field_present": count_field_present
         }
 
     @classmethod

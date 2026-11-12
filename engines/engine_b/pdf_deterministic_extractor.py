@@ -192,14 +192,25 @@ class PDFDeterministicExtractor:
     def _parse_extent_dict(ext_str: str) -> Dict[str, Any]:
         if not ext_str:
             return {"raw": "", "sqft": 0.0, "sq_meters": 0.0}
-        clean_ext = ext_str.strip()
-        nums = re.findall(r'[0-9]+(?:\.[0-9]+)?', clean_ext)
-        val = float(nums[0]) if nums else 0.0
-        if any(k in clean_ext.lower() for k in ["acre", "ஏக்கர்"]):
+        clean_ext = PDFDeterministicExtractor._clean_extent_raw(ext_str)
+        if not clean_ext:
+            return {"raw": "", "sqft": 0.0, "sq_meters": 0.0}
+        # Prefer the number that directly precedes an explicit area unit, so a survey token
+        # in front ("173/2 - 2520.0 SQUARE FEET", "13, 173/2H - 2340.0 SQUARE FEET") is never
+        # taken as the area.
+        unit_m = PDFDeterministicExtractor.EXTENT_UNIT_RE.search(clean_ext)
+        if unit_m:
+            val = float(unit_m.group(1))
+            unit_txt = unit_m.group(2).lower()
+        else:
+            nums = re.findall(r'[0-9]+(?:\.[0-9]+)?', clean_ext)
+            val = float(nums[0]) if nums else 0.0
+            unit_txt = clean_ext.lower()
+        if any(k in unit_txt for k in ["acre", "ஏக்கர்"]):
             sqft = round(val * 43560.0, 2)
-        elif any(k in clean_ext.lower() for k in ["cent", "சென்ட்"]):
+        elif any(k in unit_txt for k in ["cent", "சென்ட்"]):
             sqft = round(val * 435.6, 2)
-        elif any(k in clean_ext.lower() for k in ["sq.m", "sqm", "சதுர மீட்டர்"]):
+        elif any(k in unit_txt for k in ["sq.m", "sqm", "சதுர மீட்டர்", "ச.மீ"]):
             sqft = round(val / 0.092903, 2)
         else:
             sqft = val
@@ -208,6 +219,47 @@ class PDFDeterministicExtractor:
             "sqft": sqft,
             "sq_meters": round(sqft * 0.092903, 2)
         }
+
+    # Number immediately followed by an explicit area unit.
+    EXTENT_UNIT_RE = re.compile(
+        r'([0-9]+(?:\.[0-9]+)?)\s*(square\s*feet|sq\.?\s*ft\.?|sqft|சதுரடி|சதுர\s*அடி|ச\.?\s*அடி|சஅடி|'
+        r'acres?|ஏக்கர்|cents?|சென்ட்|sq\.?\s*m(?:eters?|tr?s?)?\b|sqm|சதுர\s*மீட்டர்|ச\.மீ)',
+        re.I
+    )
+    # Combined "Survey No-Extent/புல எண்-விஸ்தீர்ணம்: <survey> - <extent>" cell (legacy glyph order tolerated).
+    SURVEY_EXTENT_LABEL_RE = re.compile(
+        r'(?:Survey\s*No\.?\s*-\s*Extent|புல\s*எண்\s*-\s*விஸ்[^\s:]*\s*[^\s:]*)[^:\n]*:\s*', re.I
+    )
+
+    @staticmethod
+    def _clean_extent_raw(ext_str: str) -> str:
+        """Strips a leaked 'label:' prefix and an unbalanced trailing ')' left by a wrapped
+        "(விஸ்தீர்ணம் : 0.42 / ஏக்கர்)" remark."""
+        v = (ext_str or "").strip()
+        lab = re.match(r'^[^0-9:]{0,60}:\s*', v)
+        if lab and re.search(r'(?:ணம்|Extent|விஸ்)', lab.group(0), re.I):
+            v = v[lab.end():].strip()
+        while v.endswith(')') and v.count(')') > v.count('('):
+            v = v[:-1].rstrip()
+        return v.strip(' ,-')
+
+    @classmethod
+    def _split_survey_extent_cell(cls, cell: str) -> Optional[Tuple[str, str]]:
+        """Returns (survey_raw, extent_raw) for a combined Survey No-Extent cell, else None."""
+        if not cell:
+            return None
+        m = cls.SURVEY_EXTENT_LABEL_RE.search(cell)
+        if not m:
+            return None
+        val = cell[m.end():].split('\n')[0].strip()
+        if ' - ' in val:
+            sur, ext = val.rsplit(' - ', 1)
+        elif cls.EXTENT_UNIT_RE.search(val):
+            um = cls.EXTENT_UNIT_RE.search(val)
+            sur, ext = val[:um.start()], val[um.start():]
+        else:
+            sur, ext = val, ''
+        return sur.strip(' ,-'), ext.strip(' ,-')
 
     @staticmethod
     def _parse_survey_dict(sur_str: str) -> Dict[str, str]:
@@ -268,8 +320,26 @@ class PDFDeterministicExtractor:
             current_entry = None
             current_sched = None
             entry_idx = 1
+            # Label-only financial/PR cells (value pushed onto the next page): col -> label text
+            pending_value_labels: Dict[int, str] = {}
+            fin_label_re = re.compile(
+                r'(?:Consideration\s*Value|Market\s*Value|PR\s*Number|ைகமாற்றுத்|கைமாற்றுத்|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு|முந்ைதய\s*ஆவண|முந்தைய\s*ஆவண)[^:]*:\s*$',
+                re.I
+            )
 
             for r in all_table_rows:
+                if pending_value_labels:
+                    row_has_label = any(c and re.search(r'(?:Value|Number|Details|Remarks|:)', str(c)) for c in r)
+                    if not row_has_label:
+                        r = list(r)
+                        for col, lbl in pending_value_labels.items():
+                            if col < len(r) and r[col]:
+                                r[col] = f"{lbl}\n{r[col]}"
+                    pending_value_labels = {}
+                label_only = {i: str(c).strip() for i, c in enumerate(r) if c and fin_label_re.search(str(c).strip())}
+                if label_only and len(label_only) == sum(1 for c in r if c and str(c).strip()):
+                    pending_value_labels = label_only
+
                 doc_cell = None
                 for c in r[:3]:
                     if c and re.search(r'^\s*(\d{1,6})\s*/\s*(\d{4})\s*$', c.strip()):
@@ -351,16 +421,16 @@ class PDFDeterministicExtractor:
                     # 1. Financials & PR (check cells in row)
                     for c in r:
                         if not c: continue
-                        con_m = re.search(r'(?:Consideration\s*Value|ைகமாற்றுத்\s*ெதாைக|கைமாற்றுத்\s*தொகை)[^\:]*[\:\-]\s*Rs\.?\s*([0-9\,]+|\-)', c, re.I)
-                        if con_m and con_m.group(1) != '-':
-                            v_num = float(con_m.group(1).replace(',', ''))
-                            current_entry["financials"]["consideration_value_raw"] = f"Rs. {con_m.group(1)}/-"
+                        con_m = re.search(r'(?:Consideration\s*Value|ைகமாற்றுத்\s*ெதாைக|கைமாற்றுத்\s*தொகை)[^\:]*[\:\-]\s*(Rs\.?|ரூ\.?)?\s*([0-9\,]+|\-)', c, re.I)
+                        if con_m and con_m.group(2) != '-':
+                            v_num = float(con_m.group(2).replace(',', ''))
+                            current_entry["financials"]["consideration_value_raw"] = f"{(con_m.group(1) or 'Rs.').rstrip('.')}. {con_m.group(2)}/-"
                             current_entry["financials"]["consideration_value_num"] = v_num
 
-                        mkt_m = re.search(r'(?:Market\s*Value|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு)[^\:]*[\:\-]\s*Rs\.?\s*([0-9\,]+|\-)', c, re.I)
-                        if mkt_m and mkt_m.group(1) != '-':
-                            v_num = float(mkt_m.group(1).replace(',', ''))
-                            current_entry["financials"]["market_value_raw"] = f"Rs. {mkt_m.group(1)}/-"
+                        mkt_m = re.search(r'(?:Market\s*Value|சந்ைத\s*மதிப்பு|சந்தை\s*மதிப்பு)[^\:]*[\:\-]\s*(Rs\.?|ரூ\.?)?\s*([0-9\,]+|\-)', c, re.I)
+                        if mkt_m and mkt_m.group(2) != '-':
+                            v_num = float(mkt_m.group(2).replace(',', ''))
+                            current_entry["financials"]["market_value_raw"] = f"{(mkt_m.group(1) or 'Rs.').rstrip('.')}. {mkt_m.group(2)}/-"
                             current_entry["financials"]["market_value_num"] = v_num
 
                         pr_m = re.search(r'(?:PR\s*Number|முந்ைதய\s*ஆவண\s*எண்|முந்தைய\s*ஆவண\s*எண்)[^\:]*[\:\-]\s*([^\n\r]+)', c, re.I)
@@ -372,6 +442,7 @@ class PDFDeterministicExtractor:
                             pr_full = cls._stitch_pr_cell_continuation(c[pr_m.start(1):])
                             if pr_full:
                                 pr_val = pr_full
+                            pr_val = cls._clean_empty_pr(pr_val)
                             current_entry["pr_lineage"]["pr_raw"] = pr_val
                             current_entry["pr_lineage"]["pr_documents"] = cls._parse_pr_string(
                                 pr_val, exclude_doc_id=current_entry["registration_particulars"].get("document_id", "")
@@ -455,9 +526,19 @@ class PDFDeterministicExtractor:
                                     current_sched["property_type"] = pt_val
                                     is_field_row = True
 
+                            # 2a. Combined "Survey No-Extent: <survey> - <extent>" cell
+                            se_pair = cls._split_survey_extent_cell(c)
+                            if se_pair:
+                                se_sur, se_ext = se_pair
+                                if se_sur and re.search(r'[0-9]', se_sur):
+                                    current_sched["survey_number"] = cls._parse_survey_dict(se_sur)
+                                if se_ext:
+                                    current_sched["extent"] = cls._parse_extent_dict(se_ext)
+                                is_field_row = True
+
                             # 2. Clean Property Extent
-                            ext_m = re.search(r'(?:Property\s*Extent[\s\/]*(?:ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)?|ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)[\s\/\:\-]+([^\n\r]+?)(?=(?:Survey\s*No|புல\s*எண்|Village|கிராமம்|Plot|மைன|Door|கதவு|\n|$))', c, re.I)
-                            if not ext_m:
+                            ext_m = None if se_pair else re.search(r'(?:Property\s*Extent[\s\/]*(?:ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)?|ெசாத்தின்\s*விஸ்தீர்ணம்|சொத்தின்\s*விஸ்தீர்ணம்|விஸ்தீர்ணம்)[\s\/\:\-]+([^\n\r]+?)(?=(?:Survey\s*No|புல\s*எண்|Village|கிராமம்|Plot|மைன|Door|கதவு|\n|$))', c, re.I)
+                            if not ext_m and not se_pair:
                                 ext_m = re.search(r'(?:Survey\s*No\-Extent|புல\s*எண்\-விஸ்த[ீி]ர்ணம்)[\s\/\:\-][^\-]+?\-\s*([^\n\r]+)', c, re.I)
                             if ext_m:
                                 ext_val = ext_m.group(1).strip(' ,-')
@@ -467,12 +548,14 @@ class PDFDeterministicExtractor:
                                     is_field_row = True
 
                             # 3. Clean Survey Number
-                            sur_m = re.search(r'(?:Survey\s*No\.?|புல\s*எண்)[\s\/\:\-]+([0-9]+[A-Za-z0-9\/\,\s\-]+?)(?=(?:New\s*Door|Old\s*Door|Door|Floor|Plot|புதிய|பழைய|கதவு|தள|மனை|மைன|\n|$))', c, re.I)
-                            if not sur_m:
+                            sur_m = None if se_pair else re.search(r'(?:Survey\s*No\.?|புல\s*எண்)[\s\/\:\-]+([0-9]+[A-Za-z0-9\/\,\s\-]+?)(?=(?:New\s*Door|Old\s*Door|Door|Floor|Plot|புதிய|பழைய|கதவு|தள|மனை|மைன|\n|$))', c, re.I)
+                            if not sur_m and not se_pair:
                                 sur_m = re.search(r'(?:Survey\s*No\-Extent|புல\s*எண்\-விஸ்த[ீி]ர்ணம்)[\s\/\:\-]+([^\-\n\r]+)', c, re.I)
                             if sur_m:
                                 sur_val = sur_m.group(1).strip(' ,-')
-                                current_sched["survey_number"] = cls._parse_survey_dict(sur_val)
+                                # Never store a label (e.g. "புல எண்") as the survey value.
+                                if re.search(r'[0-9]', sur_val):
+                                    current_sched["survey_number"] = cls._parse_survey_dict(sur_val)
                                 is_field_row = True
 
                             # 4. Clean Village & Street (NEVER overwritten by schedule remarks)
@@ -875,7 +958,7 @@ class PDFDeterministicExtractor:
         }
 
         entry["pr_lineage"] = {
-            "pr_raw": pr_raw,
+            "pr_raw": cls._clean_empty_pr(pr_raw),
             "pr_documents": merged_pr_docs
         }
 
@@ -1018,19 +1101,14 @@ class PDFDeterministicExtractor:
                         else:
                             sched["survey_number"]["survey"] = sur_part.strip()
                     if ext_part and not sched["extent"]["raw"]:
-                        sched["extent"]["raw"] = ext_part.strip()
-                        num_sqft = cls._extract_numeric_value(ext_part)
-                        sched["extent"]["sqft"] = num_sqft
-                        sched["extent"]["sq_meters"] = round(num_sqft * 0.092903, 2) if num_sqft > 0 else 0.0
+                        sched["extent"] = cls._parse_extent_dict(ext_part)
 
             # Standalone Property Extent
             if any(k in l for k in ['Property Extent', 'ெசாத்தின் விஸ்தீர்ணம்', 'சொத்தின் விஸ்தீர்ணம்']) and not any(k in l for k in ['Survey No-Extent', 'புல எண்-விஸ்தீர்ணம்']):
                 if ':' in l:
                     raw_ext = l.split(':', 1)[1].strip()
-                    sched["extent"]["raw"] = raw_ext
-                    num_sqft = cls._extract_numeric_value(raw_ext)
-                    sched["extent"]["sqft"] = num_sqft
-                    sched["extent"]["sq_meters"] = round(num_sqft * 0.092903, 2) if num_sqft > 0 else 0.0
+                    # Unit-aware (acre / cent / sq.m / sq.ft); raw text kept verbatim.
+                    sched["extent"] = cls._parse_extent_dict(raw_ext)
 
             # Village & Street
             if any(k in l for k in ['Village & Street', 'கிராமம் மற்றும் ெதரு', 'கிராமம் மற்றும் தெரு']):
@@ -1437,6 +1515,12 @@ class PDFDeterministicExtractor:
                     break
             return acc.strip()
         return ""
+
+    @staticmethod
+    def _clean_empty_pr(pr_val: str) -> str:
+        """A PR cell holding only '/' or '-' (portal placeholder for "no prior document") is empty."""
+        v = (pr_val or "").strip()
+        return "" if re.fullmatch(r'[\s\/\-–—]*', v) else v
 
     @classmethod
     def _parse_pr_string(cls, pr_str: str, exclude_doc_id: str = "") -> List[Dict[str, str]]:
