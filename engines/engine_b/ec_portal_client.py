@@ -547,6 +547,10 @@ class ECPortalClient:
         }
 
     # Portal "busy" pages that are delivered as a (valid-looking) PDF instead of a certificate.
+    # Certificate print/download retries for transient portal errors ("Please try after sometime").
+    PRINT_MAX_ATTEMPTS = 4
+    TRANSIENT_BACKOFF_S = (3, 6, 12)
+    EC_TRANSIENT_HTML_RE = re.compile(r'(?:Please\s*try\s*after\s*some\s*time|try\s*again\s*later)', re.I)
     EC_ERROR_PAGE_RE = re.compile(r'(?:Please\s*try\s*after\s*some\s*time|HTML_CONTENT|try\s*again\s*later)', re.I)
     EC_ERROR_COUNT_RE = re.compile(r'No\.?\s*Of\s*Records\s*:+\s*([0-9]+)', re.I)
     EC_CERT_MARKER_RE = re.compile(r'(?:Encumbrance|வில்லங்க|Number\s*of\s*Entries|Document\s*No)', re.I)
@@ -768,7 +772,23 @@ class ECPortalClient:
         has_table_rows = bool(doc_table and len(doc_table.find_all('tr')) > 1)
         has_items_banner = "items found" in resp.text and "0 items found" not in resp.text and "No items found" not in resp.text
         has_results = has_table_rows or has_items_banner
-        # 3. Universal Overflow Evaluation
+        # 2b. Transient portal error on the search step itself (no authoritative count rendered)
+        if not count_field_present and not has_results and cls.EC_TRANSIENT_HTML_RE.search(resp.text or ""):
+            log(f"      [!] Portal transient error on search step ('try after sometime'); no countNoRecords rendered.")
+            return {
+                "success": False,
+                "overflow": False,
+                "split_needed": False,
+                "nil": False,
+                "transient": True,
+                "error": "Portal transient error on search step",
+                "pdf_saved": None,
+                "records": [],
+                "pdf_status": "PORTAL_TRANSIENT_ERROR",
+                "portal_record_count": None,
+                "count_field_present": False
+            }
+        # 3. Universal Overflow Evaluation (HTML countNoRecords / explicit overflow prompt only)
         is_overflow = False
         if rec_count >= 200:
             is_overflow = True
@@ -805,7 +825,7 @@ class ECPortalClient:
         pdf_downloaded_path = None
         pdf_status = "NOT_GENERATED"
         pdf_inspection: Dict[str, Any] = {}
-        for p_attempt in range(1, 4):
+        for p_attempt in range(1, cls.PRINT_MAX_ATTEMPTS + 1):
             try:
                 print_payload = list(payload)
                 update_or_add(print_payload, 'requestType', 'ApplicationRH')
@@ -846,27 +866,21 @@ class ECPortalClient:
                         log(f"      [✓] Successfully downloaded raw government EC PDF ({len(dl_resp.content)} bytes, {pdf_inspection.get('pages')} pages) -> {output_pdf_path}")
                         break
                     err_cnt = pdf_inspection.get("error_record_count")
+                    # The "Please try after sometime ... No Of Records:: N" page is a TRANSIENT certificate
+                    # generator error. Its N is a stale template value (it reads 206 even for a single day),
+                    # so it is never used as a window count and never triggers date halving. The search
+                    # HTML countNoRecords above is the only authoritative count.
+                    pdf_status = "PORTAL_TRANSIENT_ERROR" if pdf_inspection.get("reason") == "PORTAL_ERROR_PAGE" else "ERROR_PAGE"
                     log(f"      [!] Portal returned a non-certificate PDF ({pdf_inspection.get('reason')}, {len(dl_resp.content)} bytes"
-                        f"{', No Of Records: ' + str(err_cnt) if err_cnt is not None else ''}). Not saved as an EC.")
-                    if err_cnt is not None and err_cnt >= 200:
-                        # The certificate generator refuses >= 200 records: same rule as the HTML count.
-                        return {
-                            "success": False,
-                            "overflow": True,
-                            "split_needed": True,
-                            "error": f"Portal certificate overflow ({err_cnt} records) - date halving required",
-                            "pdf_status": "OVERFLOW",
-                            "portal_record_count": max(rec_count, err_cnt),
-                            "count_field_present": count_field_present
-                        }
-                    pdf_status = "ERROR_PAGE"
-                    if p_attempt < 3:
-                        time.sleep(2 * p_attempt)
+                        f"{', error-page text says ' + str(err_cnt) + ' records (ignored; HTML count=' + str(rec_count) + ')' if err_cnt is not None else ''}). "
+                        f"Not saved as an EC. Retrying same window (attempt {p_attempt}/{cls.PRINT_MAX_ATTEMPTS}).")
+                    if p_attempt < cls.PRINT_MAX_ATTEMPTS:
+                        time.sleep(cls.TRANSIENT_BACKOFF_S[min(p_attempt - 1, len(cls.TRANSIENT_BACKOFF_S) - 1)])
                         continue
                 break
             except (ConnectionResetError, requests.exceptions.RequestException, Exception) as e_print:
-                log(f"      [!] directPrintDwnLoad network notice (attempt {p_attempt}/3): {e_print}")
-                if p_attempt < 3:
+                log(f"      [!] directPrintDwnLoad network notice (attempt {p_attempt}/{cls.PRINT_MAX_ATTEMPTS}): {e_print}")
+                if p_attempt < cls.PRINT_MAX_ATTEMPTS:
                     time.sleep(2 * p_attempt)
                 else:
                     log(f"      [!] directPrintDwnLoad ended: {e_print}")
@@ -932,6 +946,23 @@ class ECPortalClient:
             with open(records_json_path, 'w', encoding='utf-8') as f:
                 json.dump(all_records, f, indent=2, ensure_ascii=False)
 
+        if pdf_status == "PORTAL_TRANSIENT_ERROR":
+            return {
+                "success": False,
+                "overflow": False,
+                "split_needed": False,
+                "nil": False,
+                "transient": True,
+                "error": f"Portal transient error ('Please try after sometime') persisted after {cls.PRINT_MAX_ATTEMPTS} certificate attempts",
+                "entries_found": len(all_records),
+                "records": all_records,
+                "records_json": records_json_path,
+                "pdf_saved": None,
+                "pdf_status": pdf_status,
+                "pdf_inspection": pdf_inspection,
+                "portal_record_count": rec_count,
+                "count_field_present": count_field_present
+            }
         return {
             "success": True,
             "overflow": False,

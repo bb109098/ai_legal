@@ -9,6 +9,7 @@ import pytest
 
 from pdf_deterministic_extractor import PDFDeterministicExtractor as X
 from ec_portal_client import ECPortalClient
+import ec_portal_client as portal_mod
 import ec_engine_orchestrator as orch_mod
 from ec_engine_orchestrator import ECEngineOrchestrator
 
@@ -54,38 +55,91 @@ class _Resp:
 
 
 class _FakeSession:
-    """Search HTML says 26 records (as on the run), but the certificate generator returns the
-    'No Of Records:: 206' error page."""
-    def __init__(self, pdf_bytes):
+    """Search HTML carries the real window count (countNoRecords); the certificate generator returns
+    the 'Please try after sometime ... No Of Records:: 206' error page (`bad_prints` times)."""
+    def __init__(self, pdf_bytes, html_count=26, error_bytes=None, bad_prints=99, search_html=None):
         self.pdf_bytes = pdf_bytes
+        self.error_bytes = error_bytes
+        self.bad_prints = bad_prints
+        self.html_count = html_count
+        self.search_html = search_html
         self.gets = 0
 
     def post(self, url, data=None, **kw):
         if "directPrintDwnLoad" in url:
             return _Resp('<a href="webHP?requestType=ApplicationRH&actionVal=dwnLoadPdf&id=1">pdf</a>')
-        return _Resp('<input type="hidden" name="countNoRecords" id="countNoRecords" value="26"/>'
+        if self.search_html is not None:
+            return _Resp(self.search_html)
+        return _Resp(f'<input type="hidden" name="countNoRecords" id="countNoRecords" value="{self.html_count}"/>'
                      '<table id="DocPropertyDesc"><tr><th>Document No</th></tr><tr><td>4761/1975</td></tr></table>'
-                     ' 26 items found')
+                     f' {self.html_count} items found')
 
     def get(self, url, **kw):
+        if "dwnLoadPdf" not in url:
+            return _Resp("<html></html>")
         self.gets += 1
+        if self.error_bytes is not None and self.gets > self.bad_prints:
+            return _Resp(content=self.error_bytes)
         return _Resp(content=self.pdf_bytes)
 
 
-def test_error_page_with_206_records_triggers_split_and_is_not_saved(tmp_path):
+_SEARCH_KW = dict(auth_token="t", csrf_token="c", captcha_code="x",
+                  sro_info={"sro_id": "20445:1", "sro_name": "Trichy Joint 1", "district_id": "20034", "zone_id": "6"},
+                  survey_items=[{"village_id": "1", "survey_no": "173", "subdivision_no": "2"}],
+                  start_date="22-Aug-1975", end_date="22-Aug-1975", log_callback=lambda m: None)
+
+
+def test_error_page_is_transient_retried_same_window_never_split(tmp_path, monkeypatch):
+    """Single-day window: the error page still says 206. That must NOT become an overflow."""
+    monkeypatch.setattr(portal_mod.time, "sleep", lambda s: None)
     with open(ERROR_PDF, "rb") as f:
-        sess = _FakeSession(f.read())
+        sess = _FakeSession(f.read(), html_count=3)
     out = tmp_path / "EC_JOB_03.pdf"
-    res = ECPortalClient.execute_ec_search(
-        session=sess, auth_token="t", csrf_token="c", captcha_code="x",
-        sro_info={"sro_id": "20445:1", "sro_name": "Trichy Joint 1", "district_id": "20034", "zone_id": "6"},
-        survey_items=[{"village_id": "1", "survey_no": "173", "subdivision_no": "2"}],
-        start_date="01-Jan-1975", end_date="31-Dec-1983", output_pdf_path=str(out),
-        log_callback=lambda m: None,
-    )
-    assert res["split_needed"] is True and res["overflow"] is True
-    assert res["portal_record_count"] == 206
+    res = ECPortalClient.execute_ec_search(session=sess, output_pdf_path=str(out), **_SEARCH_KW)
+    assert res["split_needed"] is False and res["overflow"] is False
+    assert res["transient"] is True and res["success"] is False
+    assert res["pdf_status"] == "PORTAL_TRANSIENT_ERROR"
+    assert res["portal_record_count"] == 3          # HTML count, never the 206 from the error page
+    assert sess.gets == ECPortalClient.PRINT_MAX_ATTEMPTS
     assert not out.exists()
+    v = ECEngineOrchestrator.classify_window_result(res)
+    assert v["outcome"] == "FAILED" and v["reason"] == "PORTAL_TRANSIENT_ERROR"
+
+
+def test_error_page_then_real_certificate_on_retry_is_saved(tmp_path, monkeypatch):
+    monkeypatch.setattr(portal_mod.time, "sleep", lambda s: None)
+    good = _cert_pdf(tmp_path / "good.pdf", ["Certificate of Encumbrance on Property", "Number of Entries: 3"])
+    with open(ERROR_PDF, "rb") as f:
+        err = f.read()
+    sess = _FakeSession(open(good, "rb").read(), html_count=3, error_bytes=err, bad_prints=0)
+    sess.bad_prints = 0
+    # first two prints error, third succeeds
+    seq = [err, err, open(good, "rb").read()]
+    sess.get = lambda url, **kw: _Resp(content=seq.pop(0))
+    out = tmp_path / "EC_ok.pdf"
+    res = ECPortalClient.execute_ec_search(session=sess, output_pdf_path=str(out), **_SEARCH_KW)
+    assert res["success"] is True and res["pdf_status"] == "CERTIFIED" and out.exists()
+    assert ECEngineOrchestrator.classify_window_result(res)["outcome"] == "CERTIFIED"
+
+
+def test_split_only_when_html_count_reaches_200(tmp_path, monkeypatch):
+    monkeypatch.setattr(portal_mod.time, "sleep", lambda s: None)
+    with open(ERROR_PDF, "rb") as f:
+        err = f.read()
+    res = ECPortalClient.execute_ec_search(session=_FakeSession(err, html_count=212),
+                                           output_pdf_path=str(tmp_path / "x.pdf"), **_SEARCH_KW)
+    assert res["split_needed"] is True and res["portal_record_count"] == 212
+    res = ECPortalClient.execute_ec_search(session=_FakeSession(err, html_count=199),
+                                           output_pdf_path=str(tmp_path / "y.pdf"), **_SEARCH_KW)
+    assert res["split_needed"] is False
+
+
+def test_transient_text_on_search_step_is_not_nil(tmp_path, monkeypatch):
+    monkeypatch.setattr(portal_mod.time, "sleep", lambda s: None)
+    sess = _FakeSession(b"", search_html="<html><body>Please try after sometime</body></html>")
+    res = ECPortalClient.execute_ec_search(session=sess, output_pdf_path=str(tmp_path / "z.pdf"), **_SEARCH_KW)
+    assert res["transient"] is True and not res.get("nil")
+    assert ECEngineOrchestrator.classify_window_result(res)["outcome"] == "FAILED"
 
 
 # ---------------------------------------------------------------- 2. exhaustiveness verdicts
@@ -102,8 +156,8 @@ def test_classify_window_result(res, ok, outcome):
 
 
 def test_run_with_failed_parent_window_is_not_exhaustive(tmp_path, monkeypatch):
-    """Replays the 1579 plan offline: TSLR nil, primary certified, parent window gets the
-    206-record error page that cannot be split further. JOB_05 (173/2 to 2021) must be executed,
+    """Replays the 1579 plan offline: TSLR nil, primary certified, parent window keeps getting the
+    transient 'try after sometime' error page (stale 206 text). JOB_05 (173/2 to 2021) must be executed,
     not skipped as 'covered', and the run must not be VERIFIED_EXHAUSTIVE."""
     run = tmp_path / "run"
     (run / "deeds" / "01_Root_Doc_1579_2021").mkdir(parents=True)
@@ -133,11 +187,11 @@ def test_run_with_failed_parent_window_is_not_exhaustive(tmp_path, monkeypatch):
         if kw.get("is_ward_block"):
             return {"success": True, "nil": True, "records": [], "pdf_saved": None, "count_field_present": True, "portal_record_count": 0}
         sub = (kw.get("survey_items") or [{}])[0].get("subdivision_no")
-        if sub == "2" and kw["end_date"] == "31-Dec-1983" and kw["start_date"] == "01-Jan-1975":
-            return {"success": False, "overflow": True, "split_needed": True, "pdf_status": "OVERFLOW", "portal_record_count": 206}
-        if sub == "2" and kw["end_date"] != "31-Dec-2021":
-            return {"success": True, "nil": False, "records": [{}], "pdf_saved": None, "pdf_status": "ERROR_PAGE",
-                    "portal_record_count": 103, "count_field_present": True}
+        if sub == "2" and kw["end_date"] == "31-Dec-1983":
+            # every certificate attempt returns the transient error page (HTML says 26 records)
+            return {"success": False, "transient": True, "overflow": False, "split_needed": False, "records": [{}],
+                    "pdf_saved": None, "pdf_status": "PORTAL_TRANSIENT_ERROR", "portal_record_count": 26,
+                    "count_field_present": True}
         import shutil
         dst = kw["output_pdf_path"]
         shutil.copy(good_pdf, dst)
@@ -160,8 +214,14 @@ def test_run_with_failed_parent_window_is_not_exhaustive(tmp_path, monkeypatch):
     assert ("JOB_04_PRIMARY_SF_173_2H", "COVERED_BY_MASTER_BATCH") in outcomes
     # JOB_05 really executed (date range beyond the failed parent batch)
     assert any(c[0] == "2" and c[2] == "31-Dec-2021" for c in calls)
-    # the 206-record parent window was split into halves before failing
-    assert sum(1 for c in calls if c[0] == "2" and c[2] != "31-Dec-2021") >= 3
+    # transient parent window: retried on the SAME dates (1 + WINDOW_TRANSIENT_RETRIES), never split
+    parent_calls = [c for c in calls if c[0] == "2" and c[2] != "31-Dec-2021"]
+    assert parent_calls == [("2", "01-Jan-1975", "31-Dec-1983", False)] * (1 + ECEngineOrchestrator.WINDOW_TRANSIENT_RETRIES) \
+        or all(c[1:3] == ("01-Jan-1975", "31-Dec-1983") for c in parent_calls)
+    assert len(parent_calls) == 1 + ECEngineOrchestrator.WINDOW_TRANSIENT_RETRIES
+    j3 = [o for o in plan_out["window_outcomes"] if o["job_id"].startswith("JOB_03")]
+    assert len(j3) == 1 and j3[0]["outcome"] == "FAILED" and j3[0]["reason"] == "PORTAL_TRANSIENT_ERROR"
+    assert not any("OVERFLOW" in str(o.get("reason")) for o in plan_out["window_outcomes"])
     assert any(b["type"] == "EC_WINDOW_NOT_CERTIFIED" for b in plan_out["audit_blockers"])
 
 

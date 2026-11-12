@@ -33,6 +33,9 @@ from pdf_deterministic_extractor import PDFDeterministicExtractor
 class ECEngineOrchestrator:
     """Master controller orchestrating complete 1975-Present property EC discovery."""
 
+    WINDOW_TRANSIENT_RETRIES = 2
+    WINDOW_TRANSIENT_BACKOFF_S = 20
+
     @staticmethod
     def classify_window_result(res: Optional[Dict[str, Any]], reason: str = "") -> Dict[str, Any]:
         """
@@ -219,6 +222,37 @@ class ECEngineOrchestrator:
                     else:
                         res = {"success": False, "pdf_status": "SEARCH_FAILED", "error": str(e_exec)}
             
+            # Transient portal error ("Please try after sometime"): retry the SAME window with a fresh
+            # session and longer backoff. Never date-split on it; the error page's record count is stale.
+            t_att = 0
+            while res and res.get("transient") and t_att < cls.WINDOW_TRANSIENT_RETRIES:
+                t_att += 1
+                wait_s = cls.WINDOW_TRANSIENT_BACKOFF_S * t_att
+                log(f"      [↻] Transient portal error for {cur_start} to {cur_end}; window retry {t_att}/{cls.WINDOW_TRANSIENT_RETRIES} after {wait_s}s (no date split).")
+                time.sleep(wait_s)
+                try:
+                    session = ECPortalClient.create_session()
+                    session_state = ECPortalClient.init_ec_session(session, log_callback=log)
+                    res = ECPortalClient.execute_ec_search(
+                        session=session,
+                        auth_token=session_state["auth_token"],
+                        csrf_token=session_state["csrf_token"],
+                        captcha_code=session_state["captcha_code"],
+                        sro_info=sro_info,
+                        survey_items=survey_items,
+                        start_date=cur_start,
+                        end_date=cur_end,
+                        output_pdf_path=out_pdf_path,
+                        base_form_fields=session_state.get("base_form_fields"),
+                        is_ward_block=is_ward_block,
+                        ward_no=ward_no,
+                        block_no=block_no,
+                        log_callback=log
+                    )
+                except Exception as e_tr:
+                    log(f"      [!] Transient-retry notice: {e_tr}")
+                    res = {"success": False, "transient": True, "pdf_status": "PORTAL_TRANSIENT_ERROR", "error": str(e_tr)}
+
             results = []
             if res.get("split_needed") or res.get("overflow"):
                 log(f"      [!] Portal email submission prompt active: records exceed synchronous threshold.")

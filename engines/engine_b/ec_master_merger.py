@@ -462,6 +462,7 @@ class ECMasterMerger:
                 "parties": entry.get("parties", {}),
                 "schedules": entry.get("schedules", []),
                 "pr_lineage": entry.get("pr_lineage", {}),
+                "document_remarks": entry.get("document_remarks", ""),
                 "discovered_in_surveys": entry.get("discovered_in_surveys", []),
                 "source_pdfs": entry.get("source_pdfs", []),
                 "_source_pdf": entry.get("_source_pdf", "")
